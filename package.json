@@ -31,6 +31,6 @@
     "live": "node --env-file=.env tests/live-jev.mjs",
     "matrix": "node --env-file=.env tests/jev-matrix.mjs",
     "chart:dark": "node tests/jev-dark.mjs",
-    "chart:png": "magick -density 144 tests/jev-chart-dark.svg tests/jev-chart-dark.png"
+    "chart:png": "magick -density 144 tests/jev-chart.svg tests/jev-chart.png && magick -density 144 tests/jev-chart-dark.svg tests/jev-chart-dark.png"
   }
 }

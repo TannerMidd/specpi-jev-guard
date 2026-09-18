@@ -26,7 +26,27 @@ switch, probes Jev live, and switches the guard on. Full docs in the
 63 commands probed against Jev via OpenRouter (thresholds ask ≥ 0.35, block ≥
 0.8). Green runs, amber asks, red never runs. Regenerate with `npm run matrix`.
 
+<p>
+  <button id="chart-toggle" type="button">Dark chart</button>
+</p>
 <picture>
   <source srcset="jev-chart-dark.svg" media="(prefers-color-scheme: dark)">
-  <img src="jev-chart.svg" alt="Jev danger by command, sorted low to high" width="100%">
+  <img id="jev-chart" src="jev-chart.svg" alt="Jev danger by command, sorted low to high" width="100%">
 </picture>
+<p>
+  <small>Download: <a href="https://raw.githubusercontent.com/TannerMidd/specpi-jev-guard/main/tests/jev-chart.png">light PNG</a> · <a href="https://raw.githubusercontent.com/TannerMidd/specpi-jev-guard/main/tests/jev-chart-dark.png">dark PNG</a></small>
+</p>
+<script>
+(function () {
+  var img = document.getElementById('jev-chart');
+  var btn = document.getElementById('chart-toggle');
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  function label() { btn.textContent = dark ? 'Light chart' : 'Dark chart'; }
+  label();
+  btn.addEventListener('click', function () {
+    dark = !dark;
+    img.src = dark ? 'jev-chart-dark.svg' : 'jev-chart.svg';
+    label();
+  });
+})();
+</script>
