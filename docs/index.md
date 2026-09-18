@@ -12,7 +12,7 @@ middle band asks you, low danger runs. No key, no network, or a garbled
 verdict never silently waves a call through — the guard fails closed.
 
 ```bash
-pi install git:github.com/TannerMidd/specpi-jev-guard
+pi install specpi-jev-guard
 ```
 
 Then run `/jev-guard setup` inside pi. Full docs in the

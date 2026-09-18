@@ -26,10 +26,10 @@ Two backends (default: OpenRouter):
 ## Install
 
 ```bash
+pi install specpi-jev-guard
+# or from git:
 pi install git:github.com/TannerMidd/specpi-jev-guard
-# or try it for one session:
-pi -e git:github.com/TannerMidd/specpi-jev-guard
-# or from a checkout:
+# or try it for one session from a checkout:
 pi -e ./extensions/jev-guard.ts
 ```
 
