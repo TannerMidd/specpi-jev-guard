@@ -80,6 +80,27 @@ describe("safe fast-pass", () => {
     assert.equal(classifyCommandLocal("sudo ls", S).decision, "unknown");
     assert.equal(classifyCommandLocal("FOO=1 ls", S).decision, "unknown");
   });
+  it("does not fast-pass read-only binaries used destructively", () => {
+    // Regression: `find / -delete` scored 0.96 danger from Jev but was allowed
+    // by the local fast-pass before these checks existed.
+    for (const cmd of [
+      "find / -delete",
+      'find . -name "*.tmp" -delete',
+      "find . -exec rm {} ;",
+      "git branch -D feature",
+      "git tag -d v1",
+      "git remote add evil https://x",
+      "git stash drop",
+      "sort -o out.txt in.txt",
+      "uniq in.txt out.txt",
+    ]) {
+      assert.equal(classifyCommandLocal(cmd, S).decision, "unknown", cmd);
+    }
+    // ...while genuinely read-only forms still pass with zero latency.
+    for (const cmd of ["find src -name \"*.ts\"", "git branch -a", "git tag -l", "git remote -v", "sort -n in.txt", "uniq -c file"]) {
+      assert.equal(classifyCommandLocal(cmd, S).decision, "pass", cmd);
+    }
+  });
 });
 
 describe("config lists", () => {

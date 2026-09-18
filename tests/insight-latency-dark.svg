@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="510" viewBox="0 0 1060 510" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<rect width="1060" height="510" fill="#0f172a"/>
+<text x="24" y="34" font-size="20" font-weight="700" fill="#f1f5f9">How long Jev takes to answer</text>
+<text x="24" y="58" font-size="13" fill="#94a3b8">124 live classifications · avg 204ms · p50 189ms · p95 255ms · max 643ms</text>
+<text x="24" y="78" font-size="13" fill="#94a3b8">This is the entire added cost of a gated call. Local rules and cached verdicts add 0 ms.</text>
+<rect x="141.9" y="404.4" width="77.7" height="27.575757575757578" rx="4" fill="#60a5fa" opacity="0.9"/>
+<text x="180.7" y="396.4" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">7</text>
+<text x="180.7" y="454.0" font-size="11.5" fill="#94a3b8" text-anchor="middle">&lt;150</text>
+<rect x="263.3" y="172.0" width="77.7" height="260" rx="4" fill="#60a5fa" opacity="0.9"/>
+<text x="302.1" y="164.0" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">66</text>
+<text x="302.1" y="454.0" font-size="11.5" fill="#94a3b8" text-anchor="middle">150-199</text>
+<rect x="384.7" y="258.7" width="77.7" height="173.33333333333331" rx="4" fill="#60a5fa" opacity="0.9"/>
+<text x="423.6" y="250.7" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">44</text>
+<text x="423.6" y="454.0" font-size="11.5" fill="#94a3b8" text-anchor="middle">200-249</text>
+<rect x="506.1" y="428.1" width="77.7" height="3.9393939393939394" rx="4" fill="#60a5fa" opacity="0.9"/>
+<text x="545.0" y="420.1" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">1</text>
+<text x="545.0" y="454.0" font-size="11.5" fill="#94a3b8" text-anchor="middle">250-299</text>
+<rect x="627.6" y="424.1" width="77.7" height="7.878787878787879" rx="4" fill="#60a5fa" opacity="0.9"/>
+<text x="666.4" y="416.1" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">2</text>
+<text x="666.4" y="454.0" font-size="11.5" fill="#94a3b8" text-anchor="middle">300-399</text>
+<rect x="749.0" y="420.2" width="77.7" height="11.818181818181818" rx="4" fill="#60a5fa" opacity="0.9"/>
+<text x="787.9" y="412.2" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">3</text>
+<text x="787.9" y="454.0" font-size="11.5" fill="#94a3b8" text-anchor="middle">400-599</text>
+<rect x="870.4" y="428.1" width="77.7" height="3.9393939393939394" rx="4" fill="#60a5fa" opacity="0.9"/>
+<text x="909.3" y="420.1" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">1</text>
+<text x="909.3" y="454.0" font-size="11.5" fill="#94a3b8" text-anchor="middle">600+</text>
+<line x1="120" y1="432" x2="970" y2="432" stroke="#334155" stroke-width="1.5"/>
+<text x="108.0" y="168.0" font-size="11" fill="#94a3b8" text-anchor="end">66</text>
+<text x="108.0" y="432.0" font-size="11" fill="#94a3b8" text-anchor="end">0</text>
+<text x="24.0" y="456.0" font-size="11" fill="#94a3b8" text-anchor="start">commands</text>
+<text x="545.0" y="480.0" font-size="12" fill="#94a3b8" text-anchor="middle">classifier latency (ms)</text>
+<text x="24.0" y="494.0" font-size="11.5" fill="#94a3b8" text-anchor="start">Even the slowest call stays well under a second; the guard fails closed if a call exceeds the 12s timeout.</text>
+</svg>

@@ -244,17 +244,65 @@ export function splitChain(command: string): string[] {
     .filter((s) => s.length > 0);
 }
 
+/** Flags that turn an otherwise read-only binary into a writer, or a `git`
+ *  subcommand that mutates refs. A matching segment falls through to Jev
+ *  instead of fast-passing, so the zero-latency path stays provably read-only. */
+function hasUnsafeReadOnlyFlag(bin: string, args: string[]): boolean {
+  const nonFlag = args.filter((a) => !a.startsWith("-"));
+  const flag = (re: RegExp): boolean => args.some((a) => re.test(a));
+  switch (bin) {
+    case "find":
+      // -delete, -exec*, -ok*, -fprint* all mutate the filesystem.
+      return flag(/^-(delete|exec|execdir|ok|okdir|fprint|fprint0|fprintf|fls)$/);
+    case "sort":
+      // sort -o file / --output=file overwrite the target.
+      return flag(/^(-o.+|--output(=.*)?)$/) || args.includes("-o");
+    case "uniq":
+      // uniq IN OUT writes to OUT; one operand (or flags only) is read-only.
+      return nonFlag.length >= 2;
+    case "git":
+      return isUnsafeGitArgs(args);
+    default:
+      return false;
+  }
+}
+
+/** True when a `git` invocation mutates refs, history, or remotes. */
+function isUnsafeGitArgs(args: string[]): boolean {
+  const sub = (args[0] ?? "").toLowerCase();
+  const rest = args.slice(1);
+  const first = (rest[0] ?? "").toLowerCase();
+  const anyFlag = (re: RegExp): boolean => rest.some((a) => re.test(a));
+  switch (sub) {
+    case "branch":
+      // -d/-D delete, -m/-M move; plain `git branch` and `-a/-v/-r` only list.
+      return anyFlag(/^-[a-zA-Z]*[dDmM][a-zA-Z]*$/) || anyFlag(/^--(delete|move|force)$/);
+    case "tag":
+      return anyFlag(/^-[a-zA-Z]*[dTf][a-zA-Z]*$/) || anyFlag(/^--(delete|force)$/);
+    case "remote":
+      return ["add", "remove", "rm", "set-url", "rename"].includes(first);
+    case "stash":
+      return ["drop", "clear", "pop"].includes(first);
+    case "clean":
+      return true;
+    default:
+      return false;
+  }
+}
+
 /** True when a single chain segment is a provably read-only invocation. */
 function isSafeSegment(segment: string): boolean {
   if (OPERATOR_RE.test(segment)) return false;
-  const bin = binaryOf(segment);
+  const trimmed = segment.trim();
+  const bin = binaryOf(trimmed);
   if (!SAFE_BINARIES.has(bin)) return false;
   if (bin === "git") {
-    const sub = segment.trim().split(/\s+/)[1]?.toLowerCase().replace(/^-+/, "") ?? "";
+    const sub = trimmed.split(/\s+/)[1]?.toLowerCase().replace(/^-+/, "") ?? "";
     if (!SAFE_GIT_SUBCOMMANDS.has(sub)) return false;
   }
+  if (hasUnsafeReadOnlyFlag(bin, trimmed.split(/\s+/).slice(1))) return false;
   // Assignment prefixes (FOO=bar cmd) and sudo/doas wrappers are not provably safe.
-  if (/^\w+=/.test(segment.trim()) || bin === "sudo" || bin === "doas" || bin === "su") return false;
+  if (/^\w+=/.test(trimmed) || bin === "sudo" || bin === "doas" || bin === "su") return false;
   return true;
 }
 
