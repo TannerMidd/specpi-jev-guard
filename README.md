@@ -35,7 +35,12 @@ pi -e ./extensions/jev-guard.ts
 
 ## Setup (2 minutes)
 
-OpenRouter backend (default) — get a key at
+Run `/jev-guard setup` inside pi — it checks your key, offers a backend
+switch, probes Jev live, and switches the guard on. If no key is found it
+tells you exactly what to do.
+
+The guard reads its key from pi's environment, so set it before launching
+pi. OpenRouter backend (default) — get a key at
 [openrouter.ai/keys](https://openrouter.ai/keys):
 
 ```bash
@@ -43,16 +48,12 @@ export OPENROUTER_API_KEY=sk-or-v1-...
 ```
 
 TypeSafe-direct backend — get a key at
-[console.typesafe.ai](https://console.typesafe.ai/settings/keys):
+[console.typesafe.ai](https://console.typesafe.ai/settings/keys),
+then point the guard at it once: `/jev-guard backend typesafe`.
 
 ```bash
 export TYPESAFE_API_KEY=...
 ```
-
-...then point the guard at it once: `/jev-guard backend typesafe`.
-
-Then run `/jev-guard setup` inside pi — it checks your key, offers a
-backend switch, probes Jev live, and switches the guard on.
 
 For development and live testing, copy the example env file instead —
 `.env` is gitignored so keys never end up in history or chat:
