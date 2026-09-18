@@ -1,0 +1,35 @@
+# Publishes specpi-jev-guard to npm when you cut a GitHub Release.
+#
+# Uses npm Trusted Publishing (OIDC) — no long-lived NPM_TOKEN needed.
+# One-time setup on npmjs.com (see README "Publishing" section):
+#   package Settings → Trusted Publisher → GitHub Actions → this repo + this workflow file.
+#
+# Fallback: if you instead save an Automation token as repo secret NPM_TOKEN,
+# uncomment the NODE_AUTH_TOKEN line — the same job works either way.
+
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write # required for npm Trusted Publishing + provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm publish --provenance --access public
+        # env:
+        #   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

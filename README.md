@@ -173,4 +173,16 @@ per-command table with reasons. Highlights from the latest run (124 commands,
 - **10 of 124 differed from expectation** — the calibration targets, listed in
   `tests/jev-chart.md` and charted on the docs site.
 
+## Publishing (maintainers)
+
+Releases publish to npm via [publish.yml](.github/workflows/publish.yml),
+which runs on every published GitHub Release using npm Trusted
+Publishing (OIDC, no stored token). First release needs a one-time setup:
+
+1. `npm login`, then `npm publish --provenance --access public` from `main`.
+2. On npmjs.com, open the package → Settings → Trusted Publisher → add
+   repo `TannerMidd/specpi-jev-guard` with workflow file `publish.yml`.
+3. After that, just cut a GitHub Release (tag `vX.Y.Z` matching
+   `package.json`) — CI tests, typechecks, and publishes.
+
 MIT.

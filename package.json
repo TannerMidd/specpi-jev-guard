@@ -3,10 +3,29 @@
   "version": "0.1.0",
   "description": "Pi extension that gates dangerous shell and file tool calls with the Jev classifier via OpenRouter",
   "type": "module",
+  "author": "Tanner Middleton",
   "keywords": [
-    "pi-package"
+    "pi-package",
+    "pi-extension",
+    "pi",
+    "guardrails",
+    "security",
+    "openrouter",
+    "jev"
   ],
   "license": "MIT",
+  "files": [
+    "extensions/",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TannerMidd/specpi-jev-guard.git"
@@ -28,6 +47,7 @@
   "scripts": {
     "test": "node --test tests/rules.test.mjs",
     "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm test && npm run typecheck",
     "live": "node --env-file=.env tests/live-jev.mjs",
     "matrix": "node --env-file=.env tests/jev-matrix.mjs",
     "insights": "node tests/jev-insights.mjs",
