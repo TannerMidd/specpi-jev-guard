@@ -17,8 +17,8 @@
 <text x="1040.0" y="3370.0" font-size="12" fill="#6b7280" text-anchor="middle">1.0</text>
 <line x1="611.0" y1="110" x2="611.0" y2="3350" stroke="#eab308" stroke-width="1.5" stroke-dasharray="6 4"/>
 <text x="611.0" y="104.0" font-size="12" fill="#eab308" text-anchor="middle" font-weight="600">ask 0.35</text>
-<line x1="908.0" y1="110" x2="908.0" y2="3350" stroke="#eab308" stroke-width="1.5" stroke-dasharray="6 4"/>
-<text x="908.0" y="104.0" font-size="12" fill="#eab308" text-anchor="middle" font-weight="600">block 0.8</text>
+<line x1="908.0" y1="110" x2="908.0" y2="3350" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="908.0" y="104.0" font-size="12" fill="#ef4444" text-anchor="middle" font-weight="600">block 0.8</text>
 <g><title>git log --oneline -5
 danger 0.01 · allow · 246ms · decided locally (pass)</title>
 <rect x="380.0" y="121.0" width="6.6" height="19" rx="4" fill="#22c55e" opacity="0.9"/>

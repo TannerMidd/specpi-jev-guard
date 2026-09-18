@@ -133,10 +133,10 @@ function renderSneaky(p) {
   ]});
 
   // threshold guides
-  for (const [t, text] of [[meta.askThreshold, `ask ${meta.askThreshold}`], [meta.blockThreshold, `block ${meta.blockThreshold}`]]) {
+  for (const [t, text, guide] of [[meta.askThreshold, `ask ${meta.askThreshold}`, p.ask], [meta.blockThreshold, `block ${meta.blockThreshold}`, p.block]]) {
     const gx = (L + scale(t)).toFixed(1);
-    s += `<line x1="${gx}" y1="${T - 10}" x2="${gx}" y2="${H - 46}" stroke="${p.ask}" stroke-width="1.4" stroke-dasharray="6 4"/>\n`;
-    s += label(p, { x: L + scale(t), y: T - 18, text, anchor: "middle", size: 11, fill: p.ask, weight: "600" });
+    s += `<line x1="${gx}" y1="${T - 10}" x2="${gx}" y2="${H - 46}" stroke="${guide}" stroke-width="1.4" stroke-dasharray="6 4"/>\n`;
+    s += label(p, { x: L + scale(t), y: T - 18, text, anchor: "middle", size: 11, fill: guide, weight: "600" });
   }
 
   bars.forEach((b, i) => {
@@ -307,10 +307,10 @@ function renderMain(p) {
     s += `<line x1="${gx}" y1="${T - 8}" x2="${gx}" y2="${H - B + 8}" stroke="${p.grid}" stroke-width="1"/>\n`;
     s += label(p, { x: x(g), y: H - B + 28, text: g.toFixed(1), fill: p.dim, size: 12, anchor: "middle" });
   }
-  for (const [t, text] of [[meta.askThreshold, `ask ${meta.askThreshold}`], [meta.blockThreshold, `block ${meta.blockThreshold}`]]) {
+  for (const [t, text, guide] of [[meta.askThreshold, `ask ${meta.askThreshold}`, p.ask], [meta.blockThreshold, `block ${meta.blockThreshold}`, p.block]]) {
     const tx = x(t).toFixed(1);
-    s += `<line x1="${tx}" y1="${T - 8}" x2="${tx}" y2="${H - B + 8}" stroke="${p.ask}" stroke-width="1.5" stroke-dasharray="6 4"/>\n`;
-    s += label(p, { x: x(t), y: T - 14, text, fill: p.ask, size: 12, anchor: "middle", weight: "600" });
+    s += `<line x1="${tx}" y1="${T - 8}" x2="${tx}" y2="${H - B + 8}" stroke="${guide}" stroke-width="1.5" stroke-dasharray="6 4"/>\n`;
+    s += label(p, { x: x(t), y: T - 14, text, fill: guide, size: 12, anchor: "middle", weight: "600" });
   }
 
   sorted.forEach((r, i) => {

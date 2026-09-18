@@ -107,6 +107,92 @@ $content-width: 1140px;
   .site-footer a:visited {
     color: #93c5fd;
   }
+
+  /* Syntax-highlighted code blocks. Minima's Rouge theme wins on
+     specificity (.highlighter-rouge .highlight), so match it here. */
+  .highlighter-rouge .highlight,
+  div.highlight,
+  figure.highlight {
+    background-color: #1e293b;
+    border-color: #334155;
+  }
+
+  .highlight .c,
+  .highlight .cm,
+  .highlight .c1,
+  .highlight .cs {
+    color: #7d8aa0;
+  }
+
+  .highlight .k,
+  .highlight .o,
+  .highlight .kc,
+  .highlight .kd,
+  .highlight .kn,
+  .highlight .kp,
+  .highlight .kr,
+  .highlight .kt,
+  .highlight .ow,
+  .highlight .nt,
+  .highlight .nb,
+  .highlight .bp {
+    color: #93c5fd;
+  }
+
+  .highlight .s,
+  .highlight .sb,
+  .highlight .sc,
+  .highlight .sd,
+  .highlight .s2,
+  .highlight .se,
+  .highlight .sh,
+  .highlight .si,
+  .highlight .sx,
+  .highlight .s1,
+  .highlight .ss {
+    color: #86efac;
+  }
+
+  .highlight .m,
+  .highlight .mf,
+  .highlight .mh,
+  .highlight .mi,
+  .highlight .mo,
+  .highlight .il {
+    color: #fbbf24;
+  }
+
+  .highlight .na,
+  .highlight .nv,
+  .highlight .vc,
+  .highlight .vg,
+  .highlight .vi,
+  .highlight .nl,
+  .highlight .nn,
+  .highlight .nx {
+    color: #e2e8f0;
+  }
+
+  .highlight .err {
+    color: #f87171;
+    background-color: transparent;
+  }
+
+  .highlight .gd {
+    color: #fca5a5;
+    background-color: transparent;
+  }
+
+  .highlight .gi {
+    color: #86efac;
+    background-color: transparent;
+  }
+
+  .highlight .gp,
+  .highlight .go,
+  .highlight .gh {
+    color: #64748b;
+  }
 }
 
 /* ------------------------------------------------------------------
