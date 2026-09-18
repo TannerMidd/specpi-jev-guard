@@ -1,0 +1,36 @@
+{
+  "name": "specpi-jev-guard",
+  "version": "0.1.0",
+  "description": "Pi extension that gates dangerous shell and file tool calls with the Jev classifier via OpenRouter",
+  "type": "module",
+  "keywords": [
+    "pi-package"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TannerMidd/specpi-jev-guard.git"
+  },
+  "homepage": "https://tannermidd.github.io/specpi-jev-guard/",
+  "pi": {
+    "extensions": [
+      "./extensions/jev-guard.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "scripts": {
+    "test": "node --test tests/rules.test.mjs",
+    "typecheck": "tsc --noEmit",
+    "live": "node --env-file=.env tests/live-jev.mjs",
+    "matrix": "node --env-file=.env tests/jev-matrix.mjs",
+    "chart:dark": "node tests/jev-dark.mjs",
+    "chart:png": "magick -density 144 tests/jev-chart-dark.svg tests/jev-chart-dark.png"
+  }
+}

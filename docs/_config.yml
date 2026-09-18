@@ -1,0 +1,3 @@
+title: specpi-jev-guard
+description: Pi extension that gates dangerous shell and file tool calls with the Jev classifier via OpenRouter
+theme: minima
