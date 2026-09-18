@@ -21,7 +21,6 @@ import {
   openRouterDecisionsUrl,
   parseSystemOneResponse,
 } from "../extensions/risk-rules.ts";
-import { PALETTES, clip, escXml, hBar, label, legend, subtitle, svgClose, svgOpen, title } from "./svg-util.mjs";
 
 const BASE = process.env.JEV_GUARD_BASE_URL || "https://openrouter.ai/api/v1";
 const MODEL = process.env.JEV_GUARD_MODEL || "~typesafe/jev-latest";
@@ -332,63 +331,10 @@ md += `\n(!) marks a command whose outcome differed from expectation — the int
 md += `\nHow to read: allow runs, ask needs UI confirmation (blocks headless), block never runs.\n`;
 writeFileSync(new URL("./jev-chart.md", import.meta.url), md, "utf-8");
 
-// ---------------------------------------------------------------- main chart
-function renderMain(p) {
-  const sorted = [...rows].sort((a, b) => (Number.isNaN(a.danger) ? -1 : a.danger) - (Number.isNaN(b.danger) ? -1 : b.danger));
-  const W = 1060;
-  const L = 400;
-  const R = 90;
-  const T = 116;
-  const B = 58;
-  const RH = 24;
-  const H = T + B + sorted.length * RH;
-  const CW = W - L - R;
-  const x = (d) => L + Math.max(0, Math.min(1, d)) * CW;
-  const colors = { allow: p.allow, ask: p.ask, block: p.block, error: p.error };
-
-  let s = svgOpen(p, W, H);
-  s += title(p, 24, 34, "Jev danger by command — live OpenRouter decisions probe");
-  s += subtitle(p, 24, 58, `${MODEL} → ${servedBy} · ${stamp} · ask ≥ ${SETTINGS.askThreshold}, block ≥ ${SETTINGS.blockThreshold} · ${matched}/${rows.length} as expected · avg ${avg}ms`);
-  s += legend(p, { x: 24, y: 82, items: [
-    { color: p.allow, label: "allow (runs)" },
-    { color: p.ask, label: "ask (needs confirmation)" },
-    { color: p.block, label: "block (never runs)" },
-  ] });
-  s += subtitle(p, 24, 100, "Local deny/pass = 0 ms, Jev not consulted. “dark” marks the disguised/obfuscated commands.");
-
-  for (const g of [0, 0.2, 0.4, 0.6, 0.8, 1.0]) {
-    const gx = x(g).toFixed(1);
-    s += `<line x1="${gx}" y1="${T - 8}" x2="${gx}" y2="${H - B + 8}" stroke="${p.grid}" stroke-width="1"/>\n`;
-    s += label(p, { x: x(g), y: H - B + 28, text: g.toFixed(1), fill: p.dim, size: 11, anchor: "middle" });
-  }
-  for (const [t, text] of [[SETTINGS.askThreshold, `ask ${SETTINGS.askThreshold}`], [SETTINGS.blockThreshold, `block ${SETTINGS.blockThreshold}`]]) {
-    const tx = x(t).toFixed(1);
-    s += `<line x1="${tx}" y1="${T - 8}" x2="${tx}" y2="${H - B + 8}" stroke="${p.ask}" stroke-width="1.5" stroke-dasharray="6 4"/>\n`;
-    s += label(p, { x: x(t), y: T - 14, text, fill: p.ask, size: 11, anchor: "middle", weight: "600" });
-  }
-
-  sorted.forEach((r, i) => {
-    const y = T + i * RH;
-    const cy = y + RH / 2;
-    const d = Number.isNaN(r.danger) ? 0 : r.danger;
-    const bw = d * CW;
-    const fill = colors[r.final] || colors.error;
-    s += hBar(p, { x: L, y: y + 3, width: bw, height: RH - 7, fill });
-    s += label(p, { x: L - 10, y: cy + 4, text: clip(r.cmd, 52), anchor: "end", size: 12 });
-    s += label(p, { x: L + bw + 8, y: cy + 4, text: Number.isNaN(r.danger) ? "FAIL" : r.danger.toFixed(2), size: 11.5, weight: "600" });
-    if (!r.match) s += label(p, { x: W - 18, y: cy + 4, text: "variance", fill: p.block, size: 11, anchor: "end" });
-  });
-
-  s += label(p, { x: 24, y: H - 14, text: "0 = routine · 1 = destructive or exfiltrating. Recalibrate thresholds before trusting auto mode.", fill: p.dim, size: 11 });
-  s += svgClose();
-  return s;
-}
-
-writeFileSync(new URL("./jev-chart.svg", import.meta.url), renderMain(PALETTES.light), "utf-8");
-writeFileSync(new URL("./jev-chart-dark.svg", import.meta.url), renderMain(PALETTES.dark), "utf-8");
+// Main-chart rendering lives in jev-insights.mjs (reads jev-results.json, no network).
 
 const variances = rows.filter((r) => !r.match);
-console.log(`\nWROTE jev-results.json, jev-chart.md, jev-chart.svg + dark — ${matched}/${rows.length} as expected, ${failed} request failures, avg ${avg}ms (p95 ${p95}ms)`);
+console.log(`\nWROTE jev-results.json + jev-chart.md — ${matched}/${rows.length} as expected, ${failed} request failures, avg ${avg}ms (p95 ${p95}ms). Run npm run insights for charts.`);
 if (variances.length) {
   console.log(`\nVariances vs expectation (${variances.length}):`);
   for (const v of variances) {

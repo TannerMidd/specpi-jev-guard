@@ -87,7 +87,7 @@ function renderBands(p) {
     for (const band of ["allow", "ask", "block"]) {
       const w = counts[band] * unit;
       if (w <= 0) continue;
-      s += hBar(p, { x: cx, y: y + 6, width: w, height: 24, fill: bandColor(p, band), opacity: 1 });
+      s += hBar(p, { x: cx, y: y + 6, width: w, height: 24, fill: bandColor(p, band), opacity: 1, tip: `${GROUP_LABELS[g]}: ${counts[band]} ${band}` });
       if (w > 22) s += label(p, { x: cx + w / 2, y: y + 23, text: String(counts[band]), anchor: "middle", size: 12, fill: p.bg, weight: "700" });
       cx += w;
     }
@@ -276,6 +276,66 @@ function renderLatency(p) {
   return s;
 }
 
+// ---------------------------------------------------------------- main chart
+// Minimal by design: no per-bar numbers (hover any bar for the details),
+// gridlines only at 0 / 0.5 / 1.0 plus the two threshold guides.
+function renderMain(p) {
+  const sorted = [...rows].sort((a, b) => (Number.isNaN(a.danger) ? -1 : a.danger) - (Number.isNaN(b.danger) ? -1 : b.danger));
+  const W = 1120;
+  const L = 380;
+  const R = 80;
+  const T = 118;
+  const B = 54;
+  const RH = 26;
+  const H = T + B + sorted.length * RH;
+  const CW = W - L - R;
+  const x = (d) => L + Math.max(0, Math.min(1, d)) * CW;
+  const colors = { allow: p.allow, ask: p.ask, block: p.block, error: p.error };
+
+  let s = svgOpen(p, W, H);
+  s += title(p, 24, 34, "Jev danger by command");
+  s += subtitle(p, 24, 58, `${meta.model} → ${meta.servedBy} · ${meta.stamp} · ask ≥ ${meta.askThreshold}, block ≥ ${meta.blockThreshold} · ${meta.matched}/${meta.total} as expected · avg ${meta.latency.avg}ms`);
+  s += legend(p, { x: 24, y: 84, items: [
+    { color: p.allow, label: "allow (runs)" },
+    { color: p.ask, label: "ask (confirms)" },
+    { color: p.block, label: "block (never runs)" },
+  ] });
+  s += subtitle(p, 24, 104, "Local deny/pass settles in 0 ms without consulting Jev. Hover any bar for the exact score.");
+
+  for (const g of [0, 0.5, 1.0]) {
+    const gx = x(g).toFixed(1);
+    s += `<line x1="${gx}" y1="${T - 8}" x2="${gx}" y2="${H - B + 8}" stroke="${p.grid}" stroke-width="1"/>\n`;
+    s += label(p, { x: x(g), y: H - B + 28, text: g.toFixed(1), fill: p.dim, size: 12, anchor: "middle" });
+  }
+  for (const [t, text] of [[meta.askThreshold, `ask ${meta.askThreshold}`], [meta.blockThreshold, `block ${meta.blockThreshold}`]]) {
+    const tx = x(t).toFixed(1);
+    s += `<line x1="${tx}" y1="${T - 8}" x2="${tx}" y2="${H - B + 8}" stroke="${p.ask}" stroke-width="1.5" stroke-dasharray="6 4"/>\n`;
+    s += label(p, { x: x(t), y: T - 14, text, fill: p.ask, size: 12, anchor: "middle", weight: "600" });
+  }
+
+  sorted.forEach((r, i) => {
+    const y = T + i * RH;
+    const cy = y + RH / 2;
+    const d = Number.isNaN(r.danger) ? 0 : r.danger;
+    const fill = colors[r.final] || colors.error;
+    const tip =
+      `${r.cmd}\n` +
+      `danger ${Number.isNaN(r.danger) ? "unavailable" : r.danger.toFixed(2)} · ${r.final} · ${r.latencyMs}ms` +
+      (r.local === "jev" ? "" : ` · decided locally (${r.local})`) +
+      (r.match ? "" : ` · differs from expectation (expected ${r.expect})`);
+    s += hBar(p, { x: L, y: y + 3, width: d * CW, height: RH - 7, fill, tip });
+    s += label(p, { x: L - 12, y: cy + 4.5, text: clip(r.cmd, 48), anchor: "end", size: 13 });
+    if (!r.match) {
+      s += `<circle cx="${(W - 30).toFixed(1)}" cy="${cy.toFixed(1)}" r="4" fill="${p.ask}"><title>Differs from expectation (expected ${r.expect})</title></circle>\n`;
+    }
+  });
+
+  s += label(p, { x: 24, y: H - 14, text: "0 = routine · 1 = destructive or exfiltrating.", fill: p.dim, size: 12 });
+  s += svgClose();
+  return s;
+}
+
+write2("jev-chart", renderMain);
 write2("insight-bands", renderBands);
 write2("insight-sneaky", renderSneaky);
 write2("insight-layers", renderLayers);
@@ -283,4 +343,4 @@ write2("insight-expectations", renderExpectations);
 write2("insight-latency", renderLatency);
 
 const variances = rows.filter((r) => !r.match).length;
-console.log(`WROTE 5 insight charts (light + dark) from ${rows.length} results — ${variances} expectation variances noted`);
+console.log(`WROTE main + 5 insight charts (light + dark) from ${rows.length} results — ${variances} expectation variances noted`);

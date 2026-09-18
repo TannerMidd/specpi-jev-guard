@@ -1,6 +1,9 @@
 ---
 ---
 
+// Wide, full-page reading measure for chart-heavy content.
+$content-width: 1140px;
+
 @import "minima";
 
 /* ------------------------------------------------------------------
@@ -124,4 +127,49 @@
   font-size: 0.85rem;
   line-height: 1.5;
   opacity: 0.75;
+}
+
+/* ------------------------------------------------------------------
+   Stat strip: key numbers in responsive cards.
+   ------------------------------------------------------------------ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.stat-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  background: #f8fafc;
+}
+
+.stat-card strong {
+  display: block;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.stat-card span {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  opacity: 0.75;
+}
+
+.stat-card.allow strong { color: #16a34a; }
+.stat-card.ask strong { color: #ca8a04; }
+.stat-card.block strong { color: #dc2626; }
+
+@media (prefers-color-scheme: dark) {
+  .stat-card {
+    border-color: #334155;
+    background: #16213a;
+  }
+
+  .stat-card.allow strong { color: #4ade80; }
+  .stat-card.ask strong { color: #fbbf24; }
+  .stat-card.block strong { color: #f87171; }
 }

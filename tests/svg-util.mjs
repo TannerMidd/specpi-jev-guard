@@ -62,9 +62,11 @@ export function subtitle(p, x, y, text) {
   return `<text x="${x}" y="${y}" font-size="13" fill="${p.dim}">${escXml(text)}</text>\n`;
 }
 
-/** A labelled horizontal bar. */
-export function hBar(p, { x, y, width, height, fill, opacity = 0.9 }) {
-  return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(2, width).toFixed(1)}" height="${height}" rx="4" fill="${fill}" opacity="${opacity}"/>\n`;
+/** A labelled horizontal bar. Pass `tip` for a native hover tooltip. */
+export function hBar(p, { x, y, width, height, fill, opacity = 0.9, tip }) {
+  const rect = `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(2, width).toFixed(1)}" height="${height}" rx="4" fill="${fill}" opacity="${opacity}"/>\n`;
+  if (tip === undefined) return rect;
+  return `<g><title>${escXml(tip)}</title>\n${rect}</g>\n`;
 }
 
 export function label(p, { x, y, text, fill, size = 12, anchor = "start", weight }) {

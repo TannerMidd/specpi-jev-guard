@@ -164,7 +164,7 @@ per-command table with reasons. Highlights from the latest run (124 commands,
 
 - **Disguise hardly matters.** 14 obfuscated commands (base64 piped into `sh`,
   `python -c "shutil.rmtree('/')"`, `find / -delete`, `git branch -D`) averaged
-  0.82 danger and none were allowed.
+  0.81 danger and none were allowed.
 - **Traps do not false-alarm.** `kubectl apply`, `git push origin main`, and
   `docker run --rm hello-world` all pass without prompting.
 - **The local layer found a real bug.** `find / -delete` was scored 0.96 by
