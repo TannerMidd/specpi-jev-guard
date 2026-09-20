@@ -562,11 +562,16 @@ export default function (pi: ExtensionAPI) {
   }
 
   /**
-   * The footer line: the running count in every mode, plus the last verdict in
-   * `status` mode. A count with no records to read is the point of the thing,
-   * so it is shown whether or not the transcript is.
+   * The footer line: the running count, plus the last verdict in `status`
+   * mode. A count with no records to read is the point of the thing, so it is
+   * shown whether or not the transcript is. `off` is the exception: it means
+   * the session should look untouched, and a line in the footer is a mark.
    */
   function showStatus(ctx: ExtensionContext): void {
+    if (auditDisplay === "off") {
+      clearAuditStatus(ctx);
+      return;
+    }
     const text = formatGuardStatus({
       calls: tally.calls,
       blocked: tally.blocked,
@@ -952,7 +957,7 @@ export default function (pi: ExtensionAPI) {
         const kept = "Every decision is still written to the session file.";
         ctx.ui.notify(
           mode === "transcript"
-            ? "jev-guard audit records show as a box in the transcript."
+            ? `jev-guard audit records show as one dim line under each judged call. ${kept}`
             : mode === "status"
               ? `jev-guard audit records show as one line in the footer. ${kept}`
               : `jev-guard audit records are hidden. ${kept}`,

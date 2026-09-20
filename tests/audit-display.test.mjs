@@ -127,12 +127,20 @@ describe("auditDisplay", () => {
     assert.equal(host.statuses.at(-1).text, "jev 0 · 1 blocked · bash blocked");
   });
 
-  it("off mode shows no record anywhere, and still records", async () => {
+  it("off mode leaves no mark at all, and still records", async () => {
     const host = await boot({ auditDisplay: "off" });
     await denyOneCall(host);
-    assert.equal(host.entries.length, 1);
+    assert.equal(host.entries.length, 1, "the record still reaches the session file");
     assert.equal(render(host), undefined);
-    assert.equal(host.statuses.at(-1).text, "jev 0 · 1 blocked", "the count is not a record");
+    assert.deepEqual(host.statuses, [], "not even a count: off means the session looks untouched");
+  });
+
+  it("switching to off takes the footer line away with it", async () => {
+    const host = await boot({ auditDisplay: "status" });
+    await denyOneCall(host);
+    assert.ok(host.statuses.at(-1).text.startsWith("jev "));
+    await host.command.handler("audit off", host.ctx);
+    assert.equal(host.statuses.at(-1).text, undefined);
   });
 
   it("blocks stay loud in every mode", async () => {
