@@ -71,36 +71,33 @@ export const DEFAULT_SETTINGS: GuardSettings = {
   ],
 };
 
-/** Commands that are read-only and side-effect free on their own. */
-const SAFE_BINARIES = new Set([
+/**
+ * Binaries whose whole option surface is a read: nothing any flag of theirs
+ * can do writes a file, changes machine state, or starts another program.
+ * The name on its own is enough to fast-pass them.
+ *
+ * Membership here is a claim about the tool, not about the call, so it is a
+ * short list on purpose. Anything that has even one flag which writes or
+ * execs belongs in READ_ONLY_FLAGS below, where the flags get checked.
+ */
+const ALWAYS_READ_ONLY = new Set([
   "ls",
   "dir",
+  "lsd",
   "cat",
   "type",
   "head",
   "tail",
-  "more",
-  "less",
-  "pwd",
-  "cd",
-  "whoami",
-  "hostname",
-  "date",
-  "uname",
-  "echo",
-  "printf",
   "wc",
-  "sort",
-  "uniq",
   "cut",
   "tr",
   "grep",
-  "rg",
-  "find",
-  "fd",
-  "lsd",
-  "tree",
-  "file",
+  "echo",
+  "printf",
+  "pwd",
+  "cd",
+  "whoami",
+  "uname",
   "stat",
   "df",
   "du",
@@ -108,40 +105,6 @@ const SAFE_BINARIES = new Set([
   "ps",
   "which",
   "where",
-  "git",
-  "hg",
-  "svn",
-]);
-
-/** git subcommands that never mutate anything. */
-const SAFE_GIT_SUBCOMMANDS = new Set([
-  "status",
-  "log",
-  "diff",
-  "show",
-  "branch",
-  "rev-parse",
-  "ls-files",
-  "ls-remote",
-  "remote",
-  "tag",
-  "blame",
-  "grep",
-  "stash",
-]);
-
-// hg/svn have no per-command handling below, so — unlike git — a subcommand
-// not listed here falls through to Jev instead of fast-passing. These are the
-// read-only ones; anything else (hg purge, hg update -C, svn rm, svn export)
-// mutates and must not be treated as a provably read-only chain.
-const SAFE_HG_SUBCOMMANDS = new Set([
-  "status", "st", "log", "diff", "cat", "annotate", "blame",
-  "id", "root", "summary", "sum", "paths", "tags", "heads",
-  "branches", "manifest", "files", "grep", "identify",
-]);
-const SAFE_SVN_SUBCOMMANDS = new Set([
-  "status", "st", "log", "diff", "cat", "info", "list", "ls",
-  "blame", "annotate", "praise", "propget", "pg", "proplist", "pl",
 ]);
 
 /** Shell operators that make a command line non-trivial. A single `&`
@@ -359,118 +322,281 @@ export function splitChain(command: string): string[] {
     .filter((s) => s.length > 0);
 }
 
-/** Long options are matched by prefix: git, Mercurial and the GNU tools all
- *  accept unambiguous abbreviations, so a rule that only knows the full
- *  spelling has a bypass (`git tag --del` for `--delete`, `sort --out` for
- *  `--output`). Any prefix of `full` counts; over-matching a read-only option
- *  only sends the call to Jev. */
-function anyLongOptPrefix(args: string[], full: string): boolean {
-  return args.some((a) => {
-    const name = a.split("=")[0] ?? "";
-    return name.startsWith("--") && name.length > 2 && full.startsWith(name);
-  });
+/**
+ * The read-only flags of one binary, or of one `git` subcommand.
+ *
+ * This is an allowlist, which is the whole point of it. The blocklist it
+ * replaces had to be finished to be correct, and three rounds of hand-probing
+ * showed it never would be: `rg --pre` was closed in one round and
+ * `rg --hostname-bin`, the same idea in the same option family, was still open
+ * two rounds later. An allowlist is finished the moment it is written. A tool
+ * that grows a new way to run a program in its next release cannot reopen a
+ * hole here, because the new option is not on the list and the call escalates.
+ *
+ * Forgetting an option therefore costs one classifier call, which the verdict
+ * cache pays once per session. Forgetting one in a blocklist cost a bypass.
+ */
+type ReadOnlyFlags = {
+  /** Short option letters that only read. A cluster like `-rn` is split up. */
+  short: string;
+  /** Short options that take a value, attached or as the next word. */
+  valued?: string;
+  /** Long options that only read, spelled out in full. */
+  long: string[];
+  /** Predicates spelled with one dash and a whole word, the shape `find` uses. */
+  words?: string[];
+  /** True when this tool accepts unambiguous abbreviations of a long option.
+   *  git and the GNU tools do; anything built on clap (rg, fd) does not, and
+   *  saying so matters: `--pre` must not be read as short for `--pretty`. */
+  abbrev?: boolean;
+  /** Structure the flags alone do not capture, such as which operand of
+   *  `git stash` is the one that only lists. */
+  operands?: (rest: string[]) => boolean;
+};
+
+/** Diff output options, shared by the subcommands that produce a diff. Not
+ *  `--output`, which writes the diff to a path of the caller's choosing, and
+ *  not `--ext-diff`, which hands the file to the configured external driver. */
+const GIT_DIFF_LONG = [
+  "stat", "numstat", "shortstat", "compact-summary", "dirstat", "summary",
+  "name-only", "name-status", "patch", "no-patch", "raw", "unified",
+  "diff-filter", "diff-algorithm", "find-renames", "find-copies",
+  "find-copies-harder", "break-rewrites", "renames", "no-renames",
+  "irreversible-delete", "minimal", "patience", "histogram", "anchored",
+  "relative", "text", "binary", "full-index", "abbrev", "src-prefix",
+  "dst-prefix", "no-prefix", "color", "no-color", "color-words", "word-diff",
+  "word-diff-regex", "function-context", "ignore-all-space",
+  "ignore-space-change", "ignore-space-at-eol", "ignore-blank-lines",
+  "ignore-cr-at-eol", "ignore-submodules", "submodule", "check", "exit-code",
+  "quiet", "textconv", "no-textconv", "no-ext-diff", "stat-width",
+  "cached", "staged", "merge-base",
+];
+
+/** Commit selection and formatting for the history subcommands. */
+const GIT_LOG_LONG = [
+  "oneline", "graph", "decorate", "no-decorate", "format", "pretty",
+  "abbrev-commit", "no-abbrev-commit", "date", "since", "until", "after",
+  "before", "author", "committer", "grep", "all", "branches", "tags",
+  "remotes", "reverse", "max-count", "skip", "first-parent", "merges",
+  "no-merges", "follow", "topo-order", "date-order", "author-date-order",
+  "boundary", "parents", "children", "left-right", "cherry-pick", "count",
+  "walk-reflogs", "simplify-by-decoration", "no-walk", "source",
+];
+
+/**
+ * The `git` subcommands that can fast-pass, and what each one may be passed.
+ * A subcommand that is not a key here escalates, which also covers the global
+ * option position: `git -c core.pager=... log` has `-c` where a subcommand
+ * should be, and `-c` is not a key.
+ */
+const GIT_READ_ONLY: Record<string, ReadOnlyFlags> = {
+  status: {
+    short: "sbuz", valued: "u", abbrev: true,
+    long: ["short", "branch", "porcelain", "long", "verbose", "untracked-files",
+      "ignored", "ignore-submodules", "column", "no-column", "renames",
+      "no-renames", "find-renames", "show-stash", "ahead-behind",
+      "no-ahead-behind", "null"],
+  },
+  log: {
+    short: "npUwsSGLi", valued: "nUSGL", abbrev: true,
+    long: [...GIT_LOG_LONG, ...GIT_DIFF_LONG],
+  },
+  show: {
+    short: "npUwsq", valued: "nUS", abbrev: true,
+    long: [...GIT_LOG_LONG, ...GIT_DIFF_LONG],
+  },
+  diff: {
+    short: "pUwsMCBRzbW", valued: "UMCB", abbrev: true,
+    long: [...GIT_DIFF_LONG, "no-index", "numbered"],
+  },
+  blame: {
+    short: "LwfncersMC", valued: "LMC", abbrev: true,
+    long: ["line-porcelain", "porcelain", "incremental", "show-name",
+      "show-number", "show-email", "show-stats", "root", "reverse", "abbrev",
+      "date", "encoding", "contents", "ignore-rev", "ignore-revs-file",
+      "color-lines", "color-by-age", "first-parent"],
+  },
+  grep: {
+    // Not `-O`/`--open-files-in-pager`, which runs its argument over every
+    // match. No allowed spelling starts with "op", so no abbreviation of it
+    // gets through either.
+    short: "nilLcHhIwvaeEFPfzqW", valued: "efmC", abbrev: true,
+    long: ["line-number", "no-line-number", "column", "count",
+      "files-with-matches", "files-without-match", "name-only", "recursive",
+      "no-recursive", "max-depth", "cached", "untracked", "no-index",
+      "exclude-standard", "no-exclude-standard", "text", "ignore-case",
+      "word-regexp", "invert-match", "extended-regexp", "basic-regexp",
+      "fixed-strings", "perl-regexp", "only-matching", "threads", "heading",
+      "break", "context", "after-context", "before-context",
+      "function-context", "and", "or", "not", "all-match", "full-name",
+      "textconv", "no-textconv", "quiet", "null"],
+  },
+  branch: {
+    // Listing only. `-d/-D` delete, `-m/-M` move and `-f/-C` reset a branch to
+    // another commit, so none of those letters are here, and neither is any
+    // long spelling they could be abbreviated from: git resolves `--forc` to
+    // `--force`, and nothing on this list starts with "forc".
+    short: "avrl", abbrev: true,
+    long: ["list", "all", "verbose", "remotes", "contains", "no-contains",
+      "merged", "no-merged", "points-at", "sort", "format", "color",
+      "no-color", "column", "no-column", "show-current", "ignore-case",
+      "abbrev", "no-abbrev", "quiet"],
+  },
+  tag: {
+    short: "ln", valued: "n", abbrev: true,
+    long: ["list", "contains", "no-contains", "merged", "no-merged",
+      "points-at", "sort", "format", "color", "column", "ignore-case",
+      "omit-empty"],
+  },
+  "rev-parse": {
+    short: "q", abbrev: true,
+    long: ["verify", "abbrev-ref", "symbolic", "symbolic-full-name", "short",
+      "is-inside-work-tree", "is-bare-repository", "is-inside-git-dir",
+      "is-shallow-repository", "show-toplevel", "show-prefix", "show-cdup",
+      "show-superproject-working-tree", "git-dir", "git-common-dir",
+      "absolute-git-dir", "path-format", "quiet", "default", "all",
+      "branches", "tags", "remotes", "disambiguate", "shared-index-path"],
+  },
+  "ls-files": {
+    short: "cdmosztiuvkx", valued: "x", abbrev: true,
+    long: ["cached", "deleted", "modified", "others", "ignored", "stage",
+      "unmerged", "killed", "exclude", "exclude-standard", "full-name",
+      "abbrev", "error-unmatch", "with-tree", "directory",
+      "no-empty-directory", "eol", "deduplicate", "format", "null"],
+  },
+  "ls-remote": {
+    // Not `--upload-pack`, which names the program run on the other end.
+    short: "hqt", abbrev: true,
+    long: ["heads", "tags", "refs", "get-url", "exit-code", "symref", "quiet",
+      "sort"],
+  },
+  remote: {
+    short: "v", abbrev: true, long: ["verbose"],
+    // add/remove/set-url/rename rewrite config; update/prune touch refs.
+    operands: (rest) => {
+      const ops = rest.filter((a) => !a.startsWith("-"));
+      return ops.length === 0 || ["show", "get-url"].includes(ops[0].toLowerCase());
+    },
+  },
+  stash: {
+    short: "pu", abbrev: true, long: [...GIT_LOG_LONG, ...GIT_DIFF_LONG],
+    // A bare `git stash` saves; push/pop/apply/drop/clear all mutate.
+    operands: (rest) => {
+      const ops = rest.filter((a) => !a.startsWith("-"));
+      return ops.length > 0 && ["list", "show"].includes(ops[0].toLowerCase());
+    },
+  },
+};
+
+/**
+ * The non-git binaries that stay on the fast pass despite owning a flag that
+ * writes or runs something. Their read-only flags are named; the rest escalate.
+ */
+const READ_ONLY_FLAGS: Record<string, ReadOnlyFlags> = {
+  // Not -x/-X/--exec/--exec-batch, which run a command over every result, and
+  // not -l/--list-details, which fd implements by running `ls`.
+  fd: {
+    short: "HIsigFapL01uqdteEcjS", valued: "dteEcjSj",
+    long: ["hidden", "no-ignore", "no-ignore-vcs", "unrestricted",
+      "case-sensitive", "ignore-case", "glob", "regex", "fixed-strings",
+      "absolute-path", "follow", "full-path", "print0", "max-depth",
+      "min-depth", "exact-depth", "type", "extension", "exclude",
+      "ignore-file", "size", "changed-within", "changed-before", "owner",
+      "color", "threads", "max-results", "quiet", "show-errors",
+      "base-directory", "path-separator", "search-path", "strip-cwd-prefix",
+      "one-file-system", "and", "prune", "help", "version"],
+  },
+  // Not --pre/--pre-glob, which filter each file through a command, and not
+  // --hostname-bin, which runs one to label the output. rg takes long options
+  // exactly, so `--pre` is never read as an abbreviation of `--pretty`.
+  rg: {
+    short: "ieEvwxcltLnNHhmABCFfgjoprsStTuUzaPM01",
+    valued: "emABCfgjtTrdM",
+    long: ["regexp", "file", "ignore-case", "case-sensitive", "smart-case",
+      "invert-match", "word-regexp", "line-regexp", "count", "count-matches",
+      "files-with-matches", "files-without-match", "files", "line-number",
+      "no-line-number", "column", "with-filename", "no-filename", "heading",
+      "no-heading", "max-count", "max-depth", "max-filesize", "after-context",
+      "before-context", "context", "context-separator", "fixed-strings",
+      "glob", "iglob", "glob-case-insensitive", "threads", "only-matching",
+      "pretty", "quiet", "replace", "no-messages", "sort", "sortr", "type",
+      "type-not", "type-add", "type-list", "unrestricted", "multiline",
+      "multiline-dotall", "search-zip", "text", "binary", "pcre2", "hidden",
+      "no-ignore", "no-ignore-vcs", "follow", "null", "null-data", "json",
+      "stats", "trim", "vimgrep", "path-separator", "color", "colors",
+      "crlf", "encoding", "engine", "field-match-separator", "include-zero",
+      "one-file-system", "mmap", "no-mmap", "byte-offset", "block-buffered",
+      "line-buffered", "debug", "help", "version"],
+  },
+  // Not -delete, -exec, -execdir, -ok, -okdir, -fprint, -fprint0, -fprintf or
+  // -fls. find matches predicates exactly, so -fprintf cannot ride in on
+  // -printf. Bare numbers are operands: `-mtime -1`, `-perm -644`.
+  find: {
+    short: "HLP",
+    long: ["help", "version"],
+    words: ["maxdepth", "mindepth", "depth", "daystart", "follow", "help",
+      "mount", "noleaf", "ignore_readdir_race", "noignore_readdir_race",
+      "regextype", "version", "warn", "nowarn", "xdev", "xautofs", "files0-from",
+      "amin", "anewer", "atime", "cmin", "cnewer", "ctime", "mmin", "mtime",
+      "newer", "empty", "executable", "readable", "writable", "false", "true",
+      "fstype", "gid", "uid", "group", "user", "nogroup", "nouser", "context",
+      "name", "iname", "path", "ipath", "wholename", "iwholename", "lname",
+      "ilname", "regex", "iregex", "inum", "links", "perm", "samefile", "size",
+      "type", "xtype", "used",
+      "print", "print0", "printf", "ls", "quit", "prune",
+      "not", "and", "or", "a", "o"],
+  },
+};
+
+/** True when every flag in `args` is one the policy names as a read. */
+function flagsAreReadOnly(policy: ReadOnlyFlags, args: string[]): boolean {
+  for (const arg of args) {
+    if (arg === "--") break; // everything after this is an operand
+    if (arg === "-" || !arg.startsWith("-")) continue; // operand, or stdin
+    if (/^-\d+$/.test(arg)) continue; // `-5`, and find's numeric comparisons
+
+    if (arg.startsWith("--")) {
+      const name = arg.slice(2).split("=")[0] ?? "";
+      if (name === "") continue;
+      const named = policy.abbrev
+        ? policy.long.some((l) => l.startsWith(name))
+        : policy.long.includes(name);
+      if (!named) return false;
+      continue;
+    }
+
+    if (policy.words) {
+      // One dash and a whole word, matched exactly: no abbreviation, so
+      // -fprintf is not -printf with a letter in front of it.
+      const word = arg.slice(1);
+      if (policy.words.includes(word)) continue;
+      if ([...word].every((c) => policy.short.includes(c))) continue;
+      return false;
+    }
+
+    for (const c of arg.slice(1)) {
+      if (!policy.short.includes(c)) return false;
+      // A letter that takes a value swallows the rest of the word, so `-uno`
+      // is `-u no` and not a cluster containing `n` and `o`.
+      if (policy.valued?.includes(c)) break;
+    }
+  }
+  return policy.operands ? policy.operands(args) : true;
 }
 
-/** Flags that turn an otherwise read-only binary into a writer, or a `git`
- *  subcommand that mutates refs. A matching segment falls through to Jev
- *  instead of fast-passing, so the zero-latency path stays provably read-only. */
-function hasUnsafeReadOnlyFlag(bin: string, args: string[]): boolean {
-  const nonFlag = args.filter((a) => !a.startsWith("-"));
-  const flag = (re: RegExp): boolean => args.some((a) => re.test(a));
-  switch (bin) {
-    case "find":
-      // -delete, -exec*, -ok*, -fprint* all mutate the filesystem.
-      return flag(/^-(delete|exec|execdir|ok|okdir|fprint|fprint0|fprintf|fls)$/);
-    case "fd":
-      // -x/--exec and -X/--exec-batch run an arbitrary command over the
-      // results; -e is the extension filter and is not a code path. The short
-      // form may be attached with `=`, as in `fd -x=echo`.
-      return flag(/^-[a-zA-Z]*[xX][a-zA-Z]*(=.*)?$/) || flag(/^--exec(-batch)?(=.*)?$/);
-    case "rg":
-      // --pre/--pre-glob pipe each file through a command of the caller's
-      // choosing: code execution wearing the name of a search.
-      return flag(/^--pre(-glob)?(=.*)?$/);
-    case "tree":
-      // -o/--output writes the listing into a file instead of stdout.
-      return flag(/^(-o.*|--output(=.*)?)$/) || anyLongOptPrefix(args, "--output");
-    case "file":
-      // -C/--compile writes the compiled magic database beside the source.
-      return flag(/^-[a-zA-Z]*C[a-zA-Z]*$/) || anyLongOptPrefix(args, "--compile");
-    case "date":
-      // -s/--set changes the system clock.
-      return flag(/^-[a-zA-Z]*s[a-zA-Z]*$/) || anyLongOptPrefix(args, "--set");
-    case "hostname":
-      // A bare operand sets the hostname; flags alone only read it.
-      return nonFlag.length >= 1;
-    case "sort":
-      // sort -o file / --output=file overwrite the target. --compress-program
-      // runs a program of the caller's choosing when the sort spills to disk.
-      return flag(/^(-o.+|--output(=.*)?)$/) || args.includes("-o") ||
-        anyLongOptPrefix(args, "--output") || anyLongOptPrefix(args, "--compress-program");
-    case "uniq":
-      // uniq IN OUT writes to OUT; one operand (or flags only) is read-only.
-      return nonFlag.length >= 2;
-    case "git":
-      return isUnsafeGitArgs(args);
-    case "hg":
-      // Global options may follow the subcommand; --config can load an
-      // arbitrary Python extension and --debugger starts an interactive one.
-      return anyLongOptPrefix(args, "--config") || anyLongOptPrefix(args, "--configfile") || anyLongOptPrefix(args, "--debugger");
-    case "svn":
-      // --diff-cmd runs an external program; a caller-supplied config dir or
-      // option can set that program. Code execution behind a read subcommand.
-      return anyLongOptPrefix(args, "--diff-cmd") ||
-        anyLongOptPrefix(args, "--config-option") ||
-        anyLongOptPrefix(args, "--config-dir");
-    default:
-      return false;
+/** The policy for one invocation, or undefined when it cannot fast-pass. */
+function readOnlyPolicy(bin: string, args: string[]): { policy: ReadOnlyFlags; rest: string[] } | undefined {
+  if (bin === "git") {
+    const sub = (args[0] ?? "").toLowerCase();
+    const policy = Object.prototype.hasOwnProperty.call(GIT_READ_ONLY, sub)
+      ? GIT_READ_ONLY[sub]
+      : undefined;
+    return policy ? { policy, rest: args.slice(1) } : undefined;
   }
-}
-
-/** True when a `git` invocation mutates refs, history, remotes, or runs code. */
-function isUnsafeGitArgs(args: string[]): boolean {
-  const sub = (args[0] ?? "").toLowerCase();
-  const rest = args.slice(1);
-  const first = (rest[0] ?? "").toLowerCase();
-  const anyFlag = (re: RegExp): boolean => rest.some((a) => re.test(a));
-  // --output=<file> writes the diff to an arbitrary path, and every diff-
-  // producing subcommand on the safe list accepts it (diff, show, log). The
-  // prefix form covers the abbreviations git itself accepts.
-  if (anyLongOptPrefix(rest, "--output")) return true;
-  switch (sub) {
-    case "branch":
-      // -d/-D delete, -m/-M move, -f/-C reset an existing branch to another
-      // commit, which drops whatever was on it. Plain `git branch` and
-      // `-a/-v/-r` only list. Creating a branch or a tag (a bare name operand)
-      // writes a ref but loses nothing and is left on the fast-pass, so listing
-      // forms like `git branch --format=...` are not dragged to Jev.
-      return anyFlag(/^-[a-zA-Z]*[dDmMfC][a-zA-Z]*$/) ||
-        anyLongOptPrefix(rest, "--delete") ||
-        anyLongOptPrefix(rest, "--move") ||
-        anyLongOptPrefix(rest, "--force") ||
-        anyLongOptPrefix(rest, "--copy");
-    case "tag":
-      return anyFlag(/^-[a-zA-Z]*[dTf][a-zA-Z]*$/) ||
-        anyLongOptPrefix(rest, "--delete") ||
-        anyLongOptPrefix(rest, "--force");
-    case "remote":
-      // Mutating forms: add/remove/set-url/rename change config; update/prune
-      // fetch or delete tracking refs. `git remote` / `-v` / `show` only read.
-      return ["add", "remove", "rm", "set-url", "set-head", "set-branches", "rename", "prune", "update"].includes(first);
-    case "stash":
-      // Only listing/inspecting is read-only. Bare `git stash` (save),
-      // push/pop/apply/drop/clear all mutate the working tree or stash.
-      return !["list", "show"].includes(first);
-    case "grep":
-      // -O / --open-files-in-pager runs its argument as a shell command over
-      // the matching files — arbitrary code execution, not a read. The prefix
-      // form covers git's accepted abbreviations such as --op=.
-      return rest.some((a) => /^-O/.test(a)) || anyLongOptPrefix(rest, "--open-files-in-pager");
-    case "clean":
-      return true;
-    default:
-      return false;
-  }
+  const policy = Object.prototype.hasOwnProperty.call(READ_ONLY_FLAGS, bin)
+    ? READ_ONLY_FLAGS[bin]
+    : undefined;
+  return policy ? { policy, rest: args } : undefined;
 }
 
 /** True when a single chain segment is a provably read-only invocation. */
@@ -478,17 +604,11 @@ function isSafeSegment(segment: string): boolean {
   if (OPERATOR_RE.test(segment)) return false;
   const trimmed = segment.trim();
   const bin = binaryOf(trimmed);
-  if (!SAFE_BINARIES.has(bin)) return false;
-  if (bin === "git" || bin === "hg" || bin === "svn") {
-    const sub = trimmed.split(/\s+/)[1]?.toLowerCase().replace(/^-+/, "") ?? "";
-    const allow =
-      bin === "git" ? SAFE_GIT_SUBCOMMANDS : bin === "hg" ? SAFE_HG_SUBCOMMANDS : SAFE_SVN_SUBCOMMANDS;
-    if (!allow.has(sub)) return false;
-  }
-  if (hasUnsafeReadOnlyFlag(bin, trimmed.split(/\s+/).slice(1))) return false;
   // Assignment prefixes (FOO=bar cmd) and sudo/doas wrappers are not provably safe.
   if (/^\w+=/.test(trimmed) || bin === "sudo" || bin === "doas" || bin === "su") return false;
-  return true;
+  if (ALWAYS_READ_ONLY.has(bin)) return true;
+  const found = readOnlyPolicy(bin, trimmed.split(/\s+/).slice(1));
+  return found !== undefined && flagsAreReadOnly(found.policy, found.rest);
 }
 
 /**
