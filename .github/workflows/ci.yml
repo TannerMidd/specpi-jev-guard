@@ -22,3 +22,7 @@ jobs:
       - run: npm test
       - run: npm run typecheck
       - run: npm pack --dry-run
+      # Replays the recorded devious set through pi-permission-system's gates.
+      # No network and no key, so the published head-to-head cannot drift
+      # without this failing.
+      - run: npm run compare

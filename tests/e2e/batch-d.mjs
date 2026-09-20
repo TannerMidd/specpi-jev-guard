@@ -100,9 +100,13 @@ export default async function runBatchD() {
       const pi = new Pi({ name: "d5-published", env: { HOME: home2, USERPROFILE: home2 } });
       const status = (await pi.prompt("/jev-guard status", { quietMs: 4000 })).notices.join("\n");
       await pi.stop();
-      record("D5", "the published package loads in a clean pi home",
-        "status answers from the npm copy",
-        status.replace(/\s+/g, " ").slice(0, 200), /jev-guard: (ON|OFF)/.test(status));
+      // The registry copy, not this branch: what is on npm today is an earlier
+      // release, and the tarball for this one is covered by every other batch.
+      // What this proves is that an install by name produces a working extension.
+      record("D5", "the copy already on npm loads in a clean pi home",
+        "status answers from the npm copy, whichever version that is",
+        `${fromNpm.out.replace(/\s+/g, " ").slice(0, 90)} | ${status.replace(/\s+/g, " ").slice(0, 140)}`,
+        /jev-guard: (ON|OFF)/.test(status));
     }
   }
 

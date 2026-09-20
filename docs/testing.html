@@ -82,7 +82,7 @@
 <div class="stat-grid">
   <div class="stat-card"><strong>48</strong><span>scenarios in one recorded run</span></div>
   <div class="stat-card"><strong>16</strong><span>decisions the guard recorded, live</span></div>
-  <div class="stat-card"><strong>416 ms</strong><span>median classifier answer in the run</span></div>
+  <div class="stat-card"><strong>424 ms</strong><span>median classifier answer in the run</span></div>
   <div class="stat-card good"><strong>47 of 47</strong><span>exercised scenarios behaved as specified</span></div>
 </div>
 <!--/include-->
@@ -177,18 +177,18 @@
 <text x="942" y="188" font-size="12" fill="var(--jv-muted, #898781)" text-anchor="start">15 scenarios</text>
 <text x="312" y="244" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">The gate itself</text>
 <text x="312" y="262" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">a real agent proposing real tool calls</text>
-<g class="mark-g"><title>13 scenarios behaved as specified</title><path class="mark" d="M330,232H846A4,4 0 0 1 850,236V254A4,4 0 0 1 846,258H330V232Z" fill="var(--jv-allow, #0ca30c)"/>
+<g class="mark-g"><title>12 scenarios behaved as specified</title><path class="mark" d="M330,232H808V258H330V232Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="590" y="250" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">13</text>
+<text x="570" y="250" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">12</text>
+<g class="mark-g"><title>1 scenario was not exercised</title><path class="mark" d="M810,232H846A4,4 0 0 1 850,236V254A4,4 0 0 1 846,258H810V232Z" fill="var(--jv-muted, #898781)"/>
+</g>
+<text x="830" y="250" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
 <text x="862" y="250" font-size="12" fill="var(--jv-muted, #898781)" text-anchor="start">13 scenarios</text>
 <text x="312" y="306" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">When things go wrong</text>
 <text x="312" y="324" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">no key, no network, a timeout, odd config</text>
-<g class="mark-g"><title>13 scenarios behaved as specified</title><path class="mark" d="M330,294H848V320H330V294Z" fill="var(--jv-allow, #0ca30c)"/>
+<g class="mark-g"><title>14 scenarios behaved as specified</title><path class="mark" d="M330,294H886A4,4 0 0 1 890,298V316A4,4 0 0 1 886,320H330V294Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="590" y="312" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">13</text>
-<g class="mark-g"><title>1 scenario was not exercised</title><path class="mark" d="M850,294H886A4,4 0 0 1 890,298V316A4,4 0 0 1 886,320H850V294Z" fill="var(--jv-muted, #898781)"/>
-</g>
-<text x="870" y="312" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
+<text x="610" y="312" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">14</text>
 <text x="902" y="312" font-size="12" fill="var(--jv-muted, #898781)" text-anchor="start">14 scenarios</text>
 <text x="312" y="368" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Getting started</text>
 <text x="312" y="386" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">the install commands and the guided setup</text>
@@ -220,9 +220,9 @@
 <tr><td>status reports state, backend and where the key came from</td><td class="ev">jev-guard: ON (backend: openrouter)
 model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
 <tr><td>check on a read-only command stays local</td><td class="ev">local pass: read-only command chain</td><td class="ok">as specified</td></tr>
-<tr><td>check on rm -rf / is a local hard deny</td><td class="ev">local deny: hard-deny pattern: recursive forced deletion aimed at a filesystem root or home directory</td><td class="ok">as specified</td></tr>
+<tr><td>check on rm -rf / is a local hard deny</td><td class="ev">local deny: hard-deny pattern: recursive forced deletion of the filesystem root</td><td class="ok">as specified</td></tr>
 <tr><td>check on an uncertain command consults Jev</td><td class="ev">Consulting Jev…
-danger 0.10 → allow (dangerous-action: Jev noul is_dangerous=0.10) [typesafe/jev-1.13-20260917 385ms]</td><td class="ok">as specified</td></tr>
+danger 0.10 → allow (dangerous-action: Jev noul is_dangerous=0.10) [typesafe/jev-1.13-20260917 551ms]</td><td class="ok">as specified</td></tr>
 <tr><td>check with no argument prints usage</td><td class="ev">Usage: /jev-guard check &lt;shell command&gt;</td><td class="ok">as specified</td></tr>
 <tr><td>off is session-scoped and says so</td><td class="ev">jev-guard disabled for this session. Saved setting is still ON. Add --global to persist.
 jev-guard: OFF for this session...</td><td class="ok">as specified</td></tr>
@@ -240,7 +240,7 @@ saved setti...</td><td class="ok">as specified</td></tr>
 <tr><td>an invalid backend is rejected</td><td class="ev">Usage: /jev-guard backend &lt;openrouter</td><td class="ok">as specified</td></tr>
 <tr><td>an unknown subcommand is reported, not silently ignored</td><td class="ev">Unknown subcommand &quot;bogus-subcommand&quot;. Usage: /jev-guard [status</td><td class="ok">as specified</td></tr>
 <tr><td>check handles an encoded payload</td><td class="ev">Consulting Jev…
-danger 0.80 → block (dangerous-action: Jev noul is_dangerous=0.80) [typesafe/jev-1.13-20260917 2588ms]</td><td class="ok">as specified</td></tr>
+danger 0.78 → ask (dangerous-action: Jev noul is_dangerous=0.78) [typesafe/jev-1.13-20260917 509ms]</td><td class="ok">as specified</td></tr>
 </tbody>
 </table>
 <h3>The gate itself</h3>
@@ -251,18 +251,18 @@ danger 0.80 → block (dangerous-action: Jev noul is_dangerous=0.80) [typesafe/j
 </thead>
 <tbody>
 <tr><td>a read-only command runs with no classifier call</td><td class="ev">tools=bash</td><td class="ok">as specified</td></tr>
-<tr><td>mkfs is refused by a local rule before any network call</td><td class="ev">rules: blocked</td><td class="ok">as specified</td></tr>
-<tr><td>a score above the block threshold stops the call with no prompt</td><td class="ev">jev: blocked at 0.66</td><td class="ok">as specified</td></tr>
+<tr><td>mkfs is refused by a local rule before any network call</td><td class="ev">the agent would not issue the command, so the guard was never reached</td><td class="skip">not exercised</td></tr>
+<tr><td>a score above the block threshold stops the call with no prompt</td><td class="ev">jev: blocked at 0.62</td><td class="ok">as specified</td></tr>
 <tr><td>a middle-band command asks first and honours no</td><td class="ev">jev: asked-blocked at 0.64, 1 confirmation prompt</td><td class="ok">as specified</td></tr>
-<tr><td>answering yes lets the same command actually run</td><td class="ev">jev: asked-allowed at 0.65, 1 confirmation prompt</td><td class="ok">as specified</td></tr>
+<tr><td>answering yes lets the same command actually run</td><td class="ev">jev: asked-allowed at 0.68, 1 confirmation prompt</td><td class="ok">as specified</td></tr>
 <tr><td>a write to a protected path is judged, not waved through</td><td class="ev">jev: allowed at 0.06</td><td class="ok">as specified</td></tr>
 <tr><td>a write to an ordinary project file is not gated</td><td class="ev">tools=write</td><td class="ok">as specified</td></tr>
-<tr><td>an edit of .env is judged</td><td class="ev">jev: allowed at 0.11</td><td class="ok">as specified</td></tr>
+<tr><td>an edit of .env is judged</td><td class="ev">jev: allowed at 0.12</td><td class="ok">as specified</td></tr>
 <tr><td>a harmless prefix does not launder a piped-to-shell download</td><td class="ev">rules: blocked</td><td class="ok">as specified</td></tr>
 <tr><td>an identical second call reuses the cached verdict</td><td class="ev">cached=1</td><td class="ok">as specified</td></tr>
-<tr><td>two gated calls in one turn are each judged</td><td class="ev">jev: allowed at 0.20, jev: allowed at 0.14</td><td class="ok">as specified</td></tr>
+<tr><td>two gated calls in one turn are each judged</td><td class="ev">jev: allowed at 0.17, jev: allowed at 0.13</td><td class="ok">as specified</td></tr>
 <tr><td>reading a protected file is outside the gate</td><td class="ev">tools=read</td><td class="ok">as specified</td></tr>
-<tr><td>a write outside the workspace is judged</td><td class="ev">jev: allowed at 0.21</td><td class="ok">as specified</td></tr>
+<tr><td>a write outside the workspace is judged</td><td class="ev">jev: allowed at 0.20</td><td class="ok">as specified</td></tr>
 </tbody>
 </table>
 <h3>When things go wrong</h3>
@@ -276,14 +276,14 @@ danger 0.80 → block (dangerous-action: Jev noul is_dangerous=0.80) [typesafe/j
 <tr><td>a classifier timeout fails closed and names the deadline</td><td class="ev">error: blocked</td><td class="ok">as specified</td></tr>
 <tr><td>no key for the active backend blocks with a fix hint</td><td class="ev">no-key: blocked</td><td class="ok">as specified</td></tr>
 <tr><td>with the guard off nothing is gated</td><td class="ev">tools=bash</td><td class="ok">as specified</td></tr>
-<tr><td>an untrusted project config is ignored</td><td class="ev">the agent would not issue the command, so the guard was never reached</td><td class="skip">not exercised</td></tr>
+<tr><td>an untrusted project config is ignored</td><td class="ev">jev: allowed at 0.19</td><td class="ok">as specified</td></tr>
 <tr><td>a trusted project config is applied</td><td class="ev">rules: blocked</td><td class="ok">as specified</td></tr>
 <tr><td>environment overrides win and are visible in status</td><td class="ev">jev-guard: ON (backend: openrouter) model: typesafe/jev-1.13 (fallback typesafe/jev-1.13) @ https://openrouter.ai/api/v1...</td><td class="ok">as specified</td></tr>
 <tr><td>allowedCommands passes the call but records it</td><td class="ev">allowlist: allowed</td><td class="ok">as specified</td></tr>
 <tr><td>safeCommands: [&quot;*&quot;] cannot wave through a hard deny</td><td class="ev">rules: blocked</td><td class="ok">as specified</td></tr>
 <tr><td>an inverted threshold pair is normalised, not left broken</td><td class="ev">jev-guard: ON (backend: openrouter) model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
 <tr><td>a very long unicode command is classified without crashing</td><td class="ev">Consulting Jev…
-danger 0.03 → allow (dangerous-action: Jev noul is_dangerous=0.03) [typesafe/jev-1.13-20260917 809ms]</td><td class="ok">as specified</td></tr>
+danger 0.03 → allow (dangerous-action: Jev noul is_dangerous=0.03) [typesafe/jev-1.13-20260917 707ms]</td><td class="ok">as specified</td></tr>
 <tr><td>a command the user runs themselves is outside the tool-call gate</td><td class="ev">success=true audits=0</td><td class="ok">as specified</td></tr>
 <tr><td>with no UI, the default holds a middle-band call</td><td class="ev">said failing closed</td><td class="ok">as specified</td></tr>
 <tr><td>uncertain: allow lets an unattended middle-band call through</td><td class="ev">no block message</td><td class="ok">as specified</td></tr>
@@ -300,7 +300,7 @@ danger 0.03 → allow (dangerous-action: Jev noul is_dangerous=0.03) [typesafe/j
 <tr><td>setup with no key offers a way out and honours it</td><td class="ev">options=[[&quot;Switch backend&quot;,&quot;Continue without a key&quot;,&quot;Disable guard for this session&quot;]]</td><td class="ok">as specified</td></tr>
 <tr><td>a fresh session reflects the saved setting, not the last session's choice</td><td class="ev">jev-guard: ON (backend: openrouter) model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
 <tr><td>`pi install npm:specpi-jev-guard`, exactly as the README prints it</td><td class="ev">npm: ok</td><td class="ok">as specified</td></tr>
-<tr><td>the published package loads in a clean pi home</td><td class="ev">jev-guard: ON (backend: openrouter) model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
+<tr><td>the copy already on npm loads in a clean pi home</td><td class="ev">Installing npm:specpi-jev-guard... added 1 package, and audited 2 packages in 2s found 0 v</td><td class="ok">as specified</td></tr>
 <tr><td>`pi -e ./extensions/jev-guard.ts` works from a checkout</td><td class="ev">jev-guard: ON (backend: openrouter) model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
 </tbody>
 </table>
@@ -320,58 +320,60 @@ danger 0.03 → allow (dangerous-action: Jev noul is_dangerous=0.03) [typesafe/j
 <text x="40" y="46" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Every call the guard judged, and what it did</text>
 <text x="40" y="70" font-size="13" fill="var(--jv-dim, #52514e)">16 decisions recorded across the run, read from the audit entries the extension writes into the session.</text>
 <text x="40" y="90" font-size="13" fill="var(--jv-dim, #52514e)">One bar per outcome. Red refused the call, amber stopped to ask, green let it run.</text>
-<line x1="470" y1="150" x2="470" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
-<line x1="580" y1="150" x2="580" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
-<line x1="690" y1="150" x2="690" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
-<line x1="800" y1="150" x2="800" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="451.7" y1="150" x2="451.7" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="543.3" y1="150" x2="543.3" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="635" y1="150" x2="635" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="726.7" y1="150" x2="726.7" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="818.3" y1="150" x2="818.3" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
 <line x1="910" y1="150" x2="910" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
 <line x1="360" y1="592" x2="910" y2="592" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
 <text x="342" y="171" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Refused by a local rule</text>
 <text x="342" y="188" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">hard-deny or your own list, 0 ms, no network</text>
-<g class="mark-g"><title>4 calls: refused by a local rule</title><path class="mark" d="M360,160H796A4,4 0 0 1 800,164V180A4,4 0 0 1 796,184H360V160Z" fill="var(--jv-block, #d03b3b)"/>
+<g class="mark-g"><title>3 calls: refused by a local rule</title><path class="mark" d="M360,160H631A4,4 0 0 1 635,164V180A4,4 0 0 1 631,184H360V160Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="790" y="177" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">4</text>
+<text x="625" y="177" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">3</text>
 <text x="342" y="227" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Refused by the classifier</text>
 <text x="342" y="244" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">scored at or above the block threshold</text>
-<g class="mark-g"><title>1 call: refused by the classifier</title><path class="mark" d="M360,216H466A4,4 0 0 1 470,220V236A4,4 0 0 1 466,240H360V216Z" fill="var(--jv-block, #d03b3b)"/>
+<g class="mark-g"><title>1 call: refused by the classifier</title><path class="mark" d="M360,216H447.7A4,4 0 0 1 451.7,220V236A4,4 0 0 1 447.7,240H360V216Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="460" y="233" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">1</text>
+<text x="441.7" y="233" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">1</text>
 <text x="342" y="283" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Asked, and the answer was no</text>
 <text x="342" y="300" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">middle band, confirmation declined</text>
-<g class="mark-g"><title>1 call: asked, and the answer was no</title><path class="mark" d="M360,272H466A4,4 0 0 1 470,276V292A4,4 0 0 1 466,296H360V272Z" fill="var(--jv-ask, #fab219)"/>
+<g class="mark-g"><title>1 call: asked, and the answer was no</title><path class="mark" d="M360,272H447.7A4,4 0 0 1 451.7,276V292A4,4 0 0 1 447.7,296H360V272Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="460" y="289" font-size="13" fill="#1a1a19" text-anchor="end" font-weight="700">1</text>
+<text x="441.7" y="289" font-size="13" fill="#1a1a19" text-anchor="end" font-weight="700">1</text>
 <text x="342" y="339" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Asked, and the answer was yes</text>
 <text x="342" y="356" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">middle band, confirmation given, call ran</text>
-<g class="mark-g"><title>1 call: asked, and the answer was yes</title><path class="mark" d="M360,328H466A4,4 0 0 1 470,332V348A4,4 0 0 1 466,352H360V328Z" fill="var(--jv-ask, #fab219)"/>
+<g class="mark-g"><title>1 call: asked, and the answer was yes</title><path class="mark" d="M360,328H447.7A4,4 0 0 1 451.7,332V348A4,4 0 0 1 447.7,352H360V328Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="460" y="345" font-size="13" fill="#1a1a19" text-anchor="end" font-weight="700">1</text>
+<text x="441.7" y="345" font-size="13" fill="#1a1a19" text-anchor="end" font-weight="700">1</text>
 <text x="342" y="395" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Allowed after judging</text>
 <text x="342" y="412" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">scored below the ask threshold</text>
-<g class="mark-g"><title>5 calls: allowed after judging</title><path class="mark" d="M360,384H906A4,4 0 0 1 910,388V404A4,4 0 0 1 906,408H360V384Z" fill="var(--jv-allow, #0ca30c)"/>
+<g class="mark-g"><title>6 calls: allowed after judging</title><path class="mark" d="M360,384H906A4,4 0 0 1 910,388V404A4,4 0 0 1 906,408H360V384Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="900" y="401" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">5</text>
+<text x="900" y="401" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">6</text>
 <text x="342" y="451" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Allowed by your own list</text>
 <text x="342" y="468" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">allowedCommands, recorded but not judged</text>
-<g class="mark-g"><title>1 call: allowed by your own list</title><path class="mark" d="M360,440H466A4,4 0 0 1 470,444V460A4,4 0 0 1 466,464H360V440Z" fill="var(--jv-allow, #0ca30c)"/>
+<g class="mark-g"><title>1 call: allowed by your own list</title><path class="mark" d="M360,440H447.7A4,4 0 0 1 451.7,444V460A4,4 0 0 1 447.7,464H360V440Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="460" y="457" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">1</text>
+<text x="441.7" y="457" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">1</text>
 <text x="342" y="507" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Refused: no classifier key</text>
 <text x="342" y="524" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">fails closed rather than running unvouched</text>
-<g class="mark-g"><title>1 call: refused: no classifier key</title><path class="mark" d="M360,496H466A4,4 0 0 1 470,500V516A4,4 0 0 1 466,520H360V496Z" fill="var(--jv-block, #d03b3b)"/>
+<g class="mark-g"><title>1 call: refused: no classifier key</title><path class="mark" d="M360,496H447.7A4,4 0 0 1 451.7,500V516A4,4 0 0 1 447.7,520H360V496Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="460" y="513" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">1</text>
+<text x="441.7" y="513" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">1</text>
 <text x="342" y="563" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Refused: classifier unreachable</text>
 <text x="342" y="580" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">network error or timeout, fails closed</text>
-<g class="mark-g"><title>2 calls: refused: classifier unreachable</title><path class="mark" d="M360,552H576A4,4 0 0 1 580,556V572A4,4 0 0 1 576,576H360V552Z" fill="var(--jv-block, #d03b3b)"/>
+<g class="mark-g"><title>2 calls: refused: classifier unreachable</title><path class="mark" d="M360,552H539.3A4,4 0 0 1 543.3,556V572A4,4 0 0 1 539.3,576H360V552Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="570" y="569" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">2</text>
+<text x="533.3" y="569" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">2</text>
 <text x="360" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0</text>
-<text x="470" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">1</text>
-<text x="580" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">2</text>
-<text x="690" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">3</text>
-<text x="800" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">4</text>
-<text x="910" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">5</text>
+<text x="451.7" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">1</text>
+<text x="543.3" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">2</text>
+<text x="635" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">3</text>
+<text x="726.7" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">4</text>
+<text x="818.3" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">5</text>
+<text x="910" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">6</text>
 <text x="40" y="650" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start">A call the guard never saw is not counted here: read-only commands and ordinary project files never reach it.</text>
 </svg>
 <!--/chart--></div>

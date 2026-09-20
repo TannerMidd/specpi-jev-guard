@@ -270,7 +270,9 @@ function renderLatency() {
   s += label(24, baseY + 24, "commands", { size: 11, fill: P.dim });
   s += label(L + CW / 2, baseY + 48, "classifier latency (ms)", { anchor: "middle", size: 12, fill: P.dim });
 
-  s += label(24, H - 16, `Even the slowest call stays well under a second; the guard fails closed if a call exceeds the ${Math.round(12000 / 1000)}s timeout.`, { fill: P.dim, size: 11.5 });
+  // Read off the run rather than asserted, so a slower day cannot make the chart lie.
+  const slowest = meta.latency.max >= 1000 ? `${(meta.latency.max / 1000).toFixed(1)}s` : `${meta.latency.max}ms`;
+  s += label(24, H - 16, `Half the calls answered within ${meta.latency.p50}ms and the slowest took ${slowest}; past the 12s timeout the guard fails closed.`, { fill: P.dim, size: 11.5 });
   s += svgClose();
   return s;
 }

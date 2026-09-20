@@ -12,7 +12,7 @@
  * that judges them.
  */
 import { writeFileSync } from "node:fs";
-import { AGENT_MODEL, ROOT, buildSandbox, resetFixture } from "./setup.mjs";
+import { AGENT_MODEL, ROOT, buildSandbox, resetFixture, scrubSecrets } from "./setup.mjs";
 import runBatchA from "./batch-a.mjs";
 import runBatchB from "./batch-b.mjs";
 import runBatchC from "./batch-c.mjs";
@@ -40,7 +40,7 @@ const payload = {
     pi: process.env.JEV_E2E_PI_VERSION ?? null,
     agentModel: AGENT_MODEL,
     artifact: packed?.split(/[\\/]/).pop() ?? null,
-    sandbox: ROOT,
+    sandbox: ROOT, // replaced with a placeholder below; see the note on `portable`
     batches: chosen,
     scenarios: rows.length,
     passed,
@@ -55,7 +55,15 @@ const payload = {
   },
   rows,
 };
-writeFileSync(new URL("../pi-e2e-results.json", import.meta.url), JSON.stringify(payload, null, 2) + "\n", "utf-8");
+// The sandbox path is this machine, not the result. Anything that quotes it
+// back (an error message, a `pi list` line) gets the same placeholder, so the
+// committed artifact reads the same wherever it was produced.
+const portable = JSON.stringify(payload, null, 2)
+  .split(JSON.stringify(ROOT).slice(1, -1))
+  .join("<sandbox>")
+  .split(ROOT.replace(/\\/g, "/"))
+  .join("<sandbox>");
+writeFileSync(new URL("../pi-e2e-results.json", import.meta.url), portable + "\n", "utf-8");
 
 console.log(`\n${"=".repeat(64)}`);
 console.log(
@@ -64,4 +72,5 @@ console.log(
 );
 for (const r of rows.filter((x) => !x.pass && !x.declined)) console.log(`  FAILED ${r.id}  ${r.title}`);
 for (const r of rows.filter((x) => x.declined)) console.log(`  NOT EXERCISED ${r.id}  ${r.title}`);
-console.log("wrote tests/pi-e2e-results.json");
+scrubSecrets();
+console.log("wrote tests/pi-e2e-results.json; the sandbox key has been removed");

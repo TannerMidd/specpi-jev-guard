@@ -12,8 +12,10 @@
 import { execFileSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, parse, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { readPiAuthKey } from "../pi-auth.mjs";
 
 export const REPO = fileURLToPath(new URL("../..", import.meta.url));
 export const ROOT = process.env.JEV_E2E_DIR || join(tmpdir(), "jev-guard-e2e");
@@ -38,16 +40,42 @@ export function resolveKey() {
     const m = /^\s*OPENROUTER_API_KEY=(.+)$/m.exec(readFileSync(envFile, "utf-8"));
     if (m) return m[1].trim();
   }
-  const auth = join(homedir(), ".pi", "agent", "auth.json");
-  if (existsSync(auth)) {
-    try {
-      const key = JSON.parse(readFileSync(auth, "utf-8"))?.openrouter?.key;
-      if (typeof key === "string" && key.trim()) return key.trim();
-    } catch {
-      /* fall through */
-    }
+  return readPiAuthKey("openrouter") ?? "";
+}
+
+const MARKER = "jev-guard-e2e.marker";
+
+/**
+ * The sandbox is deleted and rebuilt on every run, so refuse to point that at
+ * anything that is not already a sandbox. JEV_E2E_DIR=$HOME should be a clear
+ * error, not a wiped home directory.
+ */
+function assertDisposable(dir) {
+  const resolved = resolve(dir);
+  const forbidden = [resolve(homedir()), resolve(REPO), parse(resolved).root];
+  if (forbidden.some((f) => resolve(f) === resolved)) {
+    throw new Error(`refusing to use ${resolved} as the e2e sandbox: it is your home, the repo, or a drive root`);
   }
-  return "";
+  if (relative(parse(resolved).root, resolved).split(sep).filter(Boolean).length < 2) {
+    throw new Error(`refusing to use ${resolved} as the e2e sandbox: too close to the drive root`);
+  }
+  if (existsSync(resolved) && !existsSync(join(resolved, MARKER))) {
+    throw new Error(
+      `${resolved} already exists and was not created by this harness (no ${MARKER}). ` +
+        `Delete it yourself, or point JEV_E2E_DIR somewhere else.`,
+    );
+  }
+}
+
+/**
+ * The sandbox keeps a real OpenRouter key on disk so pi can log in as itself.
+ * Take it back out when the run is over; the logs and the results are what is
+ * worth keeping.
+ */
+export function scrubSecrets() {
+  for (const f of [join(HOME, ".pi", "agent", "auth.json"), join(ROOT, "home2", ".pi", "agent", "auth.json")]) {
+    if (existsSync(f)) rmSync(f, { force: true });
+  }
 }
 
 /**
@@ -100,7 +128,10 @@ export function buildSandbox({ quiet = false } = {}) {
     process.exit(1);
   }
 
+  assertDisposable(ROOT);
   rmRetry(ROOT);
+  mkdirSync(ROOT, { recursive: true });
+  writeFileSync(join(ROOT, MARKER), "created by tests/e2e/setup.mjs; safe to delete\n");
   for (const d of [join(HOME, ".pi", "agent"), PKG, LOGS, SESSIONS]) mkdirSync(d, { recursive: true });
 
   // 1. the artefact under test: exactly what `npm publish` would upload

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 670" width="1060" height="670" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
 <rect width="1060" height="670" fill="var(--jv-bg, #fcfcfb)"/>
 <text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">What the guard does, by command category</text>
-<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">124 live commands · 2026-09-18 · bar length = how many commands fell in each band</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">124 live commands · 2026-09-20 · bar length = how many commands fell in each band</text>
 <rect x="24" y="75" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
 <text x="41" y="84" font-size="12" fill="var(--jv-dim, #52514e)">allow (runs)</text>
 <rect x="144.5" y="75" width="11" height="11" rx="3" fill="var(--jv-ask, #fab219)"/>
@@ -97,12 +97,15 @@
 <text x="504.4" y="549" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">2 blocked · 6 ask · 0 allow</text>
 <text x="198" y="596" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Sneaky (disguised)</text>
 <text x="198" y="611" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">14 commands</text>
-<g class="mark-g"><title>Sneaky (disguised): 3 ask</title><path class="mark" d="M210,578H313.9V602H210V578Z" fill="var(--jv-ask, #fab219)"/>
+<g class="mark-g"><title>Sneaky (disguised): 1 allow</title><path class="mark" d="M210,578H243.3V602H210V578Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="262.9" y="595" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
-<g class="mark-g"><title>Sneaky (disguised): 11 block</title><path class="mark" d="M315.9,578H700.1A4,4 0 0 1 704.1,582V598A4,4 0 0 1 700.1,602H315.9V578Z" fill="var(--jv-block, #d03b3b)"/>
+<text x="227.6" y="595" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
+<g class="mark-g"><title>Sneaky (disguised): 3 ask</title><path class="mark" d="M245.3,578H349.2V602H245.3V578Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="510" y="595" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">11</text>
-<text x="716.1" y="595" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">11 blocked · 3 ask · 0 allow</text>
+<text x="298.2" y="595" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Sneaky (disguised): 10 block</title><path class="mark" d="M351.2,578H700.1A4,4 0 0 1 704.1,582V598A4,4 0 0 1 700.1,602H351.2V578Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="527.6" y="595" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">10</text>
+<text x="716.1" y="595" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">10 blocked · 3 ask · 1 allow</text>
 <text x="24" y="654" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">Traps are ordinary work that merely looks alarming, so a high allow count there means few false alarms.</text>
 </svg>

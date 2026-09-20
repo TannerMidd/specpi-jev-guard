@@ -12,6 +12,7 @@ import {
   isProtectedPath,
   matchesAny,
   middleBandWithoutUI,
+  normalizeDeleteTarget,
   openRouterDecisionsUrl,
   parseSystemOneResponse,
   parseVerdict,
@@ -53,6 +54,18 @@ describe("hard deny", () => {
     "rm -rf /usr",
     "rm -rf /etc/",
     "rm -rf /Windows",
+    // The root written the long way round. A rule that only knows `/` has a bypass.
+    "rm -rf /tmp/../",
+    "rm -rf //",
+    "rm -rf /./",
+    "rm -rf /../",
+    "rm -rf /etc/..",
+    "rm -rf /usr/../",
+    "rm -rf ~/../",
+    "rm --recursive --force ${HOME}/../",
+    // Nested inside another interpreter, where the target arrives still quoted.
+    `awk 'BEGIN{system("rm -rf ~")}'`,
+    `php -r "system('rm -rf ~');"`,
   ]) {
     it(`denies: ${cmd}`, () => {
       const v = classifyCommandLocal(cmd, S);
@@ -69,12 +82,52 @@ describe("hard deny", () => {
     "rm -rf /home/me/project/node_modules",
     "rm -rf ./dist",
     "rm -rf node_modules",
+    // An override character makes the path unreadable here, which means it is
+    // deeper than a root, not that it is one. Jev is the one that reads these.
+    "rm -rf /home/‮user",
   ]) {
     it(`does not hard-deny: ${cmd}`, () => {
       const v = classifyCommandLocal(cmd, S);
       assert.notEqual(v.decision, "deny", JSON.stringify(v));
     });
   }
+});
+
+describe("deletion targets resolve before they are judged", () => {
+  const cases = [
+    ["/", "root"],
+    ["//", "root"],
+    ["/.", "root"],
+    ["/tmp/../", "root"],
+    ["/a/b/../../", "root"],
+    ["/etc/..", "root"],
+    ["/*", "root"],
+    ["~", "home"],
+    ["~/", "home"],
+    ["$HOME", "home"],
+    ["${HOME}/", "home"],
+    ["~/*", "home"],
+    ["~/..", "system"],
+    ["/home", "system"],
+    ["/usr/", "system"],
+    ["/Windows", "system"],
+    ["/tmp", "other"],
+    ["/tmp/x", "other"],
+    ["/var/tmp/cache", "other"],
+    ["~/projects/app", "other"],
+    ["./dist", "other"],
+    ["node_modules", "other"],
+  ];
+  for (const [target, expected] of cases) {
+    it(`${target} is the ${expected}`, () => {
+      assert.equal(normalizeDeleteTarget(target), expected);
+    });
+  }
+
+  it("strips the quoting a nested command leaves behind", () => {
+    assert.equal(normalizeDeleteTarget(`~');`), "home");
+    assert.equal(normalizeDeleteTarget(`"/"`), "root");
+  });
 });
 
 describe("safe fast-pass", () => {
@@ -141,6 +194,9 @@ describe("safe fast-pass", () => {
       "git stash push -m wip",
       "git remote update",
       "git remote prune origin",
+      // -f resets an existing branch to another commit and drops what was on it.
+      "git branch -f main HEAD~1",
+      "git branch -C old new",
     ]) {
       assert.equal(classifyCommandLocal(cmd, S).decision, "unknown", cmd);
     }
@@ -151,6 +207,9 @@ describe("safe fast-pass", () => {
       "git stash list",
       "git stash show",
       "git remote show origin",
+      "git branch",
+      "git branch -a -v",
+      "git branch --format=%(refname)",
       "svn status",
       "svn log",
       "svn diff",

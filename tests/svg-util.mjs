@@ -63,9 +63,10 @@ export function resolveTokens(svg, mode = "light") {
 export const FONT = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
 
 export function escXml(value) {
-  // The site inlines these files as Jekyll includes, so a literal "{{" or
-  // "{%" in command text would be read as Liquid. Break the pair with a
-  // character reference: it renders identically and Liquid never sees it.
+  // docs/.nojekyll keeps Pages from templating the site, but these SVGs get
+  // embedded elsewhere too, and a literal "{{" or "{%" in command text is
+  // Liquid to anything that does. Breaking the pair with a character reference
+  // renders identically and costs nothing.
   return String(value)
     .replace(/\{(?=[{%])/g, "&#123;")
     .replace(/&/g, "&amp;")

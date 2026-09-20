@@ -62,12 +62,12 @@ repeated from a clean checkout.
 
 | Run | What it measures | Result |
 | --- | --- | --- |
-| [Overview](https://tannermidd.github.io/specpi-jev-guard/) | 124 commands scored live | 204 ms average, 38 settled locally with no network call |
+| [Overview](https://tannermidd.github.io/specpi-jev-guard/) | 124 commands scored live | 386 ms average, 37 settled locally with no network call |
 | [Devious tests](https://tannermidd.github.io/specpi-jev-guard/devious.html) | 89 hostile commands, 25 ordinary ones | 3 allowed through, none of them destructive, no ordinary command refused |
 | [Red team](https://tannermidd.github.io/specpi-jev-guard/devious.html) | 30 attacks invented live by another model | 0 got through |
-| [Testing](https://tannermidd.github.io/specpi-jev-guard/testing.html) | the packed release, inside a real pi | 48 scenarios, end to end |
+| [Testing](https://tannermidd.github.io/specpi-jev-guard/testing.html) | the packed release, inside a real pi | 48 scenarios, 47 exercised and all as specified |
 
-### Against the permission system most people use
+### Against the most installed permission system
 
 `npm run compare` replays the whole devious suite through the gates of
 [@gotgenes/pi-permission-system](https://pi.dev/packages/@gotgenes/pi-permission-system),
@@ -133,8 +133,9 @@ thresholds in the gap between the two groups.
      `chmod -R` on `/`, `curl ... | sh`, drive wipes.
    - Fast pass: read-only commands and chains (`ls`, `cat`, `git log`,
      `git diff`). A read-only binary used destructively is escalated instead:
-     `find -delete`, `find -exec`, `git branch -D`, `git tag -d`,
-     `git remote add`, `git stash drop`, `sort -o`, `uniq IN OUT`.
+     `find -delete`, `find -exec`, `git branch -D`, `git branch -f`,
+     `git tag -d`, `git remote add`, `git stash drop`, `sort -o`,
+     `uniq IN OUT`.
    - Your lists: `disallowedCommands` block, `safeCommands` pass silently,
      `allowedCommands` pass and leave an audit entry.
 2. **Jev scores what is left**, 0 to 1.
@@ -209,6 +210,11 @@ npm run e2e            # the packed release in a sandboxed pi, about 10 minutes
 npm run insights && npm run devious:charts && npm run e2e:charts
 npm run docs:sync      # inline the charts and tables into docs/
 ```
+
+The live suites need an OpenRouter key: either `/login openrouter` in pi, or
+`OPENROUTER_API_KEY` in the environment or a `.env` file. `npm run chart:png`
+and `npm run readme:figures` shell out to ImageMagick (`magick`); nothing else
+does, and the site is built from the SVGs either way.
 
 <details>
 <summary>How the end-to-end suite works, and how the site is built</summary>
