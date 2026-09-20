@@ -136,11 +136,17 @@ from there without losing it:
 | `auditDisplay` | what you see |
 | --- | --- |
 | `transcript` (default) | one dim line under each judged call |
-| `status` | one line in the footer, showing the latest verdict only |
-| `off` | nothing |
+| `status` | no line in the transcript; the latest verdict in the footer |
+| `off` | no line in the transcript, and no verdict in the footer |
 
 A block is drawn in the error colour and names itself (`jev 0.91 blocked`), and
 a call you were asked about says who decided (`jev 0.44 allowed by you`).
+
+Whichever you pick, the footer keeps a count for the session: `jev 12`, and
+`jev 12 · 1 blocked` once the guard has stopped something. It is how a quiet
+transcript still shows the guard is awake, it survives a resume because it is
+counted from the session's own records, and it goes away while the guard is
+off. In `status` mode the last verdict joins it: `jev 12 · bash 0.04`.
 
 Every mode writes every record to the session file, so the audit trail is the
 same in all three. Blocks stay loud everywhere too: they raise a notification

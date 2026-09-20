@@ -32,7 +32,7 @@ import {
   buildSystemOneBody,
   classifyCommandLocal,
   formatAuditLine,
-  formatAuditStatus,
+  formatGuardStatus,
   isProtectedPath,
   middleBandWithoutUI,
   openRouterDecisionsUrl,
@@ -541,18 +541,41 @@ export default function (pi: ExtensionAPI) {
   // awaits before it renders a resumed transcript.
   let auditDisplay: AuditDisplay = DEFAULT_SETTINGS.auditDisplay;
 
-  /** Load settings and keep the cached display mode in step with them. */
+  // What the footer reports. Counted per session and recounted from the
+  // session's own entries on resume, so the number survives a restart the way
+  // the records themselves do.
+  const tally = { calls: 0, blocked: 0, latest: undefined as AuditRecord | undefined };
+
+  /** Load settings, keep the cached display mode in step with them, and put
+   *  the footer where the current state says it belongs. */
   function settingsFor(ctx: ExtensionContext): GuardSettings {
     const settings = loadSettings(ctx);
-    setAuditDisplay(ctx, settings.auditDisplay);
+    auditDisplay = settings.auditDisplay;
+    // A guard that is not gating must not leave a line in the footer claiming
+    // otherwise.
+    if (resolveEnabled(settings.enabled, session.enabled).enabled) showStatus(ctx);
+    else clearAuditStatus(ctx);
     return settings;
   }
 
-  /** Switch modes, clearing the footer on the way out of `status`: a verdict
-   *  left standing there outlives the call it described. */
-  function setAuditDisplay(ctx: ExtensionContext, next: AuditDisplay): void {
-    if (auditDisplay === "status" && next !== "status") clearAuditStatus(ctx);
-    auditDisplay = next;
+  /**
+   * The footer line: the running count in every mode, plus the last verdict in
+   * `status` mode. A count with no records to read is the point of the thing,
+   * so it is shown whether or not the transcript is.
+   */
+  function showStatus(ctx: ExtensionContext): void {
+    try {
+      ctx.ui.setStatus(
+        AUDIT_TYPE,
+        formatGuardStatus({
+          calls: tally.calls,
+          blocked: tally.blocked,
+          latest: auditDisplay === "status" ? tally.latest : undefined,
+        }),
+      );
+    } catch {
+      // The footer line is cosmetic; never let it break the gate.
+    }
   }
 
   function clearAuditStatus(ctx: ExtensionContext): void {
@@ -560,6 +583,32 @@ export default function (pi: ExtensionAPI) {
       ctx.ui.setStatus(AUDIT_TYPE, undefined);
     } catch {
       // The footer line is cosmetic; never let it break the gate.
+    }
+  }
+
+  /** Count what the guard has done, for the footer. A classifier verdict is a
+   *  "jev call"; a rules block never reached the classifier but did stop something. */
+  function count(data: AuditRecord): void {
+    if (data.source === "jev") tally.calls++;
+    if (data.decision.endsWith("blocked")) tally.blocked++;
+    tally.latest = data;
+  }
+
+  /** Recount from the session itself, so a resumed session keeps its total. */
+  function recount(ctx: ExtensionContext): void {
+    tally.calls = 0;
+    tally.blocked = 0;
+    tally.latest = undefined;
+    try {
+      for (const entry of ctx.sessionManager.getEntries()) {
+        if (typeof entry !== "object" || entry === null) continue;
+        if (!("type" in entry) || entry.type !== "custom") continue;
+        if (!("customType" in entry) || entry.customType !== AUDIT_TYPE) continue;
+        const data = "data" in entry ? (entry.data as AuditRecord | undefined) : undefined;
+        if (data && typeof data.decision === "string") count(data);
+      }
+    } catch {
+      // A session we cannot read just starts the count at zero.
     }
   }
 
@@ -575,12 +624,8 @@ export default function (pi: ExtensionAPI) {
     } catch {
       // Auditing must never break the gate itself.
     }
-    if (auditDisplay !== "status") return;
-    try {
-      ctx.ui.setStatus(AUDIT_TYPE, formatAuditStatus(data));
-    } catch {
-      // The footer line is cosmetic; never let it break the gate.
-    }
+    count(data);
+    showStatus(ctx);
   }
 
   function cacheGet(key: string): (JevOutcome & { verdict: JevVerdict }) | undefined {
@@ -775,6 +820,7 @@ export default function (pi: ExtensionAPI) {
     // Pi awaits session_start before it renders a resumed transcript, so
     // historical audit entries obey the setting too.
     try {
+      recount(ctx);
       settingsFor(ctx);
     } catch {
       // Priming is cosmetic: a bad read leaves the shipped default standing
@@ -844,10 +890,8 @@ export default function (pi: ExtensionAPI) {
 
       if (sub === "on" || sub === "off") {
         const enable = sub === "on";
-        const saved = settingsFor(ctx);
         session.enabled = enable;
-        // A footer verdict from a guard that is no longer gating is a lie.
-        if (!enable) clearAuditStatus(ctx);
+        const saved = settingsFor(ctx);
         if (rest.split(/\s+/).includes("--global")) {
           saveGlobalSettings({ enabled: enable });
           ctx.ui.notify(`jev-guard ${enable ? "enabled" : "disabled"} and saved (${globalSettingsPath()}).`, "info");
@@ -899,7 +943,7 @@ export default function (pi: ExtensionAPI) {
           return;
         }
         saveGlobalSettings({ auditDisplay: mode });
-        setAuditDisplay(ctx, mode);
+        settingsFor(ctx);
         const kept = "Every decision is still written to the session file.";
         ctx.ui.notify(
           mode === "transcript"

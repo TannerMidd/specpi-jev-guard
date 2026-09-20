@@ -950,21 +950,40 @@ export interface AuditStatusInput {
   model?: string;
 }
 
+/** What the footer says about the guard: how much it has judged this session,
+ *  and, in `status` mode, what it decided last. */
+export interface GuardStatusInput {
+  /** Calls the classifier judged this session. */
+  calls: number;
+  /** Calls the guard stopped, by any route. */
+  blocked: number;
+  /** The most recent decision. Shown in `status` mode only. */
+  latest?: AuditStatusInput;
+}
+
 /**
- * One short line for the footer, e.g. "jev-guard bash allowed | danger 0.04".
+ * The guard's one line in pi's footer, e.g. "jev 12 · 1 blocked · bash 0.04".
+ *
+ * The count is always there: it is how a session that shows no records still
+ * shows the guard is awake. The rest appears only when it has something to
+ * say, because the footer is one line shared with every other extension and is
+ * truncated to the terminal width.
  *
  * A segment whose field is missing is dropped rather than defaulted. Rule
- * decisions carry no score, and printing "danger 0.00" for a hard-deny block
- * would label the most dangerous call the guard ever sees as the safest thing
- * on screen. The footer gives every extension one shared line and truncates it
- * to the terminal width, so this stays short on purpose.
+ * decisions carry no score, and printing "0.00" for a hard-deny block would
+ * label the most dangerous call the guard ever sees as the safest thing on
+ * screen.
  */
-export function formatAuditStatus(record: AuditStatusInput): string {
-  const parts = [`jev-guard ${record.tool} ${record.decision}`];
-  if (typeof record.danger === "number" && Number.isFinite(record.danger)) {
-    parts.push(`danger ${record.danger.toFixed(2)}`);
+export function formatGuardStatus(state: GuardStatusInput): string {
+  const parts = [`jev ${Math.max(0, Math.trunc(state.calls))}`];
+  if (state.blocked > 0) parts.push(`${Math.trunc(state.blocked)} blocked`);
+  const latest = state.latest;
+  if (latest) {
+    const danger = latest.danger;
+    const score = typeof danger === "number" && Number.isFinite(danger) ? ` ${danger.toFixed(2)}` : "";
+    const word = latest.decision === "allowed" ? "" : ` ${latest.decision}`;
+    parts.push(`${latest.tool}${word}${score}`);
   }
-  if (typeof record.model === "string" && record.model !== "") parts.push(record.model);
   return parts.join(" · ");
 }
 

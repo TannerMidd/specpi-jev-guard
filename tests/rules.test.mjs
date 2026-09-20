@@ -9,7 +9,7 @@ import {
   buildSystemOneState,
   classifyCommandLocal,
   formatAuditLine,
-  formatAuditStatus,
+  formatGuardStatus,
   globToRegExp,
   isProtectedPath,
   matchesAny,
@@ -586,37 +586,42 @@ describe("audit display setting", () => {
   });
 });
 
-describe("audit status line", () => {
-  it("names the tool, the decision, the score and the model", () => {
+describe("guard footer line", () => {
+  it("always leads with the count, so an empty transcript still shows the guard is awake", () => {
+    assert.equal(formatGuardStatus({ calls: 0, blocked: 0 }), "jev 0");
+    assert.equal(formatGuardStatus({ calls: 12, blocked: 0 }), "jev 12");
+  });
+
+  it("adds what it stopped, only when it stopped something", () => {
+    assert.equal(formatGuardStatus({ calls: 12, blocked: 1 }), "jev 12 · 1 blocked");
+    assert.ok(!formatGuardStatus({ calls: 12, blocked: 0 }).includes("blocked"));
+  });
+
+  it("adds the last verdict when status mode passes one", () => {
     assert.equal(
-      formatAuditStatus({ tool: "bash", decision: "allowed", danger: 0.042, model: "jev-1.13" }),
-      "jev-guard bash allowed · danger 0.04 · jev-1.13",
+      formatGuardStatus({ calls: 3, blocked: 0, latest: { tool: "bash", decision: "allowed", danger: 0.042 } }),
+      "jev 3 · bash 0.04",
+    );
+    assert.equal(
+      formatGuardStatus({ calls: 3, blocked: 1, latest: { tool: "write", decision: "blocked", danger: 0.91 } }),
+      "jev 3 · 1 blocked · write blocked 0.91",
     );
   });
 
   it("leaves out a score the record does not have, rather than calling it zero", () => {
     // A rules block is the most dangerous call the guard sees and carries no
-    // score. "danger 0.00" would read as the safest line on screen.
-    const line = formatAuditStatus({ tool: "bash", decision: "blocked" });
-    assert.equal(line, "jev-guard bash blocked");
-    assert.ok(!line.includes("danger"));
-  });
-
-  it("drops an empty model instead of printing a stray separator", () => {
-    assert.equal(
-      formatAuditStatus({ tool: "write", decision: "allowed", danger: 0, model: "" }),
-      "jev-guard write allowed · danger 0.00",
-    );
+    // score. "0.00" would read as the safest thing on the line.
+    const line = formatGuardStatus({ calls: 0, blocked: 1, latest: { tool: "bash", decision: "blocked" } });
+    assert.equal(line, "jev 0 · 1 blocked · bash blocked");
   });
 
   it("stays short enough for a shared footer line", () => {
-    const line = formatAuditStatus({
-      tool: "powershell",
-      decision: "asked-allowed",
-      danger: 0.5,
-      model: "~typesafe/jev-latest",
+    const line = formatGuardStatus({
+      calls: 148,
+      blocked: 12,
+      latest: { tool: "powershell", decision: "asked-allowed", danger: 0.5 },
     });
-    assert.ok(line.length <= 80, line);
+    assert.ok(line.length <= 60, line);
   });
 });
 

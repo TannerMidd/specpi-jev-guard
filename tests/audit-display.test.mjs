@@ -36,6 +36,7 @@ let extension;
 function fakeHost() {
   const host = {
     entries: [],
+    entryLog: [],
     statuses: [],
     notices: [],
     handlers: new Map(),
@@ -55,7 +56,7 @@ function fakeHost() {
     hasUI: true,
     signal: undefined,
     isProjectTrusted: () => false,
-    sessionManager: { getBranch: () => [] },
+    sessionManager: { getBranch: () => [], getEntries: () => host.entryLog },
     ui: {
       setStatus: (key, text) => host.statuses.push({ key, text }),
       notify: (message, level) => host.notices.push({ message, level }),
@@ -104,28 +105,28 @@ after(() => {
 });
 
 describe("auditDisplay", () => {
-  it("defaults to the transcript box it has always shown", async () => {
+  it("defaults to the line in the transcript it has always had", async () => {
     const host = await boot({});
     await denyOneCall(host);
     assert.equal(host.entries.length, 1);
     assert.notEqual(render(host), undefined);
-    assert.deepEqual(host.statuses, []);
+    assert.equal(host.statuses.at(-1).text, "jev 0 · 1 blocked", "the footer counts but does not narrate");
   });
 
-  it("status mode writes one footer line and no transcript box", async () => {
+  it("status mode writes one footer line and nothing in the transcript", async () => {
     const host = await boot({ auditDisplay: "status" });
     await denyOneCall(host);
     assert.equal(host.entries.length, 1, "the record still reaches the session file");
     assert.equal(render(host), undefined, "nothing is added to the transcript");
-    assert.deepEqual(host.statuses, [{ key: "jev-guard", text: "jev-guard bash blocked" }]);
+    assert.equal(host.statuses.at(-1).text, "jev 0 · 1 blocked · bash blocked");
   });
 
-  it("off mode shows nothing anywhere and still records", async () => {
+  it("off mode shows no record anywhere, and still records", async () => {
     const host = await boot({ auditDisplay: "off" });
     await denyOneCall(host);
     assert.equal(host.entries.length, 1);
     assert.equal(render(host), undefined);
-    assert.deepEqual(host.statuses, []);
+    assert.equal(host.statuses.at(-1).text, "jev 0 · 1 blocked", "the count is not a record");
   });
 
   it("blocks stay loud in every mode", async () => {
@@ -162,8 +163,34 @@ describe("auditDisplay", () => {
     await denyOneCall(host);
     await denyOneCall(host);
     assert.equal(host.entries.length, 2);
-    assert.equal(host.statuses.length, 2);
-    assert.equal(host.statuses[0].key, host.statuses[1].key, "same key overwrites in the footer");
+    assert.equal(host.statuses.at(-1).text, "jev 0 · 2 blocked · bash blocked");
+    const keys = new Set(host.statuses.map((s) => s.key));
+    assert.equal(keys.size, 1, "one key, so the footer overwrites instead of growing");
+  });
+});
+
+describe("the footer counter", () => {
+  it("counts classifier calls apart from the calls it stopped", async () => {
+    const host = fakeHost();
+    host.entryLog = [
+      { type: "custom", customType: "jev-guard", data: { tool: "bash", decision: "allowed", source: "jev", danger: 0.02 } },
+      { type: "custom", customType: "jev-guard", data: { tool: "bash", decision: "blocked", source: "jev", danger: 0.93 } },
+      { type: "custom", customType: "jev-guard", data: { tool: "bash", decision: "blocked", source: "rules" } },
+      { type: "message", message: { role: "user" } },
+    ];
+    settings({});
+    extension(host.api);
+    await host.handlers.get("session_start")({ type: "session_start", reason: "resume" }, host.ctx);
+    // Two calls reached the classifier; three decisions, two of them stops.
+    assert.equal(host.statuses.at(-1).text, "jev 2 · 2 blocked");
+  });
+
+  it("is gone while the guard is off, and back when it is on", async () => {
+    const host = await boot({});
+    await host.command.handler("off", host.ctx);
+    assert.equal(host.statuses.at(-1).text, undefined);
+    await host.command.handler("on", host.ctx);
+    assert.equal(host.statuses.at(-1).text, "jev 0");
   });
 });
 
@@ -177,12 +204,12 @@ describe("/jev-guard audit", () => {
     assert.equal(render(host), undefined);
   });
 
-  it("clears the footer when leaving status mode, so no verdict outlives its call", async () => {
+  it("drops the verdict but keeps the count when leaving status mode", async () => {
     const host = await boot({ auditDisplay: "status" });
     await denyOneCall(host);
-    assert.equal(host.statuses.at(-1).text, "jev-guard bash blocked");
+    assert.ok(host.statuses.at(-1).text.includes("bash blocked"));
     await host.command.handler("audit transcript", host.ctx);
-    assert.equal(host.statuses.at(-1).text, undefined, "footer line is cleared");
+    assert.equal(host.statuses.at(-1).text, "jev 0 · 1 blocked", "no verdict outlives its call");
   });
 
   it("clears the footer when the guard is switched off", async () => {

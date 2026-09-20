@@ -22,6 +22,12 @@
 
 ### Added
 
+- **A counter in pi's footer: `jev 12`, and `jev 12 · 1 blocked` once the guard
+  has stopped something.** It is what makes a quiet transcript readable rather
+  than uninformative: the records can move out of the way without the guard
+  going silent. The count comes from the session's own records, so a resumed
+  session keeps its total, and the line goes away while the guard is off.
+
 - **`auditDisplay` decides where audit records show up: `transcript`,
   `status`, or `off`.** A judged call used to mean a box in the transcript, and
   nothing else. That reads well when calls are rare and buries the
