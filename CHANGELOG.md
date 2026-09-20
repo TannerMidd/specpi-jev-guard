@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 (2026-09-20)
 
 ### Changed
 
@@ -23,6 +23,12 @@
   worth the surface. They are classified like any other command now, which costs
   one call per distinct command per session, not one per invocation: the verdict
   cache pays it once.
+
+  Worth knowing before you upgrade: the guard fails closed, so with no reachable
+  classifier those ten now stop instead of running. `tree src` and `svn status`
+  used to survive a bad key or an outage on the strength of their name. They no
+  longer do. Everyday `git`, `ls`, `cat`, `grep`, `rg`, `fd` and `find` work is
+  unaffected, and `safeCommands` still passes anything you name yourself.
 
 ### Fixed
 
