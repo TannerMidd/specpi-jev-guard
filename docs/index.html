@@ -764,7 +764,7 @@ danger 0.98 · block · 237ms</title><path class="mark" d="M380,3319H1022.8A4,4 
       <figcaption>Band mix per category. The trap row matters most: everyday work that only looks alarming.</figcaption>
     </figure>
 
-    <p>Two things stand out. <strong>Almost nothing destructive gets through</strong>: 16 of 17
+    <p><strong>Almost nothing destructive gets through</strong>: 16 of 17
     destructive commands block, and the last one is held for confirmation, not waved through. And
     <strong>the traps pass</strong>: <code>kubectl apply -f k8s/</code>, a plain <code>git push
     origin main</code>, and <code>docker run --rm hello-world</code> all run without prompting, so
@@ -1132,7 +1132,7 @@ danger 0.98 · block · 237ms</title><path class="mark" d="M380,3319H1022.8A4,4 
       <figcaption>Left: hostile commands each guard would have let run. Right: ordinary work it would have stopped you over. You want both short, and no configuration of either tool gets both to zero.</figcaption>
     </figure>
 
-    <p>The shape of it: the quick-start policy lets nothing hostile through and
+    <p>The quick-start policy lets nothing hostile through and
     interrupts every single piece of ordinary work (25 of 25). Loosen it to
     allow-by-default with a deny list and the interruptions drop to 8, but
     39 hostile commands run silently, including all 7 interpreter one-liners

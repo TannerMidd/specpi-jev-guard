@@ -141,9 +141,9 @@
   "tool":"write","subject":"write .env.local","decision":"allowed",
   "source":"jev","danger":0.05,"model":"typesafe/jev-1.13-20260917","latencyMs":791}}}</code></pre>
 
-    <p>One wrinkle is worth naming, because it changes how the results read. A capable agent
-    refuses some hostile commands on its own, before the guard is ever consulted. That is a real
-    layer of defence, but it hides the layer being measured, so the batches that probe the gate
+    <p>One thing changes how the results read. A capable agent refuses some hostile commands on
+    its own, before the guard is ever consulted. That is a real layer of defence, but it hides the
+    layer being measured, so the batches that probe the gate
     add a system prompt telling the model it is a test operator and should issue the command
     verbatim. Even then it sometimes declines. The scenario is retried once, and if the agent
     still will not issue the command the run records it as not exercised rather than pretending
@@ -309,8 +309,8 @@ danger 0.03 → allow (dangerous-action: Jev noul is_dangerous=0.03) [typesafe/j
     <h2 id="decisions">What the guard actually did</h2>
 
     <p>Across the run the guard recorded every decision it made. This is that log, grouped by
-    outcome. It is worth reading as a shape rather than a score: a guard that only ever refuses
-    is as useless as one that only ever allows.</p>
+    outcome. Read it as a distribution, not a score: a guard that only ever refuses is as useless
+    as one that only ever allows.</p>
 
     <figure class="chart">
       <div class="chart-scroll"><!--chart:e2e-decisions-->
@@ -380,9 +380,9 @@ danger 0.03 → allow (dangerous-action: Jev noul is_dangerous=0.03) [typesafe/j
 
     <h2 id="found">What the run found</h2>
 
-    <p>The point of a suite like this is the things it catches. Three of these were fixed
-    before the release this page accompanies, and the fourth is a fact about how the whole
-    arrangement behaves that is worth stating plainly.</p>
+    <p>A suite like this earns its keep by what it catches. Three of these were fixed before the
+    release this page accompanies. The fourth is not a defect, but it changes how every number
+    above should be read.</p>
 
     <p><strong>A setting that did nothing.</strong> The config file, the README and
     <code>/jev-guard status</code> all advertised <code>uncertain</code>, described as what to
@@ -414,7 +414,7 @@ danger 0.03 → allow (dangerous-action: Jev noul is_dangerous=0.03) [typesafe/j
 
     <h2 id="limits">What this does not prove</h2>
 
-    <p>An honest test page says where the evidence stops.</p>
+    <p>Where the evidence stops:</p>
 
     <ul>
       <li><strong>The agent is not deterministic.</strong> The same prompt can produce a
