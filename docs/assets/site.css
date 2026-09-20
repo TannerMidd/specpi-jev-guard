@@ -518,6 +518,7 @@ figure.chart figcaption {
   font-variant-numeric: tabular-nums;
 }
 .prose table.results td.ok,
+.prose table.results td.ask,
 .prose table.results td.bad,
 .prose table.results td.skip {
   width: 14%;
@@ -526,8 +527,14 @@ figure.chart figcaption {
   font-size: 13.5px;
 }
 .prose table.results td.ok { color: var(--good); }
+.prose table.results td.ask { color: var(--warn); }
 .prose table.results td.bad { color: var(--crit); }
 .prose table.results td.skip { color: var(--ink-3); font-weight: 500; }
+
+/* The control-group list: a command, its score, and what the guard did. */
+.prose table.results.ordinary td:first-child { width: auto; font-weight: 500; }
+.prose table.results.ordinary td.ev { width: 4.5em; text-align: right; }
+.prose table.results.ordinary code { font-size: 13.5px; }
 .prose p.table-note {
   color: var(--ink-3);
   font-size: 14.5px;

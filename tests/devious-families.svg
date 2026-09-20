@@ -2,7 +2,7 @@
 <title>Stacked bars: what happened to each family of attack</title>
 <rect width="1020" height="684" fill="var(--jv-bg, #fcfcfb)"/>
 <text x="40" y="46" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Every attack family, and what happened to it</text>
-<text x="40" y="70" font-size="13" fill="var(--jv-dim, #52514e)">89 hostile commands grouped by the trick they use. Bar length is the number of commands in that family.</text>
+<text x="40" y="70" font-size="13" fill="var(--jv-dim, #52514e)">108 hostile commands grouped by the trick they use. Bar length is the number of commands in that family.</text>
 <text x="40" y="90" font-size="13" fill="var(--jv-dim, #52514e)">Sorted with the weakest result at the top, so the families worth arguing about come first.</text>
 <rect x="40" y="117" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
 <text x="57" y="126" font-size="12" fill="var(--jv-dim, #52514e)">blocked</text>
@@ -10,95 +10,101 @@
 <text x="142.7" y="126" font-size="12" fill="var(--jv-dim, #52514e)">held for confirmation</text>
 <rect x="308.9" y="117" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
 <text x="325.9" y="126" font-size="12" fill="var(--jv-dim, #52514e)">allowed</text>
-<line x1="345.7" y1="160" x2="345.7" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
-<line x1="461.3" y1="160" x2="461.3" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
-<line x1="577" y1="160" x2="577" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
-<line x1="692.7" y1="160" x2="692.7" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
-<line x1="808.3" y1="160" x2="808.3" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
-<line x1="924" y1="160" x2="924" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="290.3" y1="160" x2="290.3" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="350.7" y1="160" x2="350.7" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="411" y1="160" x2="411" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="471.4" y1="160" x2="471.4" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="531.7" y1="160" x2="531.7" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="592.1" y1="160" x2="592.1" y2="622" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
 <line x1="230" y1="622" x2="924" y2="622" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
-<text x="214" y="188.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Privesc / evasion</text>
-<g class="mark-g"><title>Privesc / evasion: 5 commands blocked</title><path class="mark" d="M230,172H517.2V196H230V172Z" fill="var(--jv-block, #d03b3b)"/>
+<text x="214" y="188.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Read-tool abuse</text>
+<g class="mark-g"><title>Read-tool abuse: 10 commands blocked</title><path class="mark" d="M230,172H529.7V196H230V172Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="373.6" y="188.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">5</text>
-<g class="mark-g"><title>Privesc / evasion: 4 commands held for confirmation</title><path class="mark" d="M519.2,172H748.5V196H519.2V172Z" fill="var(--jv-ask, #fab219)"/>
+<text x="379.9" y="188.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">10</text>
+<g class="mark-g"><title>Read-tool abuse: 10 commands held for confirmation</title><path class="mark" d="M531.7,172H831.5V196H531.7V172Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="633.8" y="188.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">4</text>
-<g class="mark-g"><title>Privesc / evasion: 1 command allowed</title><path class="mark" d="M750.5,172H804.3A4,4 0 0 1 808.3,176V192A4,4 0 0 1 804.3,196H750.5V172Z" fill="var(--jv-allow, #0ca30c)"/>
+<text x="681.6" y="188.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">10</text>
+<g class="mark-g"><title>Read-tool abuse: 3 commands allowed</title><path class="mark" d="M833.5,172H920A4,4 0 0 1 924,176V192A4,4 0 0 1 920,196H833.5V172Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="779.4" y="188.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
-<text x="822.3" y="188.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">10</text>
-<text x="214" y="230.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Read-tool abuse</text>
-<g class="mark-g"><title>Read-tool abuse: 8 commands blocked</title><path class="mark" d="M230,214H690.7V238H230V214Z" fill="var(--jv-block, #d03b3b)"/>
+<text x="878.7" y="188.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">3</text>
+<text x="938" y="188.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">23</text>
+<text x="214" y="230.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Privesc / evasion</text>
+<g class="mark-g"><title>Privesc / evasion: 6 commands blocked</title><path class="mark" d="M230,214H409V238H230V214Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="460.3" y="230.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">8</text>
-<g class="mark-g"><title>Read-tool abuse: 3 commands held for confirmation</title><path class="mark" d="M692.7,214H864.2V238H692.7V214Z" fill="var(--jv-ask, #fab219)"/>
+<text x="319.5" y="230.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">6</text>
+<g class="mark-g"><title>Privesc / evasion: 4 commands held for confirmation</title><path class="mark" d="M411,214H529.7V238H411V214Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="778.4" y="230.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
-<g class="mark-g"><title>Read-tool abuse: 1 command allowed</title><path class="mark" d="M866.2,214H920A4,4 0 0 1 924,218V234A4,4 0 0 1 920,238H866.2V214Z" fill="var(--jv-allow, #0ca30c)"/>
+<text x="470.4" y="230.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">4</text>
+<g class="mark-g"><title>Privesc / evasion: 1 command allowed</title><path class="mark" d="M531.7,214H557.9A4,4 0 0 1 561.9,218V234A4,4 0 0 1 557.9,238H531.7V214Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="895.1" y="230.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
-<text x="938" y="230.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">12</text>
+<text x="546.8" y="230.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
+<text x="575.9" y="230.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">11</text>
 <text x="214" y="272.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Chained commands</text>
-<g class="mark-g"><title>Chained commands: 4 commands blocked</title><path class="mark" d="M230,256H459.3V280H230V256Z" fill="var(--jv-block, #d03b3b)"/>
+<g class="mark-g"><title>Chained commands: 5 commands blocked</title><path class="mark" d="M230,256H378.9V280H230V256Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="344.7" y="272.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">4</text>
-<g class="mark-g"><title>Chained commands: 1 command allowed</title><path class="mark" d="M461.3,256H515.2A4,4 0 0 1 519.2,260V276A4,4 0 0 1 515.2,280H461.3V256Z" fill="var(--jv-allow, #0ca30c)"/>
+<text x="304.4" y="272.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">5</text>
+<g class="mark-g"><title>Chained commands: 2 commands held for confirmation</title><path class="mark" d="M380.9,256H439.2V280H380.9V256Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="490.3" y="272.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
-<text x="533.2" y="272.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">5</text>
+<text x="410" y="272.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">2</text>
+<g class="mark-g"><title>Chained commands: 1 command allowed</title><path class="mark" d="M441.2,256H467.4A4,4 0 0 1 471.4,260V276A4,4 0 0 1 467.4,280H441.2V256Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="456.3" y="272.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
+<text x="485.4" y="272.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">8</text>
 <text x="214" y="314.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Persistence</text>
-<g class="mark-g"><title>Persistence: 5 commands blocked</title><path class="mark" d="M230,298H517.2V322H230V298Z" fill="var(--jv-block, #d03b3b)"/>
+<g class="mark-g"><title>Persistence: 6 commands blocked</title><path class="mark" d="M230,298H409V322H230V298Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="373.6" y="314.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">5</text>
-<g class="mark-g"><title>Persistence: 1 command held for confirmation</title><path class="mark" d="M519.2,298H573A4,4 0 0 1 577,302V318A4,4 0 0 1 573,322H519.2V298Z" fill="var(--jv-ask, #fab219)"/>
+<text x="319.5" y="314.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">6</text>
+<g class="mark-g"><title>Persistence: 1 command allowed</title><path class="mark" d="M411,298H437.2A4,4 0 0 1 441.2,302V318A4,4 0 0 1 437.2,322H411V298Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="548.1" y="314.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
-<text x="591" y="314.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">6</text>
-<text x="214" y="356.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Encoded / fetched code</text>
-<g class="mark-g"><title>Encoded / fetched code: 10 commands blocked</title><path class="mark" d="M230,340H806.3V364H230V340Z" fill="var(--jv-block, #d03b3b)"/>
+<text x="426.1" y="314.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
+<text x="455.2" y="314.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">7</text>
+<text x="214" y="356.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Interpreter one-liners</text>
+<g class="mark-g"><title>Interpreter one-liners: 7 commands blocked</title><path class="mark" d="M230,340H439.2V364H230V340Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="518.2" y="356.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">10</text>
-<g class="mark-g"><title>Encoded / fetched code: 1 command held for confirmation</title><path class="mark" d="M808.3,340H862.2A4,4 0 0 1 866.2,344V360A4,4 0 0 1 862.2,364H808.3V340Z" fill="var(--jv-ask, #fab219)"/>
+<text x="334.6" y="356.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
+<g class="mark-g"><title>Interpreter one-liners: 1 command held for confirmation</title><path class="mark" d="M441.2,340H467.4A4,4 0 0 1 471.4,344V360A4,4 0 0 1 467.4,364H441.2V340Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="837.3" y="356.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
-<text x="880.2" y="356.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">11</text>
-<text x="214" y="398.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Indirection</text>
-<g class="mark-g"><title>Indirection: 10 commands blocked</title><path class="mark" d="M230,382H804.3A4,4 0 0 1 808.3,386V402A4,4 0 0 1 804.3,406H230V382Z" fill="var(--jv-block, #d03b3b)"/>
+<text x="456.3" y="356.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
+<text x="485.4" y="356.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">8</text>
+<text x="214" y="398.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Encoded / fetched code</text>
+<g class="mark-g"><title>Encoded / fetched code: 10 commands blocked</title><path class="mark" d="M230,382H529.7V406H230V382Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="519.2" y="398.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">10</text>
-<text x="822.3" y="398.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">10</text>
-<text x="214" y="440.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Exfiltration</text>
-<g class="mark-g"><title>Exfiltration: 8 commands blocked</title><path class="mark" d="M230,424H688.7A4,4 0 0 1 692.7,428V444A4,4 0 0 1 688.7,448H230V424Z" fill="var(--jv-block, #d03b3b)"/>
+<text x="379.9" y="398.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">10</text>
+<g class="mark-g"><title>Encoded / fetched code: 1 command held for confirmation</title><path class="mark" d="M531.7,382H557.9A4,4 0 0 1 561.9,386V402A4,4 0 0 1 557.9,406H531.7V382Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="461.3" y="440.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">8</text>
-<text x="706.7" y="440.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">8</text>
-<text x="214" y="482.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Interpreter one-liners</text>
-<g class="mark-g"><title>Interpreter one-liners: 7 commands blocked</title><path class="mark" d="M230,466H630.8A4,4 0 0 1 634.8,470V486A4,4 0 0 1 630.8,490H230V466Z" fill="var(--jv-block, #d03b3b)"/>
+<text x="546.8" y="398.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
+<text x="575.9" y="398.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">11</text>
+<text x="214" y="440.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Indirection</text>
+<g class="mark-g"><title>Indirection: 10 commands blocked</title><path class="mark" d="M230,424H527.7A4,4 0 0 1 531.7,428V444A4,4 0 0 1 527.7,448H230V424Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="432.4" y="482.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
-<text x="648.8" y="482.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">7</text>
+<text x="380.9" y="440.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">10</text>
+<text x="545.7" y="440.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">10</text>
+<text x="214" y="482.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Exfiltration</text>
+<g class="mark-g"><title>Exfiltration: 9 commands blocked</title><path class="mark" d="M230,466H497.6A4,4 0 0 1 501.6,470V486A4,4 0 0 1 497.6,490H230V466Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="365.8" y="482.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">9</text>
+<text x="515.6" y="482.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">9</text>
 <text x="214" y="524.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Windows / PowerShell</text>
-<g class="mark-g"><title>Windows / PowerShell: 7 commands blocked</title><path class="mark" d="M230,508H630.8A4,4 0 0 1 634.8,512V528A4,4 0 0 1 630.8,532H230V508Z" fill="var(--jv-block, #d03b3b)"/>
+<g class="mark-g"><title>Windows / PowerShell: 8 commands blocked</title><path class="mark" d="M230,508H467.4A4,4 0 0 1 471.4,512V528A4,4 0 0 1 467.4,532H230V508Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="432.4" y="524.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
-<text x="648.8" y="524.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">7</text>
+<text x="350.7" y="524.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">8</text>
+<text x="485.4" y="524.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">8</text>
 <text x="214" y="566.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Obfuscation / injection</text>
-<g class="mark-g"><title>Obfuscation / injection: 7 commands blocked</title><path class="mark" d="M230,550H630.8A4,4 0 0 1 634.8,554V570A4,4 0 0 1 630.8,574H230V550Z" fill="var(--jv-block, #d03b3b)"/>
+<g class="mark-g"><title>Obfuscation / injection: 7 commands blocked</title><path class="mark" d="M230,550H437.2A4,4 0 0 1 441.2,554V570A4,4 0 0 1 437.2,574H230V550Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="432.4" y="566.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
-<text x="648.8" y="566.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">7</text>
+<text x="335.6" y="566.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
+<text x="455.2" y="566.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">7</text>
 <text x="214" y="608.5" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Unicode tricks</text>
-<g class="mark-g"><title>Unicode tricks: 6 commands blocked</title><path class="mark" d="M230,592H573A4,4 0 0 1 577,596V612A4,4 0 0 1 573,616H230V592Z" fill="var(--jv-block, #d03b3b)"/>
+<g class="mark-g"><title>Unicode tricks: 6 commands blocked</title><path class="mark" d="M230,592H407A4,4 0 0 1 411,596V612A4,4 0 0 1 407,616H230V592Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="403.5" y="608.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">6</text>
-<text x="591" y="608.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">6</text>
+<text x="320.5" y="608.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">6</text>
+<text x="425" y="608.5" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-variant-numeric="tabular-nums">6</text>
 <text x="230" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0</text>
-<text x="345.7" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">2</text>
-<text x="461.3" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">4</text>
-<text x="577" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">6</text>
-<text x="692.7" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">8</text>
-<text x="808.3" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">10</text>
-<text x="924" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">12</text>
+<text x="290.3" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">2</text>
+<text x="350.7" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">4</text>
+<text x="411" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">6</text>
+<text x="471.4" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">8</text>
+<text x="531.7" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">10</text>
+<text x="592.1" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">12</text>
 <text x="938" y="646" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="start">total</text>
 </svg>

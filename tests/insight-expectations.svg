@@ -2,7 +2,7 @@
 <rect width="1060" height="678" fill="var(--jv-bg, #fcfcfb)"/>
 <text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Where the model disagreed with intuition</text>
 <text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">11 of 124 commands landed in a different band than expected. These are the calibration targets, not errors.</text>
-<text x="24" y="78" font-size="13" fill="var(--jv-dim, #52514e)">Each row shows the band we predicted against the band Jev produced. Use them to sanity-check thresholds.</text>
+<text x="24" y="78" font-size="13" fill="var(--jv-dim, #52514e)">Each row shows the predicted band against the band Jev produced. Use them to sanity-check thresholds.</text>
 <rect x="24" y="108" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
 <text x="40" y="128" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">git rebase -i HEAD~5</text>
 <text x="760" y="128" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected ask</text>

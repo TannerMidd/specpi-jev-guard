@@ -1,5 +1,49 @@
 # Changelog
 
+## 0.3.0 (2026-09-20)
+
+### Changed
+
+- **The read-only fast pass now names the flags that are reads, instead of the
+  ones that are dangerous.** It used to allowlist a binary by name and then
+  blocklist the flags of it that write a file, set machine state, or run a
+  program. A blocklist has to be finished to be correct, and three rounds of
+  hand-probing showed this one never would be: `rg --pre`, which pipes every
+  file through a command of the caller's choosing, was closed in the first
+  round, and `--hostname-bin`, which runs a command for the same reason in the
+  same part of the same help text, was still open two rounds later. Now 24
+  binaries with no such flag in any spelling pass on the name alone; `git`,
+  `rg`, `fd` and `find` have their read-only flags named one at a time; and
+  anything else escalates, including an option the list has never heard of. A
+  tool that grows a new way to run a program in its next release can no longer
+  reopen a hole.
+- **Ten binaries came off the fast pass:** `svn`, `hg`, `sort`, `uniq`, `tree`,
+  `file`, `date`, `hostname`, `less` and `more`. Each has at least one flag that
+  writes, sets state, or execs, and none is common enough in an agent loop to be
+  worth the surface. They are classified like any other command now, which costs
+  one call per distinct command per session, not one per invocation: the verdict
+  cache pays it once.
+
+  Worth knowing before you upgrade: the guard fails closed, so with no reachable
+  classifier those ten now stop instead of running. `tree src` and `svn status`
+  used to survive a bad key or an outage on the strength of their name. They no
+  longer do. Everyday `git`, `ls`, `cat`, `grep`, `rg`, `fd` and `find` work is
+  unaffected, and `safeCommands` still passes anything you name yourself.
+
+### Fixed
+
+- **A lone `&` hid a destructive tail behind a safe head.** `ls & rm -rf /tmp/x`
+  read as one read-only invocation whose only binary was `ls`. A single `&` is a
+  chain separator now.
+- **Long-option abbreviations reopened closed holes.** `git tag --del` and
+  `git grep --op=` matched no rule, because git resolves any unambiguous prefix.
+  Prefixes are resolved now, and only for the tools that accept them: `rg` takes
+  its long options exactly, so `--pre` is never read as short for `--pretty`.
+- **The home-directory hard deny only knew `~` and `$HOME`.** Literal
+  `/home/me` and `/Users/me` were not hard-denied, and `/Users` and `/dev` were
+  not treated as system directories. The same rules now recognise the literal
+  spellings, so those wipes stop at the local layer instead of relying on Jev.
+
 ## 0.2.0 (2026-09-20)
 
 ### Fixed

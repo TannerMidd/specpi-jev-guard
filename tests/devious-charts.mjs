@@ -6,12 +6,12 @@
  *   tests/diagram-flow.svg      how a gated command is decided
  *   tests/diagram-layers.svg    where this run's attacks were stopped
  *   tests/devious-families.svg  outcome mix per attack family
- *   tests/devious-strip.svg     danger scores, attacks vs ordinary work
+ *   tests/devious-ordinary.html what ordinary work runs into, inlined by docs:sync
  *   tests/devious-redteam.svg   an independent model's attempts, scored
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import {
-  ON, P, arrow, axisLine, barSeg, chip, clip, dot, gridV, label, legend,
+  ON, P, arrow, axisLine, barSeg, chip, clip, dot, escXml, gridV, label, legend,
   panel, rectPath, subtitle, svgClose, svgOpen, textWidth, threshold, title,
 } from "./svg-util.mjs";
 
@@ -217,126 +217,45 @@ function renderFamilies() {
   return s;
 }
 
-/* ============================================ histogram shared by 4. and 5. */
-
-const BINS = 20;
-const BINW = 1 / BINS;
-const binOf = (v) => Math.min(BINS - 1, Math.floor(v / BINW));
-
-function histogram(values) {
-  const counts = new Array(BINS).fill(0);
-  for (const v of values) counts[binOf(v)] += 1;
-  return counts;
-}
-
-/** Nice round y ticks for a count axis. */
-function ticksFor(maxCount) {
-  const step = maxCount <= 5 ? 1 : maxCount <= 12 ? 2 : maxCount <= 30 ? 10 : 10;
-  const out = [];
-  for (let t = 0; t <= maxCount; t += step) out.push(t);
-  if (out[out.length - 1] !== maxCount) out.push(Math.ceil(maxCount / step) * step);
-  return out;
-}
+/* ========================================= 4. what ordinary work runs into */
 
 /**
- * One count histogram on the 0-to-1 danger axis. Plain bars, plain counts, one
- * panel per group so nothing has to be mentally unstacked.
+ * The control group, named. A distribution of scores tells you the guard
+ * separates two piles; it does not tell you whether the thing will interrupt
+ * the work you actually do. That question is answered by reading the commands,
+ * so they are listed, in the order the guard sees them.
  */
-function scorePanel({ x, y, plotW, panelH, values, heading, note, colorOf, drawAxis }) {
-  const counts = histogram(values);
-  const maxCount = Math.max(...counts, 1);
-  const ticks = ticksFor(maxCount);
-  const top = ticks[ticks.length - 1];
-  const px = panelH / top;
-  const base = y + panelH;
-  const barW = Math.min(26, plotW / BINS - 8);
+function renderOrdinaryTable() {
+  const trp = rows
+    .filter((r) => r.kind === "trap")
+    .sort((a, b) => a.danger - b.danger);
+  const ran = trp.filter((r) => r.final === "allow");
+  const asked = trp.filter((r) => r.final === "ask");
+  const blocked = trp.filter((r) => r.final === "block");
 
-  const peakAt = counts.indexOf(maxCount);
-  let s = label(x, y - 40, heading, { size: 14, weight: 650 });
-  s += label(x, y - 21, note, { size: 12, fill: P.dim });
+  const VERDICT = {
+    allow: ["ran", "ok"],
+    ask: ["asked first", "ask"],
+    block: ["blocked", "bad"],
+  };
 
-  for (const [a, b, color] of [[0, ASK, P.allow], [ASK, BLOCK, P.ask], [BLOCK, 1, P.block]]) {
-    s += `<rect x="${(x + a * plotW).toFixed(1)}" y="${y.toFixed(1)}" width="${((b - a) * plotW).toFixed(1)}" height="${panelH}" fill="${color}" opacity="0.05"/>\n`;
-  }
-  for (const t of ticks) {
-    if (t === 0) continue;
-    s += `<line x1="${x}" y1="${(base - t * px).toFixed(1)}" x2="${(x + plotW).toFixed(1)}" y2="${(base - t * px).toFixed(1)}" stroke="${P.grid}" stroke-width="1"/>\n`;
-  }
-  for (const t of ticks) {
-    s += label(x - 10, base - t * px + 4, String(t), { anchor: "end", size: 11.5, fill: P.muted, tabular: true });
-  }
-  s += axisLine(x, base, x + plotW);
+  const row = (r) => {
+    const [text, cls] = VERDICT[r.final] ?? ["unknown", "skip"];
+    return `<tr><td><code>${escXml(r.cmd)}</code></td><td class="ev">${r.danger.toFixed(2)}</td><td class="${cls}">${text}</td></tr>`;
+  };
 
-  counts.forEach((c, i) => {
-    if (!c) return;
-    const h = c * px;
-    const cx = x + (i * BINW + BINW / 2) * plotW;
-    s += `<g class="mark-g"><title>${plural(c, "command", "commands")} scored ${(i * BINW).toFixed(2)} to ${((i + 1) * BINW).toFixed(2)}</title>` +
-      `<path class="mark" d="${rectPath(cx - barW / 2, base - h, barW, h, 4, { tl: true, tr: true })}" fill="${colorOf(i * BINW + BINW / 2)}"/></g>\n`;
-    // the tallest column carries its count, inside the bar when it fits so
-    // the label can never land on the panel heading
-    if (i === peakAt) {
-      const inside = h >= 26;
-      s += label(cx, inside ? base - h + 17 : base - h - 9, String(c), {
-        anchor: "middle", size: 12.5, weight: 700, fill: inside ? ON[bandOf(i * BINW + BINW / 2)] : P.dim,
-      });
-    }
-  });
-
-  if (drawAxis) {
-    for (let d = 0; d <= 1.0001; d += 0.1) {
-      s += label(x + d * plotW, base + 22, d.toFixed(1), { anchor: "middle", size: 11.5, fill: P.muted, tabular: true });
-    }
-    s += label(x + plotW / 2, base + 48, "danger score Jev gave the command", { anchor: "middle", size: 12.5, fill: P.dim });
-  }
-  return s;
-}
-
-/* ================================================= 4. the score distribution */
-
-function renderStrip() {
-  const scored = rows.filter((r) => typeof r.danger === "number" && !Number.isNaN(r.danger));
-  const atk = scored.filter((r) => r.kind === "attack");
-  const trp = scored.filter((r) => r.kind === "trap");
-  const localOnly = attacks.length - atk.length;
-
-  const W = 1020, H = 700;
-  const L = 70, R = 50;
-  const plotW = W - L - R;
-  const topY = 200, topH = 190;
-  const botY = 512, botH = 90;
-
-  let s = svgOpen(W, H, { alt: "Two histograms: danger scores for hostile commands and for ordinary work" });
-  s += title(40, 46, "Attacks score high. Ordinary work scores low.");
-  s += subtitle(40, 70, "Two counts of the same thing: how many commands got each danger score. Hostile commands on top, ordinary work below.");
-  s += subtitle(40, 90, `${localOnly} further attacks never got a score, because a local rule stopped them before Jev was called.`);
-  s += legend(40, 124, [
-    { label: "score blocks the command", color: P.block },
-    { label: "score asks you first", color: P.ask },
-    { label: "score lets it run", color: P.allow },
-  ]);
-
-  // the two thresholds run through both panels, labelled once
-  for (const [v, text] of [[ASK, "asks you first, from 0.35"], [BLOCK, "blocked, from 0.80"]]) {
-    const tx = L + v * plotW;
-    s += `<line x1="${tx.toFixed(1)}" y1="${topY - 10}" x2="${tx.toFixed(1)}" y2="${botY + botH}" stroke="${P.border}" stroke-width="1.5" stroke-dasharray="5 4"/>\n`;
-    s += label(tx + 8, topY - 54, text, { size: 12, weight: 620, fill: P.dim });
-  }
-
-  s += scorePanel({
-    x: L, y: topY, plotW, panelH: topH, values: atk.map((r) => r.danger),
-    heading: `${atk.length} hostile commands`, note: "written to get past a classifier",
-    colorOf: (v) => BAND[bandOf(v)],
-  });
-  s += scorePanel({
-    x: L, y: botY, plotW, panelH: botH, values: trp.map((r) => r.danger),
-    heading: `${trp.length} ordinary commands`, note: "real work that merely looks alarming",
-    colorOf: (v) => BAND[bandOf(v)], drawAxis: true,
-  });
-
-  s += label(40, H - 22, "Nothing hostile scored below 0.10, and nothing ordinary scored above 0.80. The gap between them is where you set your thresholds.", { size: 12.5, fill: P.muted });
-  s += svgClose();
-  return s;
+  return [
+    `<p class="table-note">${trp.length} commands that do real work and look alarming while doing it. ` +
+      `${ran.length} ran with no prompt, ${asked.length} stopped to ask, ` +
+      `${blocked.length === 0 ? "none were blocked" : `${blocked.length} were blocked`}.</p>`,
+    `<table class="results ordinary">`,
+    `<thead><tr><th>Command</th><th>Score</th><th>What the guard did</th></tr></thead>`,
+    `<tbody>`,
+    ...trp.map(row),
+    `</tbody>`,
+    `</table>`,
+    "",
+  ].join("\n");
 }
 
 /* ============================================= 5. the independent adversary */
@@ -412,7 +331,6 @@ for (const [name, render] of [
   ["diagram-flow", renderFlow],
   ["diagram-layers", renderLayers],
   ["devious-families", renderFamilies],
-  ["devious-strip", renderStrip],
 ]) {
   write(name, render);
   built.push(name);
@@ -423,4 +341,6 @@ if (redteam) {
 } else {
   console.warn("skip devious-redteam — run `npm run redteam` first");
 }
+writeFileSync(new URL("./devious-ordinary.html", import.meta.url), renderOrdinaryTable(), "utf-8");
+built.push("devious-ordinary.html");
 console.log(`devious:charts — wrote ${built.join(", ")}`);
