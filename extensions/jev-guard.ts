@@ -545,6 +545,9 @@ export default function (pi: ExtensionAPI) {
   // session's own entries on resume, so the number survives a restart the way
   // the records themselves do.
   const tally = { calls: 0, blocked: 0, latest: undefined as AuditRecord | undefined };
+  // What the footer currently says, so an unchanged line is not re-sent. In
+  // RPC mode every setStatus is a message on the wire.
+  let shownStatus: string | undefined;
 
   /** Load settings, keep the cached display mode in step with them, and put
    *  the footer where the current state says it belongs. */
@@ -564,23 +567,25 @@ export default function (pi: ExtensionAPI) {
    * so it is shown whether or not the transcript is.
    */
   function showStatus(ctx: ExtensionContext): void {
+    const text = formatGuardStatus({
+      calls: tally.calls,
+      blocked: tally.blocked,
+      latest: auditDisplay === "status" ? tally.latest : undefined,
+    });
+    if (text === shownStatus) return;
     try {
-      ctx.ui.setStatus(
-        AUDIT_TYPE,
-        formatGuardStatus({
-          calls: tally.calls,
-          blocked: tally.blocked,
-          latest: auditDisplay === "status" ? tally.latest : undefined,
-        }),
-      );
+      ctx.ui.setStatus(AUDIT_TYPE, text);
+      shownStatus = text;
     } catch {
       // The footer line is cosmetic; never let it break the gate.
     }
   }
 
   function clearAuditStatus(ctx: ExtensionContext): void {
+    if (shownStatus === undefined) return;
     try {
       ctx.ui.setStatus(AUDIT_TYPE, undefined);
+      shownStatus = undefined;
     } catch {
       // The footer line is cosmetic; never let it break the gate.
     }
