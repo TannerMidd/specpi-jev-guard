@@ -12,7 +12,15 @@ export type UncertainPolicy = "allow" | "ask" | "deny";
 /** Which API the classifier is reached through. */
 export type Backend = "openrouter" | "typesafe";
 
-/** Where each audit record is shown: the transcript, the footer, or nowhere. */
+/**
+ * Where each audit record is shown.
+ *
+ * The default is `status`: the footer keeps the count and the latest verdict,
+ * and the transcript is left alone. A line per judged call is a line per
+ * judged call, and in a working session that is most of the screen. `off`
+ * drops the footer line too; `transcript` puts a line back under each call for
+ * anyone who wants to watch the guard work.
+ */
 export type AuditDisplay = "transcript" | "status" | "off";
 
 export interface GuardSettings {
@@ -61,7 +69,7 @@ export const DEFAULT_SETTINGS: GuardSettings = {
   askThreshold: 0.35,
   blockThreshold: 0.8,
   uncertain: "ask",
-  auditDisplay: "transcript",
+  auditDisplay: "status",
   safeCommands: [],
   allowedCommands: [],
   disallowedCommands: [],

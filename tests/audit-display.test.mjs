@@ -105,12 +105,18 @@ after(() => {
 });
 
 describe("auditDisplay", () => {
-  it("defaults to the line in the transcript it has always had", async () => {
+  it("puts nothing in the transcript by default", async () => {
     const host = await boot({});
     await denyOneCall(host);
-    assert.equal(host.entries.length, 1);
+    assert.equal(host.entries.length, 1, "the record still reaches the session file");
+    assert.equal(render(host), undefined, "the default adds no line to the transcript");
+    assert.equal(host.statuses.at(-1).text, "jev 0 · 1 blocked · bash blocked");
+  });
+
+  it("transcript mode is there for anyone who wants the line back", async () => {
+    const host = await boot({ auditDisplay: "transcript" });
+    await denyOneCall(host);
     assert.notEqual(render(host), undefined);
-    assert.equal(host.statuses.at(-1).text, "jev 0 · 1 blocked", "the footer counts but does not narrate");
   });
 
   it("status mode writes one footer line and nothing in the transcript", async () => {
@@ -145,17 +151,18 @@ describe("auditDisplay", () => {
     // A UTF-8 BOM makes JSON.parse throw. Without stripping it the whole file
     // is dropped, silently, and every setting in it with it.
     const host = fakeHost();
-    writeFileSync(SETTINGS, "﻿" + JSON.stringify({ auditDisplay: "off" }), "utf-8");
+    writeFileSync(SETTINGS, "﻿" + JSON.stringify({ auditDisplay: "transcript" }), "utf-8");
     extension(host.api);
     await host.handlers.get("session_start")({ type: "session_start", reason: "startup" }, host.ctx);
     await denyOneCall(host);
-    assert.equal(render(host), undefined, "the BOM hid the setting");
+    assert.notEqual(render(host), undefined, "the BOM hid the setting");
   });
 
   it("an unknown value in the settings file leaves the default standing", async () => {
     const host = await boot({ auditDisplay: "footer" });
     await denyOneCall(host);
-    assert.notEqual(render(host), undefined);
+    assert.equal(render(host), undefined);
+    assert.equal(host.statuses.at(-1).text, "jev 0 · 1 blocked · bash blocked");
   });
 
   it("the latest verdict replaces the last one rather than stacking up", async () => {
@@ -182,7 +189,8 @@ describe("the footer counter", () => {
     extension(host.api);
     await host.handlers.get("session_start")({ type: "session_start", reason: "resume" }, host.ctx);
     // Two calls reached the classifier; three decisions, two of them stops.
-    assert.equal(host.statuses.at(-1).text, "jev 2 · 2 blocked");
+    // The default mode also carries the last verdict.
+    assert.equal(host.statuses.at(-1).text, "jev 2 · 2 blocked · bash blocked");
   });
 
   it("is gone while the guard is off, and back when it is on", async () => {
@@ -196,7 +204,7 @@ describe("the footer counter", () => {
 
 describe("/jev-guard audit", () => {
   it("saves the mode and applies it without a restart", async () => {
-    const host = await boot({});
+    const host = await boot({ auditDisplay: "transcript" });
     await host.command.handler("audit off", host.ctx);
     assert.equal(JSON.parse(readFileSync(SETTINGS, "utf-8")).auditDisplay, "off");
     await denyOneCall(host);

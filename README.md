@@ -114,7 +114,7 @@ trusted. Environment variables win over both.
   "askThreshold": 0.35,
   "blockThreshold": 0.8,
   "uncertain": "ask",
-  "auditDisplay": "transcript",
+  "auditDisplay": "status",
   "safeCommands": ["uv run pytest*"],
   "allowedCommands": ["rm -rf build*"],
   "disallowedCommands": ["npm publish*"]
@@ -127,31 +127,29 @@ thresholds in the gap between the two groups.
 
 ### Where audit records show up
 
-A judged call leaves a record. By default it shows in the transcript as one
-dim line under the call it judged, `jev 0.02`, and nothing more: a gated
-session should read like an ungated one apart from that mark. Expand it
-(ctrl+o) for the command, the category and the model. `auditDisplay` moves it
-from there without losing it:
+A judged call leaves a record. By default it goes to the session file and to
+the footer, and nowhere else: a gated session reads like an ungated one. The
+footer carries `jev 12`, then `jev 12 · 1 blocked` once the guard has stopped
+something, and the last verdict after that: `jev 12 · bash 0.04`.
 
 | `auditDisplay` | what you see |
 | --- | --- |
-| `transcript` (default) | one dim line under each judged call |
-| `status` | no line in the transcript; the latest verdict in the footer |
-| `off` | no line in the transcript, and no verdict in the footer |
+| `status` (default) | the footer line, and the transcript left alone |
+| `transcript` | a dim `jev 0.02` under each judged call as well |
+| `off` | nothing, not even the footer line |
 
-A block is drawn in the error colour and names itself (`jev 0.91 blocked`), and
-a call you were asked about says who decided (`jev 0.44 allowed by you`).
+The count comes from the session's own records, so it survives a resume, and
+it goes away while the guard is off.
 
-Whichever you pick, the footer keeps a count for the session: `jev 12`, and
-`jev 12 · 1 blocked` once the guard has stopped something. It is how a quiet
-transcript still shows the guard is awake, it survives a resume because it is
-counted from the session's own records, and it goes away while the guard is
-off. In `status` mode the last verdict joins it: `jev 12 · bash 0.04`.
+Blocks are loud whatever this is set to: they raise a notification and the
+reason goes back to the model. `transcript` mode draws a block in the error
+colour and names it (`jev 0.91 blocked`), says who decided when you were asked
+(`jev 0.44 allowed by you`), and expands (ctrl+o) to the command, the category
+and the model.
 
 Every mode writes every record to the session file, so the audit trail is the
-same in all three. Blocks stay loud everywhere too: they raise a notification
-and the reason goes back to the model whatever this is set to. Switch with
-`/jev-guard audit status`, which saves the choice.
+same in all three. Switch with `/jev-guard audit transcript`, which saves the
+choice.
 
 <details>
 <summary>Full reference: decision order, backends, every setting</summary>
@@ -179,7 +177,8 @@ and the reason goes back to the model whatever this is set to. Switch with
      `ask`, and `deny`, both block. Only `"allow"` lets the middle band through
      unattended.
    - Below: runs. Every judged call is recorded; `auditDisplay` decides
-     whether the record shows in the transcript, in the footer, or nowhere.
+     whether that record shows in the footer alone (the default), in the
+     transcript as well, or nowhere.
 3. **Writes and edits:** ordinary project files pass locally. Paths outside the
    workspace, and paths matching `protectedPaths` (`.env*`, keys, `.ssh/`), go
    to Jev.

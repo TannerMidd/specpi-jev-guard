@@ -581,8 +581,8 @@ describe("audit display setting", () => {
     assert.equal(parseAuditDisplay(undefined), undefined);
   });
 
-  it("ships showing records in the transcript, as it always has", () => {
-    assert.equal(DEFAULT_SETTINGS.auditDisplay, "transcript");
+  it("ships with the transcript left alone", () => {
+    assert.equal(DEFAULT_SETTINGS.auditDisplay, "status");
   });
 });
 

@@ -4,13 +4,39 @@
 
 ### Changed
 
-- **A judged call now leaves one dim line, not a box.** The audit entry used to
-  be a padded, coloured block with a bracketed label, which made routine
-  traffic the loudest thing in the transcript. It is now `jev 0.02` under the
-  call it judged, in the same dim the rest of the chrome uses: a gated session
-  reads like an ungated one apart from that mark. A block is drawn in the error
+- **A judged call no longer marks the transcript at all.** Every gated call
+  used to append a padded, coloured box, so the guard's routine traffic was the
+  loudest thing on screen and the conversation it protects scrolled away under
+  it. A gated session now reads like an ungated one: the record goes to the
+  session file and to one line in the footer, and nowhere else.
+
+  Set `"auditDisplay": "transcript"` to put a mark back under each judged call.
+  It is a dim `jev 0.02` now rather than a box, a block is drawn in the error
   colour and names itself, a call you were asked about says who decided, and
-  the command, category and model are still one keypress away.
+  expanding it still gives the command, the category, the model and the
+  latency.
+
+### Added
+
+- **A counter in pi's footer: `jev 12`, and `jev 12 · 1 blocked` once the guard
+  has stopped something, and the latest verdict after that.** It is what makes
+  a quiet transcript readable rather than uninformative: the records can move
+  out of the way without the guard going silent. The count comes from the
+  session's own records, so a resumed session keeps its total, and the line
+  goes away while the guard is off.
+
+- **`auditDisplay` decides where a record shows: `status`, `transcript`, or
+  `off`.** `status` is the default described above. `off` drops the footer line
+  too, for a session that should look untouched. Every mode still writes every
+  record to the session file, so the audit trail does not move, and blocks stay
+  loud in all three: they raise a notification and their reason goes back to
+  the model.
+
+  Set it in `~/.pi/jev-guard.json` or a trusted project file, or run
+  `/jev-guard audit <status|transcript|off>` to save it. `/jev-guard status`
+  reports the current mode.
+
+  Thanks to @toorop for the report and the design (#5).
 
 ### Fixed
 
@@ -19,30 +45,6 @@
   the read falls back to defaults without a word, so every setting in the file
   went missing at once. Found while screenshotting the new modes: the settings
   file written by PowerShell had no effect at all.
-
-### Added
-
-- **A counter in pi's footer: `jev 12`, and `jev 12 · 1 blocked` once the guard
-  has stopped something.** It is what makes a quiet transcript readable rather
-  than uninformative: the records can move out of the way without the guard
-  going silent. The count comes from the session's own records, so a resumed
-  session keeps its total, and the line goes away while the guard is off.
-
-- **`auditDisplay` decides where audit records show up: `transcript`,
-  `status`, or `off`.** A judged call used to mean a box in the transcript, and
-  nothing else. That reads well when calls are rare and buries the
-  conversation when they are not: a repeated command is scored once and cached,
-  but it was still boxed on every run. `status` puts the latest verdict on one
-  footer line instead, `off` shows nothing, and the default is unchanged.
-
-  Every mode still writes every record to the session file, so the audit trail
-  does not move. Blocks stay loud in all three: they raise a notification and
-  their reason goes back to the model regardless. Set it in
-  `~/.pi/jev-guard.json` or a trusted project file, or run
-  `/jev-guard audit <transcript|status|off>` to save it. `/jev-guard status`
-  reports the current mode.
-
-  Thanks to @toorop for the report and the design (#5).
 
 ## 0.3.0 (2026-09-20)
 
