@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **The read-only fast pass could be beaten with a second command or a flag.**
+  A lone `&` hid a destructive tail behind a safe head (`ls & rm -rf /tmp/x`),
+  and several read-only names turned out to run code or write files:
+  `fd -x/--exec`, `rg --pre`, `sort --compress-program`, `git diff/show/log
+  --output`, `tree -o`, and `hg status --config`. All of these now fall through
+  to Jev instead of skipping it, the read-only forms still fast-pass, and unit
+  tests cover both sides.
+- **Long-option abbreviations reopened the same holes.** `git tag --del`,
+  `git grep --op=`, and `sort --out` matched no rule. Unambiguous long-option
+  prefixes of the destructive flags are now escalated like the full spelling.
+
 ## 0.2.0 (2026-09-20)
 
 ### Fixed

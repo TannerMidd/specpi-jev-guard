@@ -144,8 +144,11 @@ const SAFE_SVN_SUBCOMMANDS = new Set([
   "blame", "annotate", "praise", "propget", "pg", "proplist", "pl",
 ]);
 
-/** Shell operators that make a command line non-trivial. */
-const OPERATOR_RE = /(&&|\|\||[;|<>]|`|\$\(|\$\{)/;
+/** Shell operators that make a command line non-trivial. A single `&`
+ *  backgrounds what comes before it and runs what comes after, so it belongs
+ *  here with the rest: without it `ls & rm -rf /tmp/x` reads as one read-only
+ *  invocation whose only binary is `ls`. */
+const OPERATOR_RE = /(&&|\|\||[;|&<>]|`|\$\(|\$\{)/;
 
 /**
  * Top-level directories that belong to the system rather than to whoever is
@@ -154,8 +157,11 @@ const OPERATOR_RE = /(&&|\|\||[;|<>]|`|\$\(|\$\{)/;
  */
 const SYSTEM_DIRS = new Set([
   "usr", "etc", "bin", "sbin", "lib", "lib64", "boot", "var", "opt", "srv", "home", "root",
-  "system", "system32", "windows",
+  "users", "dev", "system", "system32", "windows",
 ]);
+
+/** Top-level directories whose children are the accounts' home directories. */
+const HOME_CONTAINERS = new Set(["home", "users"]);
 
 /** A home directory sits this far down in every layout: /home/me, /Users/me, C:/Users/me. */
 const HOME_DEPTH = 2;
@@ -185,6 +191,10 @@ export function normalizeDeleteTarget(raw: string): "root" | "home" | "system" |
   const base: "root" | "home" = head[1] === "/" ? "root" : "home";
   const rest = head[2];
 
+  // `~user` is that account's home, not a directory named `user` inside this
+  // one; only `~/user` walks deeper. Shells expand it the same way.
+  if (head[1] === "~" && /^[A-Za-z_][\w.-]*$/.test(rest)) return "home";
+
   const HOME = "\u0000home\u0000"; // a placeholder no path component can spell
   const parts: string[] = base === "home" ? new Array(HOME_DEPTH).fill(HOME) : [];
   for (const part of rest.split("/")) {
@@ -200,6 +210,8 @@ export function normalizeDeleteTarget(raw: string): "root" | "home" | "system" |
 
   if (parts.length === 0) return "root";
   if (parts.length === HOME_DEPTH && parts.every((p) => p === HOME)) return "home";
+  // The literal spelling of the same thing: /home/me and /Users/me.
+  if (parts.length === HOME_DEPTH && HOME_CONTAINERS.has(parts[0].toLowerCase())) return "home";
   // Climbed part-way out of home: /home, /Users, whatever holds the accounts.
   if (parts.length < HOME_DEPTH && parts[0] === HOME) return "system";
   if (parts.length === 1 && SYSTEM_DIRS.has(parts[0].toLowerCase())) return "system";
@@ -347,6 +359,18 @@ export function splitChain(command: string): string[] {
     .filter((s) => s.length > 0);
 }
 
+/** Long options are matched by prefix: git, Mercurial and the GNU tools all
+ *  accept unambiguous abbreviations, so a rule that only knows the full
+ *  spelling has a bypass (`git tag --del` for `--delete`, `sort --out` for
+ *  `--output`). Any prefix of `full` counts; over-matching a read-only option
+ *  only sends the call to Jev. */
+function anyLongOptPrefix(args: string[], full: string): boolean {
+  return args.some((a) => {
+    const name = a.split("=")[0] ?? "";
+    return name.startsWith("--") && name.length > 2 && full.startsWith(name);
+  });
+}
+
 /** Flags that turn an otherwise read-only binary into a writer, or a `git`
  *  subcommand that mutates refs. A matching segment falls through to Jev
  *  instead of fast-passing, so the zero-latency path stays provably read-only. */
@@ -357,14 +381,47 @@ function hasUnsafeReadOnlyFlag(bin: string, args: string[]): boolean {
     case "find":
       // -delete, -exec*, -ok*, -fprint* all mutate the filesystem.
       return flag(/^-(delete|exec|execdir|ok|okdir|fprint|fprint0|fprintf|fls)$/);
+    case "fd":
+      // -x/--exec and -X/--exec-batch run an arbitrary command over the
+      // results; -e is the extension filter and is not a code path. The short
+      // form may be attached with `=`, as in `fd -x=echo`.
+      return flag(/^-[a-zA-Z]*[xX][a-zA-Z]*(=.*)?$/) || flag(/^--exec(-batch)?(=.*)?$/);
+    case "rg":
+      // --pre/--pre-glob pipe each file through a command of the caller's
+      // choosing: code execution wearing the name of a search.
+      return flag(/^--pre(-glob)?(=.*)?$/);
+    case "tree":
+      // -o/--output writes the listing into a file instead of stdout.
+      return flag(/^(-o.*|--output(=.*)?)$/) || anyLongOptPrefix(args, "--output");
+    case "file":
+      // -C/--compile writes the compiled magic database beside the source.
+      return flag(/^-[a-zA-Z]*C[a-zA-Z]*$/) || anyLongOptPrefix(args, "--compile");
+    case "date":
+      // -s/--set changes the system clock.
+      return flag(/^-[a-zA-Z]*s[a-zA-Z]*$/) || anyLongOptPrefix(args, "--set");
+    case "hostname":
+      // A bare operand sets the hostname; flags alone only read it.
+      return nonFlag.length >= 1;
     case "sort":
-      // sort -o file / --output=file overwrite the target.
-      return flag(/^(-o.+|--output(=.*)?)$/) || args.includes("-o");
+      // sort -o file / --output=file overwrite the target. --compress-program
+      // runs a program of the caller's choosing when the sort spills to disk.
+      return flag(/^(-o.+|--output(=.*)?)$/) || args.includes("-o") ||
+        anyLongOptPrefix(args, "--output") || anyLongOptPrefix(args, "--compress-program");
     case "uniq":
       // uniq IN OUT writes to OUT; one operand (or flags only) is read-only.
       return nonFlag.length >= 2;
     case "git":
       return isUnsafeGitArgs(args);
+    case "hg":
+      // Global options may follow the subcommand; --config can load an
+      // arbitrary Python extension and --debugger starts an interactive one.
+      return anyLongOptPrefix(args, "--config") || anyLongOptPrefix(args, "--configfile") || anyLongOptPrefix(args, "--debugger");
+    case "svn":
+      // --diff-cmd runs an external program; a caller-supplied config dir or
+      // option can set that program. Code execution behind a read subcommand.
+      return anyLongOptPrefix(args, "--diff-cmd") ||
+        anyLongOptPrefix(args, "--config-option") ||
+        anyLongOptPrefix(args, "--config-dir");
     default:
       return false;
   }
@@ -376,6 +433,10 @@ function isUnsafeGitArgs(args: string[]): boolean {
   const rest = args.slice(1);
   const first = (rest[0] ?? "").toLowerCase();
   const anyFlag = (re: RegExp): boolean => rest.some((a) => re.test(a));
+  // --output=<file> writes the diff to an arbitrary path, and every diff-
+  // producing subcommand on the safe list accepts it (diff, show, log). The
+  // prefix form covers the abbreviations git itself accepts.
+  if (anyLongOptPrefix(rest, "--output")) return true;
   switch (sub) {
     case "branch":
       // -d/-D delete, -m/-M move, -f/-C reset an existing branch to another
@@ -383,9 +444,15 @@ function isUnsafeGitArgs(args: string[]): boolean {
       // `-a/-v/-r` only list. Creating a branch or a tag (a bare name operand)
       // writes a ref but loses nothing and is left on the fast-pass, so listing
       // forms like `git branch --format=...` are not dragged to Jev.
-      return anyFlag(/^-[a-zA-Z]*[dDmMfC][a-zA-Z]*$/) || anyFlag(/^--(delete|move|force|copy)$/);
+      return anyFlag(/^-[a-zA-Z]*[dDmMfC][a-zA-Z]*$/) ||
+        anyLongOptPrefix(rest, "--delete") ||
+        anyLongOptPrefix(rest, "--move") ||
+        anyLongOptPrefix(rest, "--force") ||
+        anyLongOptPrefix(rest, "--copy");
     case "tag":
-      return anyFlag(/^-[a-zA-Z]*[dTf][a-zA-Z]*$/) || anyFlag(/^--(delete|force)$/);
+      return anyFlag(/^-[a-zA-Z]*[dTf][a-zA-Z]*$/) ||
+        anyLongOptPrefix(rest, "--delete") ||
+        anyLongOptPrefix(rest, "--force");
     case "remote":
       // Mutating forms: add/remove/set-url/rename change config; update/prune
       // fetch or delete tracking refs. `git remote` / `-v` / `show` only read.
@@ -396,8 +463,9 @@ function isUnsafeGitArgs(args: string[]): boolean {
       return !["list", "show"].includes(first);
     case "grep":
       // -O / --open-files-in-pager runs its argument as a shell command over
-      // the matching files — arbitrary code execution, not a read.
-      return rest.some((a) => /^-O/.test(a) || /^--open-files-in-pager(=.*)?$/.test(a));
+      // the matching files — arbitrary code execution, not a read. The prefix
+      // form covers git's accepted abbreviations such as --op=.
+      return rest.some((a) => /^-O/.test(a)) || anyLongOptPrefix(rest, "--open-files-in-pager");
     case "clean":
       return true;
     default:
