@@ -130,15 +130,37 @@ const SAFE_GIT_SUBCOMMANDS = new Set([
   "stash",
 ]);
 
+// hg/svn have no per-command handling below, so — unlike git — a subcommand
+// not listed here falls through to Jev instead of fast-passing. These are the
+// read-only ones; anything else (hg purge, hg update -C, svn rm, svn export)
+// mutates and must not be treated as a provably read-only chain.
+const SAFE_HG_SUBCOMMANDS = new Set([
+  "status", "st", "log", "diff", "cat", "annotate", "blame",
+  "id", "root", "summary", "sum", "paths", "tags", "heads",
+  "branches", "manifest", "files", "grep", "identify",
+]);
+const SAFE_SVN_SUBCOMMANDS = new Set([
+  "status", "st", "log", "diff", "cat", "info", "list", "ls",
+  "blame", "annotate", "praise", "propget", "pg", "proplist", "pl",
+]);
+
 /** Shell operators that make a command line non-trivial. */
 const OPERATOR_RE = /(&&|\|\||[;|<>]|`|\$\(|\$\{)/;
 
 /** Hard-deny: recursive/forced deletion aimed at filesystem roots. */
 const HARD_DENY_PATTERNS: Array<{ re: RegExp; reason: string }> = [
   {
-    // rm -rf / | /* | ~ | $HOME (any flag order, combined or split)
-    re: /\brm\b(?=[^|;&\n]*-[a-zA-Z]*r[a-zA-Z]*)(?=[^|;&\n]*-[a-zA-Z]*f[a-zA-Z]*|[^|;&\n]*--(?:recursive|force))[^|;&\n]*?(^|\s)(\/|\/\*|~|\$HOME|\$\{HOME\})/,
+    // rm -rf / | /* | ~ | ~/ | $HOME (any flag order, combined or split).
+    // The target has to end there. `rm -rf /tmp/build` names a directory, not a
+    // root, and belongs in front of Jev rather than in a rule nothing can override.
+    re: /\brm\b(?=[^|;&\n]*-[a-zA-Z]*r[a-zA-Z]*|[^|;&\n]*--recursive)(?=[^|;&\n]*-[a-zA-Z]*f[a-zA-Z]*|[^|;&\n]*--force)[^|;&\n]*?(?:^|\s)["']?(?:\/\*?|~(?:\/\*?)?|\$HOME(?:\/\*?)?|\$\{HOME\}(?:\/\*?)?)(?=$|[\s;&|)'"`])/,
     reason: "recursive forced deletion aimed at a filesystem root or home directory",
+  },
+  {
+    // The same, for a top-level system directory. Children are deliberately not
+    // matched: /var/tmp/cache is somebody's build output, /var is the system.
+    re: /\brm\b(?=[^|;&\n]*-[a-zA-Z]*r[a-zA-Z]*|[^|;&\n]*--recursive)(?=[^|;&\n]*-[a-zA-Z]*f[a-zA-Z]*|[^|;&\n]*--force)[^|;&\n]*?(?:^|\s)["']?\/(?:usr|etc|bin|sbin|lib|lib64|boot|var|opt|srv|home|root|System|System32|Windows)(?:\/\*?)?(?=$|[\s;&|)'"`])/i,
+    reason: "recursive forced deletion of a system directory",
   },
   {
     re: /\brm\b[^|;&\n]*--no-preserve-root/,
@@ -267,7 +289,7 @@ function hasUnsafeReadOnlyFlag(bin: string, args: string[]): boolean {
   }
 }
 
-/** True when a `git` invocation mutates refs, history, or remotes. */
+/** True when a `git` invocation mutates refs, history, remotes, or runs code. */
 function isUnsafeGitArgs(args: string[]): boolean {
   const sub = (args[0] ?? "").toLowerCase();
   const rest = args.slice(1);
@@ -276,13 +298,24 @@ function isUnsafeGitArgs(args: string[]): boolean {
   switch (sub) {
     case "branch":
       // -d/-D delete, -m/-M move; plain `git branch` and `-a/-v/-r` only list.
+      // Creating a branch (a bare name operand) is reversible and left on the
+      // fast-pass so listing forms like `git branch --format=...` are not
+      // dragged to Jev.
       return anyFlag(/^-[a-zA-Z]*[dDmM][a-zA-Z]*$/) || anyFlag(/^--(delete|move|force)$/);
     case "tag":
       return anyFlag(/^-[a-zA-Z]*[dTf][a-zA-Z]*$/) || anyFlag(/^--(delete|force)$/);
     case "remote":
-      return ["add", "remove", "rm", "set-url", "rename"].includes(first);
+      // Mutating forms: add/remove/set-url/rename change config; update/prune
+      // fetch or delete tracking refs. `git remote` / `-v` / `show` only read.
+      return ["add", "remove", "rm", "set-url", "set-head", "set-branches", "rename", "prune", "update"].includes(first);
     case "stash":
-      return ["drop", "clear", "pop"].includes(first);
+      // Only listing/inspecting is read-only. Bare `git stash` (save),
+      // push/pop/apply/drop/clear all mutate the working tree or stash.
+      return !["list", "show"].includes(first);
+    case "grep":
+      // -O / --open-files-in-pager runs its argument as a shell command over
+      // the matching files — arbitrary code execution, not a read.
+      return rest.some((a) => /^-O/.test(a) || /^--open-files-in-pager(=.*)?$/.test(a));
     case "clean":
       return true;
     default:
@@ -296,9 +329,11 @@ function isSafeSegment(segment: string): boolean {
   const trimmed = segment.trim();
   const bin = binaryOf(trimmed);
   if (!SAFE_BINARIES.has(bin)) return false;
-  if (bin === "git") {
+  if (bin === "git" || bin === "hg" || bin === "svn") {
     const sub = trimmed.split(/\s+/)[1]?.toLowerCase().replace(/^-+/, "") ?? "";
-    if (!SAFE_GIT_SUBCOMMANDS.has(sub)) return false;
+    const allow =
+      bin === "git" ? SAFE_GIT_SUBCOMMANDS : bin === "hg" ? SAFE_HG_SUBCOMMANDS : SAFE_SVN_SUBCOMMANDS;
+    if (!allow.has(sub)) return false;
   }
   if (hasUnsafeReadOnlyFlag(bin, trimmed.split(/\s+/).slice(1))) return false;
   // Assignment prefixes (FOO=bar cmd) and sudo/doas wrappers are not provably safe.
@@ -568,6 +603,17 @@ export function resolveEnabled(
 ): { enabled: boolean; source: "session" | "saved" } {
   if (sessionOverride !== undefined) return { enabled: sessionOverride, source: "session" };
   return { enabled: savedEnabled, source: "saved" };
+}
+
+/**
+ * What to do with a middle-band verdict when there is nobody to ask: a
+ * non-interactive run (a script, a CI job, an agent driving pi headlessly)
+ * cannot answer a confirmation prompt. `uncertain` decides, and only an
+ * explicit "allow" lets the call through; everything else fails closed.
+ * Pure so the policy stays testable.
+ */
+export function middleBandWithoutUI(policy: UncertainPolicy): "allow" | "block" {
+  return policy === "allow" ? "allow" : "block";
 }
 
 /** Derive the OpenRouter decisions endpoint from a chat-compatible base URL.
