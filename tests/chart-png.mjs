@@ -20,7 +20,6 @@ const CHARTS = [
   "diagram-flow",
   "diagram-layers",
   "devious-families",
-  "devious-strip",
   "devious-redteam",
   "compare-guards",
   "e2e-batches",

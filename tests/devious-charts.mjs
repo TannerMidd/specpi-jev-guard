@@ -6,12 +6,12 @@
  *   tests/diagram-flow.svg      how a gated command is decided
  *   tests/diagram-layers.svg    where this run's attacks were stopped
  *   tests/devious-families.svg  outcome mix per attack family
- *   tests/devious-strip.svg     danger scores, attacks vs ordinary work
+ *   tests/devious-ordinary.html what ordinary work runs into, inlined by docs:sync
  *   tests/devious-redteam.svg   an independent model's attempts, scored
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import {
-  ON, P, arrow, axisLine, barSeg, chip, clip, dot, gridV, label, legend,
+  ON, P, arrow, axisLine, barSeg, chip, clip, dot, escXml, gridV, label, legend,
   panel, rectPath, subtitle, svgClose, svgOpen, textWidth, threshold, title,
 } from "./svg-util.mjs";
 
@@ -217,129 +217,45 @@ function renderFamilies() {
   return s;
 }
 
-/* ================================================= 4. the score distribution */
+/* ========================================= 4. what ordinary work runs into */
 
 /**
- * One dot per command at the score it got. Two lanes sharing one axis, so a dot
- * means the same thing in both and the heights can be read against each other.
- * A dot lifts a row only when it would overlap its neighbour, which turns a
- * repeated score into a column whose height is a count you can read off.
+ * The control group, named. A distribution of scores tells you the guard
+ * separates two piles; it does not tell you whether the thing will interrupt
+ * the work you actually do. That question is answered by reading the commands,
+ * so they are listed, in the order the guard sees them.
  */
-function beeswarm(scoredRows, xOf, minGap) {
-  const taken = [];
-  return [...scoredRows]
-    .sort((a, b) => a.danger - b.danger)
-    .map((row) => {
-      const x = xOf(row.danger);
-      let level = 0;
-      while (taken.some((t) => t.level === level && Math.abs(t.x - x) < minGap)) level++;
-      taken.push({ x, level });
-      return { row, x, level };
-    });
-}
+function renderOrdinaryTable() {
+  const trp = rows
+    .filter((r) => r.kind === "trap")
+    .sort((a, b) => a.danger - b.danger);
+  const ran = trp.filter((r) => r.final === "allow");
+  const asked = trp.filter((r) => r.final === "ask");
+  const blocked = trp.filter((r) => r.final === "block");
 
-function renderStrip() {
-  const scored = rows.filter((r) => typeof r.danger === "number" && !Number.isNaN(r.danger));
-  const atk = scored.filter((r) => r.kind === "attack");
-  const trp = scored.filter((r) => r.kind === "trap");
-  const localOnly = attacks.length - atk.length;
-
-  const W = 1020;
-  const L = 60;
-  const plotW = W - L - 60;
-  const xOf = (v) => L + v * plotW;
-  const R = 3.6, PITCH = 8.4, GAP = 8.0, LANE_MIN = 46, PAD = 13;
-
-  const swarms = { atk: beeswarm(atk, xOf, GAP), trp: beeswarm(trp, xOf, GAP) };
-  const laneH = (s) => Math.max((Math.max(...s.map((p) => p.level)) + 1) * PITCH, LANE_MIN);
-
-  // Top down, each lane given the height its deepest column needs and no less
-  // than LANE_MIN, so the two read as two lanes of one chart.
-  const atkHeadY = 148;
-  const atkTop = atkHeadY + 46;
-  const atkBase = atkTop + laneH(swarms.atk);
-  const trpHeadY = atkBase + 56;
-  const trpTop = trpHeadY + 46;
-  const trpBase = trpTop + laneH(swarms.trp);
-  const axisY = trpBase + 6;
-  const H = axisY + 94;
-
-  let s = svgOpen(W, H, { alt: "One dot per command, placed at the danger score Jev gave it, hostile commands above ordinary ones" });
-  s += title(40, 46, "Hostile commands pile up at the top. Ordinary work never reaches the block line.");
-  s += subtitle(40, 70, "One dot per command, at the score Jev gave it. Dots stack where scores repeat, so a tall column is a count.");
-  s += subtitle(40, 90, "The dashed lines are the thresholds: Jev asks you first from 0.35, and blocks from 0.80.");
-  s += subtitle(40, 110, `${localOnly} further attacks never got a score, because a local rule stopped them before Jev was called.`);
-
-  // Bands behind both lanes, so a dot's colour and its position say one thing.
-  for (const [a, b, color] of [[0, ASK, P.allow], [ASK, BLOCK, P.ask], [BLOCK, 1, P.block]]) {
-    for (const [y0, y1] of [[atkTop - PAD, atkBase], [trpTop - PAD, trpBase]]) {
-      s += `<rect x="${xOf(a).toFixed(1)}" y="${y0.toFixed(1)}" width="${((b - a) * plotW).toFixed(1)}" height="${(y1 - y0).toFixed(1)}" fill="${color}" opacity="0.06"/>\n`;
-    }
-  }
-  for (const v of [ASK, BLOCK]) {
-    s += `<line x1="${xOf(v).toFixed(1)}" y1="${atkTop - PAD}" x2="${xOf(v).toFixed(1)}" y2="${trpBase.toFixed(1)}" stroke="${P.border}" stroke-width="1.5" stroke-dasharray="5 4"/>\n`;
-    s += label(xOf(v), atkTop - PAD - 7, v.toFixed(2), { anchor: "middle", size: 11.5, fill: P.muted, tabular: true });
-  }
-
-  /**
-   * Heading on the left, the same lane counted out on the right. The coloured
-   * dots there are the legend, so there is no separate one to cross-reference.
-   */
-  const laneHeader = (y, heading, note, set) => {
-    let out = label(L, y, heading, { size: 14.5, weight: 650 });
-    out += label(L, y + 19, note, { size: 12, fill: P.dim });
-    const parts = [
-      { n: set.filter((r) => r.danger >= BLOCK).length, text: "would block", color: P.block },
-      { n: set.filter((r) => r.danger >= ASK && r.danger < BLOCK).length, text: "would ask first", color: P.ask },
-      { n: set.filter((r) => r.danger < ASK).length, text: "would run", color: P.allow },
-    ];
-    const GAPX = 26;
-    const seg = parts.map((p) => 14 + textWidth(`${p.n} ${p.text}`, 13));
-    let cx = L + plotW - (seg.reduce((a, w) => a + w, 0) + GAPX * (parts.length - 1));
-    for (const [i, p] of parts.entries()) {
-      out += `<circle cx="${(cx + 4.5).toFixed(1)}" cy="${(y + 5).toFixed(1)}" r="4.5" fill="${p.color}"/>\n`;
-      out += label(cx + 14, y + 10, `${p.n} ${p.text}`, { size: 13, weight: 650, fill: p.n === 0 ? P.muted : P.text });
-      cx += seg[i] + GAPX;
-    }
-    return out;
+  const VERDICT = {
+    allow: ["ran", "ok"],
+    ask: ["asked first", "ask"],
+    block: ["blocked", "bad"],
   };
 
-  s += laneHeader(atkHeadY, `${atk.length} hostile commands`, "written to get past a classifier", atk);
-  s += laneHeader(trpHeadY, `${trp.length} ordinary commands`, "real work that merely looks alarming", trp);
+  const row = (r) => {
+    const [text, cls] = VERDICT[r.final] ?? ["unknown", "skip"];
+    return `<tr><td><code>${escXml(r.cmd)}</code></td><td class="ev">${r.danger.toFixed(2)}</td><td class="${cls}">${text}</td></tr>`;
+  };
 
-  for (const [key, base] of [["atk", atkBase], ["trp", trpBase]]) {
-    for (const { row, x, level } of swarms[key]) {
-      s += dot({
-        cx: x,
-        cy: base - R - 2 - level * PITCH,
-        r: R,
-        fill: BAND[bandOf(row.danger)],
-        tip: `${row.danger.toFixed(2)}, ${BAND_LABEL[bandOf(row.danger)]}: ${clip(row.cmd, 58)}`,
-      });
-    }
-  }
-
-  // The empty stretch in the bottom lane is the whole finding, so it is named
-  // where it happens rather than left for the reader to notice.
-  s += label((xOf(BLOCK) + xOf(1)) / 2, (trpTop + trpBase) / 2 + 4, "nothing ordinary lands here", {
-    anchor: "middle", size: 12.5, fill: P.block, opacity: 0.75, weight: 600,
-  });
-
-  s += axisLine(L, axisY, L + plotW);
-  for (let t = 0; t <= 10; t++) {
-    const tx = xOf(t / 10);
-    s += `<line x1="${tx.toFixed(1)}" y1="${axisY}" x2="${tx.toFixed(1)}" y2="${axisY + 5}" stroke="${P.border}" stroke-width="1"/>\n`;
-    s += label(tx, axisY + 21, (t / 10).toFixed(1), { anchor: "middle", size: 11.5, fill: P.muted, tabular: true });
-  }
-  s += label(L + plotW / 2, axisY + 44, "danger score Jev gave the command", { anchor: "middle", size: 12.5, fill: P.dim });
-
-  const worstOrdinary = Math.max(...trp.map((r) => r.danger));
-  s += label(40, H - 22,
-    `No ordinary command got past ${worstOrdinary.toFixed(2)}, so none of them would be blocked. ` +
-    "The two lanes overlap only in the ask band, which is what the ask band is for.",
-    { size: 12.5, fill: P.muted });
-  s += svgClose();
-  return s;
+  return [
+    `<p class="table-note">${trp.length} commands that do real work and look alarming while doing it. ` +
+      `${ran.length} ran with no prompt, ${asked.length} stopped to ask, ` +
+      `${blocked.length === 0 ? "none were blocked" : `${blocked.length} were blocked`}.</p>`,
+    `<table class="results ordinary">`,
+    `<thead><tr><th>Command</th><th>Score</th><th>What the guard did</th></tr></thead>`,
+    `<tbody>`,
+    ...trp.map(row),
+    `</tbody>`,
+    `</table>`,
+    "",
+  ].join("\n");
 }
 
 /* ============================================= 5. the independent adversary */
@@ -415,7 +331,6 @@ for (const [name, render] of [
   ["diagram-flow", renderFlow],
   ["diagram-layers", renderLayers],
   ["devious-families", renderFamilies],
-  ["devious-strip", renderStrip],
 ]) {
   write(name, render);
   built.push(name);
@@ -426,4 +341,6 @@ if (redteam) {
 } else {
   console.warn("skip devious-redteam — run `npm run redteam` first");
 }
+writeFileSync(new URL("./devious-ordinary.html", import.meta.url), renderOrdinaryTable(), "utf-8");
+built.push("devious-ordinary.html");
 console.log(`devious:charts — wrote ${built.join(", ")}`);
