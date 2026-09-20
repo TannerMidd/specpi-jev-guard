@@ -8,6 +8,7 @@ import {
   buildSystemOneBody,
   buildSystemOneState,
   classifyCommandLocal,
+  formatAuditLine,
   formatAuditStatus,
   globToRegExp,
   isProtectedPath,
@@ -616,5 +617,61 @@ describe("audit status line", () => {
       model: "~typesafe/jev-latest",
     });
     assert.ok(line.length <= 80, line);
+  });
+});
+
+describe("audit transcript line", () => {
+  it("a routine allow is the mark and the score, nothing else", () => {
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "allowed", source: "jev", danger: 0.021 }), {
+      text: "jev 0.02",
+      tone: "dim",
+    });
+  });
+
+  it("a decision with no score says what it was, since the score cannot", () => {
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "allowed", source: "allowlist" }), {
+      text: "jev allowed (allowlist)",
+      tone: "dim",
+    });
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "blocked", source: "rules" }), {
+      text: "jev blocked (rules)",
+      tone: "error",
+    });
+    assert.deepEqual(formatAuditLine({ tool: "write", decision: "blocked", source: "no-key" }), {
+      text: "jev blocked (no key)",
+      tone: "error",
+    });
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "blocked", source: "error" }), {
+      text: "jev blocked (classifier error)",
+      tone: "error",
+    });
+  });
+
+  it("a block is drawn as a block, not as a quiet aside", () => {
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "blocked", source: "jev", danger: 0.91 }), {
+      text: "jev 0.91 blocked",
+      tone: "error",
+    });
+  });
+
+  it("names the person when the person decided", () => {
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "asked-allowed", source: "jev", danger: 0.44 }), {
+      text: "jev 0.44 allowed by you",
+      tone: "warning",
+    });
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "asked-blocked", source: "jev", danger: 0.44 }), {
+      text: "jev 0.44 blocked by you",
+      tone: "warning",
+    });
+  });
+
+  it("stays on one short line whatever happened", () => {
+    for (const decision of ["allowed", "blocked", "asked-allowed", "asked-blocked"]) {
+      for (const source of ["jev", "rules", "allowlist", "no-key", "error"]) {
+        const line = formatAuditLine({ tool: "powershell", decision, source, danger: 0.5 });
+        assert.ok(line.text.length <= 40, line.text);
+        assert.ok(!line.text.includes(String.fromCharCode(10)), line.text);
+      }
+    }
   });
 });

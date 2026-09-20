@@ -31,6 +31,7 @@ import {
   bandFor,
   buildSystemOneBody,
   classifyCommandLocal,
+  formatAuditLine,
   formatAuditStatus,
   isProtectedPath,
   middleBandWithoutUI,
@@ -994,11 +995,11 @@ export default function (pi: ExtensionAPI) {
     // written to the session file either way.
     if (auditDisplay !== "transcript") return undefined;
     const data = entry.data as AuditRecord | undefined;
-    const box = new Box(1, 1, (text: string) => theme.bg("customMessageBg", text));
-    const head = data
-      ? `[jev-guard] ${data.tool} ${data.decision} (${data.source})${typeof data.danger === "number" ? ` danger=${data.danger.toFixed(2)}` : ""}`
-      : "[jev-guard] audit";
-    box.addChild(new Text(theme.bold(head)));
+    // No background and no padded block: the verdict belongs to the tool call
+    // above it and should read as a footnote to it, not as a second event.
+    const box = new Box(1, 0);
+    const line = data ? formatAuditLine(data) : { text: "jev", tone: "dim" as const };
+    box.addChild(new Text(theme.fg(line.tone, line.text)));
     if (opts.expanded && data) {
       if (data.subject) box.addChild(new Text(theme.fg("dim", `call: ${truncate(data.subject, 200)}`)));
       if (data.category || data.detail) {

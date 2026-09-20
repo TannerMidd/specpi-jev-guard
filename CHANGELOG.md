@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Changed
+
+- **A judged call now leaves one dim line, not a box.** The audit entry used to
+  be a padded, coloured block with a bracketed label, which made routine
+  traffic the loudest thing in the transcript. It is now `jev 0.02` under the
+  call it judged, in the same dim the rest of the chrome uses: a gated session
+  reads like an ungated one apart from that mark. A block is drawn in the error
+  colour and names itself, a call you were asked about says who decided, and
+  the command, category and model are still one keypress away.
+
 ### Added
 
 - **`auditDisplay` decides where audit records show up: `transcript`,

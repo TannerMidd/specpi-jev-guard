@@ -882,6 +882,57 @@ export function resolveEnabled(
   return { enabled: savedEnabled, source: "saved" };
 }
 
+/** A transcript line for one audit record: what it says, and the theme colour
+ *  it is drawn in. */
+export interface AuditLine {
+  text: string;
+  tone: "dim" | "warning" | "error";
+}
+
+/** Where a decision came from, in the few words the transcript line can spare. */
+function sourceNote(source: string | undefined): string {
+  switch (source) {
+    case "rules":
+      return "rules";
+    case "allowlist":
+      return "allowlist";
+    case "no-key":
+      return "no key";
+    case "error":
+      return "classifier error";
+    default:
+      return "";
+  }
+}
+
+/**
+ * The transcript line for one record.
+ *
+ * It sits directly under the call it judged, so it repeats none of it: the
+ * mark, the score, and the decision only where the decision was not a plain
+ * allow. The routine verdict is the common case, and the common case is the
+ * one that must not crowd out the conversation, so it gets one dim line and no
+ * box. A decision with no score always names itself, because "jev" alone says
+ * nothing about what happened.
+ */
+export function formatAuditLine(record: AuditStatusInput & { source?: string }): AuditLine {
+  const danger = record.danger;
+  const scored = typeof danger === "number" && Number.isFinite(danger);
+  const score = scored ? ` ${danger.toFixed(2)}` : "";
+  const note = sourceNote(record.source);
+  const tail = note === "" ? "" : ` (${note})`;
+  switch (record.decision) {
+    case "allowed":
+      return { text: scored && note === "" ? `jev${score}` : `jev${score} allowed${tail}`, tone: "dim" };
+    case "asked-allowed":
+      return { text: `jev${score} allowed by you`, tone: "warning" };
+    case "asked-blocked":
+      return { text: `jev${score} blocked by you`, tone: "warning" };
+    default:
+      return { text: `jev${score} blocked${tail}`, tone: "error" };
+  }
+}
+
 /**
  * Validate an `auditDisplay` value read from a settings file. An unknown value
  * returns undefined so the layer below keeps standing: a typo in the project

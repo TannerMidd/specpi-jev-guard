@@ -127,15 +127,20 @@ thresholds in the gap between the two groups.
 
 ### Where audit records show up
 
-A judged call leaves a record. By default it is a box in the transcript, which
-is readable when calls are rare and drowns the conversation when they are not.
-`auditDisplay` moves it without losing it:
+A judged call leaves a record. By default it shows in the transcript as one
+dim line under the call it judged, `jev 0.02`, and nothing more: a gated
+session should read like an ungated one apart from that mark. Expand it
+(ctrl+o) for the command, the category and the model. `auditDisplay` moves it
+from there without losing it:
 
 | `auditDisplay` | what you see |
 | --- | --- |
-| `transcript` (default) | a box per record, expandable for the command, score and model |
+| `transcript` (default) | one dim line under each judged call |
 | `status` | one line in the footer, showing the latest verdict only |
 | `off` | nothing |
+
+A block is drawn in the error colour and names itself (`jev 0.91 blocked`), and
+a call you were asked about says who decided (`jev 0.44 allowed by you`).
 
 Every mode writes every record to the session file, so the audit trail is the
 same in all three. Blocks stay loud everywhere too: they raise a notification
