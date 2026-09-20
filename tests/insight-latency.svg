@@ -1,33 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="510" viewBox="0 0 1060 510" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
-<rect width="1060" height="510" fill="#ffffff"/>
-<text x="24" y="34" font-size="20" font-weight="700" fill="#111827">How long Jev takes to answer</text>
-<text x="24" y="58" font-size="13" fill="#6b7280">124 live classifications · avg 204ms · p50 189ms · p95 255ms · max 643ms</text>
-<text x="24" y="78" font-size="13" fill="#6b7280">This is the entire added cost of a gated call. Local rules and cached verdicts add 0 ms.</text>
-<rect x="141.9" y="404.4" width="77.7" height="27.575757575757578" rx="4" fill="#3b82f6" opacity="0.9"/>
-<text x="180.7" y="396.4" font-size="12" fill="#111827" text-anchor="middle" font-weight="600">7</text>
-<text x="180.7" y="454.0" font-size="11.5" fill="#6b7280" text-anchor="middle">&lt;150</text>
-<rect x="263.3" y="172.0" width="77.7" height="260" rx="4" fill="#3b82f6" opacity="0.9"/>
-<text x="302.1" y="164.0" font-size="12" fill="#111827" text-anchor="middle" font-weight="600">66</text>
-<text x="302.1" y="454.0" font-size="11.5" fill="#6b7280" text-anchor="middle">150-199</text>
-<rect x="384.7" y="258.7" width="77.7" height="173.33333333333331" rx="4" fill="#3b82f6" opacity="0.9"/>
-<text x="423.6" y="250.7" font-size="12" fill="#111827" text-anchor="middle" font-weight="600">44</text>
-<text x="423.6" y="454.0" font-size="11.5" fill="#6b7280" text-anchor="middle">200-249</text>
-<rect x="506.1" y="428.1" width="77.7" height="3.9393939393939394" rx="4" fill="#3b82f6" opacity="0.9"/>
-<text x="545.0" y="420.1" font-size="12" fill="#111827" text-anchor="middle" font-weight="600">1</text>
-<text x="545.0" y="454.0" font-size="11.5" fill="#6b7280" text-anchor="middle">250-299</text>
-<rect x="627.6" y="424.1" width="77.7" height="7.878787878787879" rx="4" fill="#3b82f6" opacity="0.9"/>
-<text x="666.4" y="416.1" font-size="12" fill="#111827" text-anchor="middle" font-weight="600">2</text>
-<text x="666.4" y="454.0" font-size="11.5" fill="#6b7280" text-anchor="middle">300-399</text>
-<rect x="749.0" y="420.2" width="77.7" height="11.818181818181818" rx="4" fill="#3b82f6" opacity="0.9"/>
-<text x="787.9" y="412.2" font-size="12" fill="#111827" text-anchor="middle" font-weight="600">3</text>
-<text x="787.9" y="454.0" font-size="11.5" fill="#6b7280" text-anchor="middle">400-599</text>
-<rect x="870.4" y="428.1" width="77.7" height="3.9393939393939394" rx="4" fill="#3b82f6" opacity="0.9"/>
-<text x="909.3" y="420.1" font-size="12" fill="#111827" text-anchor="middle" font-weight="600">1</text>
-<text x="909.3" y="454.0" font-size="11.5" fill="#6b7280" text-anchor="middle">600+</text>
-<line x1="120" y1="432" x2="970" y2="432" stroke="#d1d5db" stroke-width="1.5"/>
-<text x="108.0" y="168.0" font-size="11" fill="#6b7280" text-anchor="end">66</text>
-<text x="108.0" y="432.0" font-size="11" fill="#6b7280" text-anchor="end">0</text>
-<text x="24.0" y="456.0" font-size="11" fill="#6b7280" text-anchor="start">commands</text>
-<text x="545.0" y="480.0" font-size="12" fill="#6b7280" text-anchor="middle">classifier latency (ms)</text>
-<text x="24.0" y="494.0" font-size="11.5" fill="#6b7280" text-anchor="start">Even the slowest call stays well under a second; the guard fails closed if a call exceeds the 12s timeout.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 510" width="1060" height="510" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<rect width="1060" height="510" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">How long Jev takes to answer</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">124 live classifications · avg 386ms · p50 334ms · p95 758ms · max 1501ms</text>
+<text x="24" y="78" font-size="13" fill="var(--jv-dim, #52514e)">This is the entire added cost of a gated call. Local rules and cached verdicts add 0 ms.</text>
+<g class="mark-g"><title>0 calls took &lt;150 ms</title><path class="mark" d="M141.9,432H219.6V432H141.9V432Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="180.7" y="424" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600"></text>
+<text x="180.7" y="454" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">&lt;150</text>
+<g class="mark-g"><title>0 calls took 150-199 ms</title><path class="mark" d="M263.3,432H341V432H263.3V432Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="302.1" y="424" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600"></text>
+<text x="302.1" y="454" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">150-199</text>
+<g class="mark-g"><title>6 calls took 200-249 ms</title><path class="mark" d="M384.7,399.5H458.4A4,4 0 0 1 462.4,403.5V428A4,4 0 0 1 458.4,432H384.7V399.5Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="423.6" y="391.5" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600">6</text>
+<text x="423.6" y="454" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">200-249</text>
+<g class="mark-g"><title>40 calls took 250-299 ms</title><path class="mark" d="M506.1,215.3H579.9A4,4 0 0 1 583.9,219.3V428A4,4 0 0 1 579.9,432H506.1V215.3Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="545" y="207.3" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600">40</text>
+<text x="545" y="454" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">250-299</text>
+<g class="mark-g"><title>48 calls took 300-399 ms</title><path class="mark" d="M627.6,172H701.3A4,4 0 0 1 705.3,176V428A4,4 0 0 1 701.3,432H627.6V172Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="666.4" y="164" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600">48</text>
+<text x="666.4" y="454" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">300-399</text>
+<g class="mark-g"><title>15 calls took 400-599 ms</title><path class="mark" d="M749,350.8H822.7A4,4 0 0 1 826.7,354.8V428A4,4 0 0 1 822.7,432H749V350.8Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="787.9" y="342.8" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600">15</text>
+<text x="787.9" y="454" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">400-599</text>
+<g class="mark-g"><title>15 calls took 600+ ms</title><path class="mark" d="M870.4,350.8H944.1A4,4 0 0 1 948.1,354.8V428A4,4 0 0 1 944.1,432H870.4V350.8Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="909.3" y="342.8" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600">15</text>
+<text x="909.3" y="454" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">600+</text>
+<line x1="120" y1="432" x2="970" y2="432" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="108" y="168" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">48</text>
+<text x="108" y="432" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">0</text>
+<text x="24" y="456" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">commands</text>
+<text x="545" y="480" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="middle">classifier latency (ms)</text>
+<text x="24" y="494" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">Half the calls answered within 334ms and the slowest took 1.5s; past the 12s timeout the guard fails closed.</text>
 </svg>

@@ -11,11 +11,16 @@
  *   3. Fail closed: no API key, network error, or unparseable verdict never
  *      silently passes an unvouched call.
  *
+ * The classifier key comes from pi's saved auth (auth.json via
+ * `/login openrouter`) or the environment, resolved fresh on every call —
+ * a mid-session /login or /logout takes effect with no restart.
+ *
  * Outbound payloads are bounded (command/path + cwd + latest user prompt)
  * and secrets are redacted locally before anything leaves the machine.
  */
 
-import { CONFIG_DIR_NAME } from "@earendil-works/pi-coding-agent";
+import { CONFIG_DIR_NAME, readStoredCredential } from "@earendil-works/pi-coding-agent";
+import { credentialKey } from "./pi-auth.ts";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { Box, Text } from "@earendil-works/pi-tui";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -27,6 +32,7 @@ import {
   buildSystemOneBody,
   classifyCommandLocal,
   isProtectedPath,
+  middleBandWithoutUI,
   openRouterDecisionsUrl,
   parseSystemOneResponse,
   relativePosix,
@@ -38,6 +44,8 @@ import type { Backend, ClassifyInput, GuardSettings, JevVerdict } from "./risk-r
 const SETTINGS_FILE = "jev-guard.json";
 const AUDIT_TYPE = "jev-guard";
 const GATED_TOOLS = new Set(["bash", "powershell", "write", "edit"]);
+/** Anything else after /jev-guard is a typo, not a request for status. */
+const KNOWN_SUBCOMMANDS = new Set(["status", "setup", "on", "off", "check", "model", "backend"]);
 const CACHE_LIMIT = 200;
 
 interface AuditRecord {
@@ -223,8 +231,59 @@ function readEnvKey(name: string): string | undefined {
   return typeof key === "string" && key.trim() !== "" ? key.trim() : undefined;
 }
 
-function activeKey(settings: GuardSettings): string | undefined {
-  return readEnvKey(settings.backend === "typesafe" ? "TYPESAFE_API_KEY" : "OPENROUTER_API_KEY");
+/** Where the classifier key came from (shown in status/setup). */
+type KeySource = "env" | "pi-auth";
+
+/** A resolved classifier key plus where it came from. */
+type ResolvedKey = { key: string | undefined; source: KeySource | "none" };
+
+function providerIdFor(backend: Backend): string {
+  return backend === "typesafe" ? "typesafe" : "openrouter";
+}
+
+/** Synchronous read of pi's saved auth.json (no registry needed). */
+function storedApiKey(providerId: string): string | undefined {
+  try {
+    return credentialKey(readStoredCredential(providerId));
+  } catch {
+    // Saved-auth read is best-effort; fall through to no key.
+  }
+  return undefined;
+}
+
+/**
+ * Resolve the classifier key for the active backend. Pi's own registry
+ * (auth.json login + env + refresh) is tried first so the guard uses the
+ * same credential as the chat model. That order is pi's own rule, not an
+ * inversion of it: "a stored credential owns the provider; ambient/env is
+ * consulted only when nothing is stored" (pi-ai resolveProviderAuth). A
+ * saved /login therefore beats an exported key, as it does everywhere else
+ * in pi. Env and a direct auth.json read are
+ * fallbacks for contexts without a registry (and for the typesafe backend,
+ * which has no pi provider). Resolved per call, never cached, so a
+ * mid-session /login or /logout takes effect immediately.
+ */
+async function resolveActiveKey(
+  ctx: ExtensionContext,
+  settings: GuardSettings,
+): Promise<ResolvedKey> {
+  const providerId = providerIdFor(settings.backend);
+  const envName = keyEnvName(settings.backend);
+  try {
+    const viaRegistry = await ctx.modelRegistry?.getApiKeyForProvider(providerId);
+    if (typeof viaRegistry === "string" && viaRegistry.trim() !== "") {
+      const trimmed = viaRegistry.trim();
+      const envKey = readEnvKey(envName);
+      return { key: trimmed, source: envKey !== undefined && trimmed === envKey ? "env" : "pi-auth" };
+    }
+  } catch {
+    // Fall through to env + stored reads below.
+  }
+  const envKey = readEnvKey(envName);
+  if (envKey !== undefined) return { key: envKey, source: "env" };
+  const stored = storedApiKey(providerId);
+  if (stored !== undefined) return { key: stored, source: "pi-auth" };
+  return { key: undefined, source: "none" };
 }
 
 function keyEnvName(backend: Backend): string {
@@ -336,27 +395,45 @@ async function classifyWithJev(
 // Guided in-session setup: key check -> backend -> live self-test -> on/off.
 // ---------------------------------------------------------------------------
 
-function keySetupHelp(need: string): string {
+function keySetupHelp(backend: Backend): string {
+  const need = keyEnvName(backend);
+  const login =
+    backend === "openrouter"
+      ? `Fastest: in pi, run /login openrouter and pick "Sign in with OpenRouter" (or "Use an API key").\n` +
+        `The key is saved in pi's auth.json and the guard picks it up immediately, no restart needed.\n\nAlternatively, set ${need}`
+      : `Set ${need}`;
   return (
-    `Set it in pi's environment before launching pi (a .env file is not picked up):\n` +
+    `${login} in pi's environment before launching pi (a .env file is not picked up):\n` +
     `  bash/macOS:  export ${need}="..."   (persist: ~/.bashrc or ~/.zshrc)\n` +
     `  PowerShell:  $env:${need}="..."     (persist: $PROFILE, or setx ${need} "...")\n` +
-    `Then restart pi and re-run /jev-guard setup. Never paste the key into chat.`
+    `Going the env route means restarting pi, then re-run /jev-guard setup.\n` +
+    `Never paste the key into chat.`
   );
 }
 
-async function setupSelfTest(ctx: ExtensionContext, settings: GuardSettings): Promise<void> {
+async function setupSelfTest(
+  ctx: ExtensionContext,
+  settings: GuardSettings,
+  key: string | undefined,
+): Promise<void> {
+  if (!key) {
+    ctx.ui.notify(
+      "Skipping live self-test (no key). Without a key the guard fails closed: unvouched calls block with setup hints instead of running silently.",
+      "warning",
+    );
+    return;
+  }
   ctx.ui.notify("Probing Jev with two sample commands…", "info");
   for (const cmd of ["npm test", "npm publish --access public"]) {
     const outcome = await classifyWithJev(
       settings,
       { kind: "bash", subject: cmd, cwd: ctx.cwd, userPrompt: "" },
-      activeKey(settings) ?? "",
+      key,
       ctx.signal ?? undefined,
     );
     if (!outcome.verdict) {
       ctx.ui.notify(
-        `self-test: Jev unreachable on "${cmd}" (${outcome.error ?? "unknown error"}) — the guard will fail closed.`,
+        `self-test: Jev unreachable on "${cmd}" (${outcome.error ?? "unknown error"}): the guard will fail closed.`,
         "error",
       );
       return;
@@ -371,11 +448,11 @@ async function setupSelfTest(ctx: ExtensionContext, settings: GuardSettings): Pr
 }
 
 async function runSetup(ctx: ExtensionContext, session: { enabled: boolean | undefined }): Promise<void> {
-  const stateLines = (): string[] => {
-    const s = loadSettings(ctx);
+  const stateLines = (s: GuardSettings, resolved: ResolvedKey): string[] => {
     const eff = resolveEnabled(s.enabled, session.enabled);
+    const keyState = resolved.key ? `set (${resolved.source === "env" ? "env" : "pi auth"})` : "MISSING";
     return [
-      `backend: ${s.backend} (needs ${keyEnvName(s.backend)}: ${activeKey(s) ? "set" : "MISSING"})`,
+      `backend: ${s.backend} (needs ${keyEnvName(s.backend)}: ${keyState})`,
       `guard: ${eff.enabled ? "ON" : "OFF"}${eff.source === "session" ? " for this session" : " (saved)"}`,
       `thresholds: ask ≥ ${s.askThreshold}, block ≥ ${s.blockThreshold}`,
     ];
@@ -384,28 +461,31 @@ async function runSetup(ctx: ExtensionContext, session: { enabled: boolean | und
   if (!ctx.hasUI) {
     // No interactive prompts available: walk through linearly.
     const s = loadSettings(ctx);
-    ctx.ui.notify(["jev-guard setup", "", ...stateLines()].join("\n"), "info");
-    if (!activeKey(s)) {
-      ctx.ui.notify(keySetupHelp(keyEnvName(s.backend)), "info");
+    const resolved = await resolveActiveKey(ctx, s);
+    ctx.ui.notify(["jev-guard setup", "", ...stateLines(s, resolved)].join("\n"), "info");
+    if (!resolved.key) {
+      ctx.ui.notify(keySetupHelp(s.backend), "info");
     } else {
-      await setupSelfTest(ctx, s);
+      await setupSelfTest(ctx, s, resolved.key);
     }
     ctx.ui.notify("Toggle anytime: /jev-guard on | off (session), add --global to persist.", "info");
     return;
   }
 
-  ctx.ui.notify(`jev-guard setup\n\n${stateLines().join("\n")}`, "info");
-
   let s = loadSettings(ctx);
-  if (!activeKey(s)) {
+  let resolved = await resolveActiveKey(ctx, s);
+  ctx.ui.notify(`jev-guard setup\n\n${stateLines(s, resolved).join("\n")}`, "info");
+
+  if (!resolved.key) {
     const choice = await ctx.ui.select(
-      `No classifier key found (${keyEnvName(s.backend)} is MISSING).\n\n${keySetupHelp(keyEnvName(s.backend))}\n\nHow do you want to proceed?`,
+      `No classifier key found (${keyEnvName(s.backend)} is MISSING).\n\n${keySetupHelp(s.backend)}\n\nHow do you want to proceed?`,
       ["Switch backend", "Continue without a key", "Disable guard for this session"],
     );
     if (choice === "Switch backend") {
       const other = s.backend === "openrouter" ? "typesafe" : "openrouter";
       saveGlobalSettings({ backend: other });
       s = loadSettings(ctx);
+      resolved = await resolveActiveKey(ctx, s);
       ctx.ui.notify(`Backend switched to ${other}; it needs ${keyEnvName(other)}.`, "info");
     } else if (choice === "Disable guard for this session") {
       session.enabled = false;
@@ -415,20 +495,16 @@ async function runSetup(ctx: ExtensionContext, session: { enabled: boolean | und
     // "Continue without a key": the enabled guard fails closed with setup hints.
   }
 
-  if (activeKey(s)) {
-    await setupSelfTest(ctx, s);
-  } else {
-    ctx.ui.notify(
-      "Skipping live self-test (no key). Without a key the guard fails closed: unvouched calls block with setup hints instead of running silently.",
-      "warning",
-    );
-  }
+  await setupSelfTest(ctx, s, resolved.key);
 
   const final = await ctx.ui.select("Enable the guard?", ["Enable for this session", "Disable for this session"]);
   session.enabled = final === "Enable for this session";
-  if (session.enabled && !activeKey(loadSettings(ctx))) {
+  // Only re-check when we think there is no key: the user was just shown how to
+  // connect one and may have done it in another pane mid-dialog.
+  const finalKey = resolved.key ?? (await resolveActiveKey(ctx, loadSettings(ctx))).key;
+  if (session.enabled && !finalKey) {
     ctx.ui.notify(
-      "jev-guard enabled without a key: unvouched calls will block until you set the key and restart pi. Bypass anytime with /jev-guard off.",
+      "jev-guard enabled without a key: unvouched calls will block until you connect a key (run /login openrouter, or set the key and restart pi). Bypass anytime with /jev-guard off.",
       "warning",
     );
   } else {
@@ -488,30 +564,42 @@ export default function (pi: ExtensionAPI) {
   ): Promise<{ block: true; reason: string; terminate?: boolean } | undefined> {
     const subject = input.subject;
     const shortSubject = truncate(subject, 160).replace(/\n/g, " ");
-    const key = activeKey(settings);
-    if (!key) {
-      const need = keyEnvName(settings.backend);
-      audit({
-        tool,
-        subject: shortSubject,
-        decision: "blocked",
-        source: "no-key",
-        detail: `${need} is not set (backend: ${settings.backend})`,
-        at: Date.now(),
-      });
-      return {
-        block: true,
-        reason:
-          `jev-guard: unvouched ${tool} call blocked — ${need} is not set ` +
-          `(backend: ${settings.backend}). Set it, switch backend with ` +
-          `/jev-guard backend <openrouter|typesafe>, or run /jev-guard off to disable the guard. ` +
-          `Call: ${shortSubject}`,
-      };
-    }
-
+    // Cache first: a hit needs no credential at all, and resolving one can
+    // re-read and parse auth.json. getApiKeyForProvider takes no options, so
+    // ctx.signal cannot reach it and the user could not cancel that wait.
     const cacheKey = `${settings.backend}\n${settings.backend === "typesafe" ? settings.typesafeModel : settings.model}\n${tool}\n${input.cwd}\n${subject}`;
     const cached = cacheable ? cacheGet(cacheKey) : undefined;
-    const outcome = cached ?? (await classifyWithJev(settings, input, key, ctx.signal ?? undefined));
+
+    let outcome: JevOutcome;
+    if (cached) {
+      outcome = cached;
+    } else {
+      const { key } = await resolveActiveKey(ctx, settings);
+      if (!key) {
+        const need = keyEnvName(settings.backend);
+        const hasPiProvider = settings.backend === "openrouter";
+        const fix = hasPiProvider ? `run /login openrouter in pi, set ${need}` : `set ${need}`;
+        audit({
+          tool,
+          subject: shortSubject,
+          decision: "blocked",
+          source: "no-key",
+          detail: hasPiProvider
+            ? `${need} is not set and no saved pi auth found (backend: ${settings.backend})`
+            : `${need} is not set (backend: ${settings.backend})`,
+          at: Date.now(),
+        });
+        return {
+          block: true,
+          reason:
+            `jev-guard: unvouched ${tool} call blocked: no classifier key ` +
+            `(backend: ${settings.backend}). To fix: ${fix}, switch backend with ` +
+            `/jev-guard backend <openrouter|typesafe>, or run /jev-guard off to disable the guard. ` +
+            `Call: ${shortSubject}`,
+        };
+      }
+      outcome = await classifyWithJev(settings, input, key, ctx.signal ?? undefined);
+    }
 
     if (!outcome.verdict) {
       // Fail closed: an unreachable or incoherent classifier must not wave calls through.
@@ -528,7 +616,7 @@ export default function (pi: ExtensionAPI) {
       return {
         block: true,
         reason:
-          `jev-guard: classifier unreachable (${outcome.error ?? "unknown error"}) — ` +
+          `jev-guard: classifier unreachable (${outcome.error ?? "unknown error"}): ` +
           `failing closed on ${tool} call. Retry, or run /jev-guard off to bypass (not recommended). ` +
           `Call: ${shortSubject}`,
       };
@@ -571,23 +659,29 @@ export default function (pi: ExtensionAPI) {
 
     if (band === "ask") {
       if (!ctx.hasUI) {
+        // Nobody to ask: `uncertain` decides, and only an explicit allow passes.
+        const headless = middleBandWithoutUI(settings.uncertain);
         audit({
           tool,
           subject: shortSubject,
-          decision: "blocked",
+          decision: headless === "allow" ? "allowed" : "blocked",
           source: "jev",
           danger,
           category: outcome.verdict.category,
-          detail: "middle-band verdict with no UI to confirm; failed closed",
+          detail:
+            `middle-band verdict with no UI to confirm; uncertain=${settings.uncertain}` +
+            (headless === "allow" ? "" : ", failed closed"),
           model: outcome.modelUsed,
           latencyMs: outcome.latencyMs,
           at: Date.now(),
         });
+        if (headless === "allow") return undefined;
         return {
           block: true,
           reason:
             `jev-guard: ${tool} call scored danger ${danger.toFixed(2)} ` +
-            `(${outcome.verdict.category}) with no UI available to confirm — failing closed. ` +
+            `(${outcome.verdict.category}) with no UI available to confirm, failing closed ` +
+            `(uncertain=${settings.uncertain}; set "uncertain": "allow" in ${SETTINGS_FILE} to let the middle band through unattended). ` +
             `Call: ${shortSubject}`,
         };
       }
@@ -641,7 +735,7 @@ export default function (pi: ExtensionAPI) {
       if (local.decision === "deny") {
         audit({ tool: event.toolName, subject: short, decision: "blocked", source: "rules", detail: local.reason, at: Date.now() });
         if (ctx.hasUI) ctx.ui.notify(`jev-guard blocked ${event.toolName}: ${local.reason}`, "error");
-        return { block: true, reason: `jev-guard: blocked — ${local.reason}. Call: ${short}`, terminate: true };
+        return { block: true, reason: `jev-guard: blocked. ${local.reason}. Call: ${short}`, terminate: true };
       }
       if (local.decision === "pass") {
         if (local.audited) {
@@ -699,7 +793,7 @@ export default function (pi: ExtensionAPI) {
         } else {
           let msg = `jev-guard ${enable ? "enabled" : "disabled"} for this session.`;
           if (enable !== saved.enabled) {
-            msg += ` Saved setting is still ${saved.enabled ? "ON" : "OFF"} — add --global to persist.`;
+            msg += ` Saved setting is still ${saved.enabled ? "ON" : "OFF"}. Add --global to persist.`;
           }
           ctx.ui.notify(msg, "info");
         }
@@ -729,7 +823,12 @@ export default function (pi: ExtensionAPI) {
           return;
         }
         saveGlobalSettings({ backend: rest });
-        ctx.ui.notify(`jev-guard backend set to ${rest}; needs ${keyEnvName(rest)}`, "info");
+        ctx.ui.notify(
+          rest === "openrouter"
+            ? `jev-guard backend set to openrouter; run /login openrouter or set OPENROUTER_API_KEY`
+            : `jev-guard backend set to typesafe; needs TYPESAFE_API_KEY`,
+          "info",
+        );
         return;
       }
       if (sub === "check") {
@@ -743,9 +842,14 @@ export default function (pi: ExtensionAPI) {
           ctx.ui.notify(`local ${local.decision}: ${local.reason}`, "info");
           return;
         }
-        const key = activeKey(settings);
+        const { key } = await resolveActiveKey(ctx, settings);
         if (!key) {
-          ctx.ui.notify(`${keyEnvName(settings.backend)} is not set; cannot consult Jev.`, "error");
+          ctx.ui.notify(
+            settings.backend === "openrouter"
+              ? `No classifier key found. Run /login openrouter in pi, or set ${keyEnvName(settings.backend)} before launching pi.`
+              : `${keyEnvName(settings.backend)} is not set; cannot consult Jev.`,
+            "error",
+          );
           return;
         }
         ctx.ui.notify("Consulting Jev…", "info");
@@ -768,10 +872,19 @@ export default function (pi: ExtensionAPI) {
         );
         return;
       }
+      if (sub !== "" && !KNOWN_SUBCOMMANDS.has(sub)) {
+        ctx.ui.notify(
+          `Unknown subcommand "${sub}". Usage: /jev-guard [status | setup | on | off | check <cmd> | model <id> | backend <openrouter|typesafe>]`,
+          "error",
+        );
+        return;
+      }
+
       // status (default)
       const settings = loadSettings(ctx);
       const need = keyEnvName(settings.backend);
-      const keyState = activeKey(settings) ? "set" : "MISSING";
+      const { key: statusKey, source: statusSource } = await resolveActiveKey(ctx, settings);
+      const keyState = statusKey ? `set (${statusSource === "env" ? "env" : "pi auth"})` : "MISSING";
       const eff = resolveEnabled(settings.enabled, session.enabled);
       const stateLine =
         `jev-guard: ${eff.enabled ? "ON" : "OFF"}` +

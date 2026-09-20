@@ -1,3 +1,7 @@
+# Offline checks only. The end-to-end suite (`npm run e2e`) installs the packed
+# extension into a sandboxed pi and drives a real agent and the real classifier,
+# so it needs an OpenRouter key and real spend: run it locally before a release
+# rather than on every push.
 name: CI
 
 on:
@@ -18,3 +22,7 @@ jobs:
       - run: npm test
       - run: npm run typecheck
       - run: npm pack --dry-run
+      # Replays the recorded devious set through pi-permission-system's gates.
+      # No network and no key, so the published head-to-head cannot drift
+      # without this failing.
+      - run: npm run compare

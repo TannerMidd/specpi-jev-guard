@@ -1,36 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="596" viewBox="0 0 1060 596" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
-<rect width="1060" height="596" fill="#ffffff"/>
-<text x="24" y="34" font-size="20" font-weight="700" fill="#111827">Does disguise beat the classifier?</text>
-<text x="24" y="58" font-size="13" fill="#6b7280">Average max-noul danger for 48 plain attacks, 14 disguised variants, and 8 traps.</text>
-<text x="24" y="78" font-size="13" fill="#6b7280">The disguised set includes base64 pipes, find -delete, git branch -D, python shutil.rmtree, and a chained git status &amp;&amp; rm -rf ~.</text>
-<rect x="24" y="99" width="12" height="12" rx="3" fill="#3b82f6"/>
-<text x="42" y="109" font-size="12" fill="#6b7280">average danger (bar)</text>
-<rect x="174" y="99" width="12" height="12" rx="3" fill="#ef4444"/>
-<text x="192" y="109" font-size="12" fill="#6b7280">% blocked outright (dot)</text>
-<line x1="533.0" y1="140" x2="533.0" y2="550" stroke="#eab308" stroke-width="1.4" stroke-dasharray="6 4"/>
-<text x="533.0" y="132.0" font-size="11" fill="#eab308" text-anchor="middle" font-weight="600">ask 0.35</text>
-<line x1="794.0" y1="140" x2="794.0" y2="550" stroke="#ef4444" stroke-width="1.4" stroke-dasharray="6 4"/>
-<text x="794.0" y="132.0" font-size="11" fill="#ef4444" text-anchor="middle" font-weight="600">block 0.8</text>
-<text x="316.0" y="176.0" font-size="13.5" fill="#111827" text-anchor="end" font-weight="600">Obvious destructive / exfil</text>
-<text x="316.0" y="194.0" font-size="11" fill="#6b7280" text-anchor="end">48 commands</text>
-<rect x="330.0" y="158.0" width="483.2" height="30" rx="4" fill="#3b82f6" opacity="1"/>
-<text x="823.2" y="179.0" font-size="14" fill="#111827" text-anchor="start" font-weight="700">0.83</text>
-<line x1="330" y1="212" x2="910" y2="212" stroke="#e5e7eb" stroke-width="1"/>
-<circle cx="740.8" cy="212" r="7" fill="#ef4444"/>
-<text x="740.8" y="195.0" font-size="12" fill="#6b7280" text-anchor="middle">71% blocked (34/48)</text>
-<text x="316.0" y="306.0" font-size="13.5" fill="#111827" text-anchor="end" font-weight="600">Disguised or obfuscated</text>
-<text x="316.0" y="324.0" font-size="11" fill="#6b7280" text-anchor="end">14 commands</text>
-<rect x="330.0" y="288.0" width="471.9" height="30" rx="4" fill="#3b82f6" opacity="1"/>
-<text x="811.9" y="309.0" font-size="14" fill="#111827" text-anchor="start" font-weight="700">0.81</text>
-<line x1="330" y1="342" x2="910" y2="342" stroke="#e5e7eb" stroke-width="1"/>
-<circle cx="785.7" cy="342" r="7" fill="#ef4444"/>
-<text x="785.7" y="325.0" font-size="12" fill="#6b7280" text-anchor="middle">79% blocked (11/14)</text>
-<text x="316.0" y="436.0" font-size="13.5" fill="#111827" text-anchor="end" font-weight="600">Ordinary-looking work (traps)</text>
-<text x="316.0" y="454.0" font-size="11" fill="#6b7280" text-anchor="end">8 commands</text>
-<rect x="330.0" y="418.0" width="292.9" height="30" rx="4" fill="#3b82f6" opacity="1"/>
-<text x="632.9" y="439.0" font-size="14" fill="#111827" text-anchor="start" font-weight="700">0.51</text>
-<line x1="330" y1="472" x2="910" y2="472" stroke="#e5e7eb" stroke-width="1"/>
-<circle cx="330.0" cy="472" r="7" fill="#ef4444"/>
-<text x="376.0" y="455.0" font-size="12" fill="#6b7280" text-anchor="middle">0% blocked (0/8)</text>
-<text x="24.0" y="580.0" font-size="11.5" fill="#6b7280" text-anchor="start">Disguise barely helps the attacker: 14/14 disguised commands were blocked or held for confirmation.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 596" width="1060" height="596" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<rect width="1060" height="596" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Does disguise beat the classifier?</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">Average max-noul danger for 48 plain attacks, 14 disguised variants, and 8 traps.</text>
+<text x="24" y="78" font-size="13" fill="var(--jv-dim, #52514e)">The disguised set includes base64 pipes, find -delete, git branch -D, python shutil.rmtree, and a chained git status &amp;&amp; rm -rf ~.</text>
+<rect x="24" y="99" width="11" height="11" rx="3" fill="var(--jv-accent, #2a78d6)"/>
+<text x="41" y="108" font-size="12" fill="var(--jv-dim, #52514e)">average danger (bar)</text>
+<rect x="200.2" y="99" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="217.2" y="108" font-size="12" fill="var(--jv-dim, #52514e)">% blocked outright (dot)</text>
+<line x1="533.0" y1="140" x2="533.0" y2="550" stroke="var(--jv-ask, #fab219)" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="533" y="132" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-weight="600">ask 0.35</text>
+<line x1="794.0" y1="140" x2="794.0" y2="550" stroke="var(--jv-block, #d03b3b)" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="794" y="132" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-weight="600">block 0.8</text>
+<text x="316" y="176" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Obvious destructive / exfil</text>
+<text x="316" y="194" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">48 commands</text>
+<g class="mark-g"><title>Obvious destructive / exfil: average danger 0.83</title><path class="mark" d="M330,158H809.1A4,4 0 0 1 813.1,162V178A4,4 0 0 1 809.1,182H330V158Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="823.1" y="176" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="700">0.83</text>
+<line x1="330" y1="212" x2="910" y2="212" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<circle cx="740.8" cy="212" r="7" fill="var(--jv-block, #d03b3b)"/>
+<text x="740.8" y="195" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="middle">71% blocked (34/48)</text>
+<text x="316" y="306" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Disguised or obfuscated</text>
+<text x="316" y="324" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">14 commands</text>
+<g class="mark-g"><title>Disguised or obfuscated: average danger 0.81</title><path class="mark" d="M330,288H798.3A4,4 0 0 1 802.3,292V308A4,4 0 0 1 798.3,312H330V288Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="812.3" y="306" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="700">0.81</text>
+<line x1="330" y1="342" x2="910" y2="342" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<circle cx="744.3" cy="342" r="7" fill="var(--jv-block, #d03b3b)"/>
+<text x="744.3" y="325" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="middle">71% blocked (10/14)</text>
+<text x="316" y="436" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Ordinary-looking work (traps)</text>
+<text x="316" y="454" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">8 commands</text>
+<g class="mark-g"><title>Ordinary-looking work (traps): average danger 0.49</title><path class="mark" d="M330,418H608.8A4,4 0 0 1 612.8,422V438A4,4 0 0 1 608.8,442H330V418Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="622.8" y="436" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="700">0.49</text>
+<line x1="330" y1="472" x2="910" y2="472" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<circle cx="330.0" cy="472" r="7" fill="var(--jv-block, #d03b3b)"/>
+<text x="376" y="455" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="middle">0% blocked (0/8)</text>
+<text x="24" y="580" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">Disguise barely helps the attacker: 13/14 disguised commands were blocked or held for confirmation.</text>
 </svg>

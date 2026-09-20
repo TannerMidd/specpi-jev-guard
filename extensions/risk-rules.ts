@@ -130,15 +130,118 @@ const SAFE_GIT_SUBCOMMANDS = new Set([
   "stash",
 ]);
 
+// hg/svn have no per-command handling below, so — unlike git — a subcommand
+// not listed here falls through to Jev instead of fast-passing. These are the
+// read-only ones; anything else (hg purge, hg update -C, svn rm, svn export)
+// mutates and must not be treated as a provably read-only chain.
+const SAFE_HG_SUBCOMMANDS = new Set([
+  "status", "st", "log", "diff", "cat", "annotate", "blame",
+  "id", "root", "summary", "sum", "paths", "tags", "heads",
+  "branches", "manifest", "files", "grep", "identify",
+]);
+const SAFE_SVN_SUBCOMMANDS = new Set([
+  "status", "st", "log", "diff", "cat", "info", "list", "ls",
+  "blame", "annotate", "praise", "propget", "pg", "proplist", "pl",
+]);
+
 /** Shell operators that make a command line non-trivial. */
 const OPERATOR_RE = /(&&|\|\||[;|<>]|`|\$\(|\$\{)/;
 
+/**
+ * Top-level directories that belong to the system rather than to whoever is
+ * running the command. Children are deliberately not included: /var/tmp/cache
+ * is somebody's build output, /var is the machine.
+ */
+const SYSTEM_DIRS = new Set([
+  "usr", "etc", "bin", "sbin", "lib", "lib64", "boot", "var", "opt", "srv", "home", "root",
+  "system", "system32", "windows",
+]);
+
+/** A home directory sits this far down in every layout: /home/me, /Users/me, C:/Users/me. */
+const HOME_DEPTH = 2;
+
+/**
+ * What a deletion target actually names, once the path is resolved.
+ *
+ * `/`, `//`, `/./`, `/tmp/../` and `/etc/..` are the filesystem root written
+ * five ways, and a rule that only knows the short spelling is a rule with a
+ * bypass. So the components are walked rather than matched, and every spelling
+ * of the same directory lands on the same answer.
+ *
+ * `~` and `$HOME` seed the walk at HOME_DEPTH. Climbing out of a home
+ * directory therefore reaches the directory that holds every account, and then
+ * the root, both of which are answers in their own right.
+ */
+export function normalizeDeleteTarget(raw: string): "root" | "home" | "system" | "other" {
+  // Drop the quoting a nested command leaves on the token, then keep only the
+  // path-shaped head of it: awk's `system("rm -rf ~")` hands over `~")}'`, and
+  // the target in there is `~`.
+  const head = /^["'`]*(\$\{HOME\}|\$HOME|~|\/)([\w.\-/*]*)(.*)$/s.exec(raw);
+  if (!head) return "other"; // relative, or some other machine's path: not this rule's business
+  // Whatever is left has to be quoting, or the path went somewhere this cannot
+  // read and the safe answer is that it is not a root. A homoglyph or an
+  // override character below is a deeper path, and Jev judges those.
+  if (!/^["'`;,)}\]]*$/.test(head[3])) return "other";
+  const base: "root" | "home" = head[1] === "/" ? "root" : "home";
+  const rest = head[2];
+
+  const HOME = "\u0000home\u0000"; // a placeholder no path component can spell
+  const parts: string[] = base === "home" ? new Array(HOME_DEPTH).fill(HOME) : [];
+  for (const part of rest.split("/")) {
+    // Empty (a doubled slash) and `.` change nothing; a trailing `*` means the
+    // contents of the directory, which for this rule is the directory.
+    if (part === "" || part === "." || part === "*") continue;
+    if (part === "..") {
+      if (parts.length > 0) parts.pop(); // the root's own parent is the root
+      continue;
+    }
+    parts.push(part);
+  }
+
+  if (parts.length === 0) return "root";
+  if (parts.length === HOME_DEPTH && parts.every((p) => p === HOME)) return "home";
+  // Climbed part-way out of home: /home, /Users, whatever holds the accounts.
+  if (parts.length < HOME_DEPTH && parts[0] === HOME) return "system";
+  if (parts.length === 1 && SYSTEM_DIRS.has(parts[0].toLowerCase())) return "system";
+  return "other";
+}
+
+/**
+ * Every target of a recursive forced `rm` on the command line, including ones
+ * nested inside quotes such as `php -r "system('rm -rf ~');"`. Flags may come
+ * in any order, combined or split.
+ */
+function recursiveDeleteTargets(cmd: string): string[] {
+  const out: string[] = [];
+  const rm = /\brm\b/g;
+  let hit: RegExpExecArray | null;
+  while ((hit = rm.exec(cmd)) !== null) {
+    const rest = cmd.slice(hit.index + hit[0].length).split(/[|;&\n]/)[0];
+    if (!/(?:^|\s)-[a-zA-Z]*r[a-zA-Z]*\b|--recursive\b/.test(rest)) continue;
+    if (!/(?:^|\s)-[a-zA-Z]*f[a-zA-Z]*\b|--force\b/.test(rest)) continue;
+    for (const token of rest.split(/\s+/)) {
+      if (token === "" || token.startsWith("-")) continue;
+      out.push(token);
+    }
+  }
+  return out;
+}
+
 /** Hard-deny: recursive/forced deletion aimed at filesystem roots. */
-const HARD_DENY_PATTERNS: Array<{ re: RegExp; reason: string }> = [
+const HARD_DENY_PATTERNS: Array<({ re: RegExp } | { hits: (cmd: string) => boolean }) & { reason: string }> = [
   {
-    // rm -rf / | /* | ~ | $HOME (any flag order, combined or split)
-    re: /\brm\b(?=[^|;&\n]*-[a-zA-Z]*r[a-zA-Z]*)(?=[^|;&\n]*-[a-zA-Z]*f[a-zA-Z]*|[^|;&\n]*--(?:recursive|force))[^|;&\n]*?(^|\s)(\/|\/\*|~|\$HOME|\$\{HOME\})/,
-    reason: "recursive forced deletion aimed at a filesystem root or home directory",
+    hits: (cmd) => recursiveDeleteTargets(cmd).some((t) => normalizeDeleteTarget(t) === "root"),
+    reason: "recursive forced deletion of the filesystem root",
+  },
+  {
+    hits: (cmd) => recursiveDeleteTargets(cmd).some((t) => normalizeDeleteTarget(t) === "home"),
+    reason: "recursive forced deletion of a home directory",
+  },
+  {
+    // `rm -rf /tmp/build` names a directory, not a root, and belongs in front of
+    // Jev rather than in a rule that nothing can override.
+    hits: (cmd) => recursiveDeleteTargets(cmd).some((t) => normalizeDeleteTarget(t) === "system"),
+    reason: "recursive forced deletion of a system directory",
   },
   {
     re: /\brm\b[^|;&\n]*--no-preserve-root/,
@@ -267,7 +370,7 @@ function hasUnsafeReadOnlyFlag(bin: string, args: string[]): boolean {
   }
 }
 
-/** True when a `git` invocation mutates refs, history, or remotes. */
+/** True when a `git` invocation mutates refs, history, remotes, or runs code. */
 function isUnsafeGitArgs(args: string[]): boolean {
   const sub = (args[0] ?? "").toLowerCase();
   const rest = args.slice(1);
@@ -275,14 +378,26 @@ function isUnsafeGitArgs(args: string[]): boolean {
   const anyFlag = (re: RegExp): boolean => rest.some((a) => re.test(a));
   switch (sub) {
     case "branch":
-      // -d/-D delete, -m/-M move; plain `git branch` and `-a/-v/-r` only list.
-      return anyFlag(/^-[a-zA-Z]*[dDmM][a-zA-Z]*$/) || anyFlag(/^--(delete|move|force)$/);
+      // -d/-D delete, -m/-M move, -f/-C reset an existing branch to another
+      // commit, which drops whatever was on it. Plain `git branch` and
+      // `-a/-v/-r` only list. Creating a branch or a tag (a bare name operand)
+      // writes a ref but loses nothing and is left on the fast-pass, so listing
+      // forms like `git branch --format=...` are not dragged to Jev.
+      return anyFlag(/^-[a-zA-Z]*[dDmMfC][a-zA-Z]*$/) || anyFlag(/^--(delete|move|force|copy)$/);
     case "tag":
       return anyFlag(/^-[a-zA-Z]*[dTf][a-zA-Z]*$/) || anyFlag(/^--(delete|force)$/);
     case "remote":
-      return ["add", "remove", "rm", "set-url", "rename"].includes(first);
+      // Mutating forms: add/remove/set-url/rename change config; update/prune
+      // fetch or delete tracking refs. `git remote` / `-v` / `show` only read.
+      return ["add", "remove", "rm", "set-url", "set-head", "set-branches", "rename", "prune", "update"].includes(first);
     case "stash":
-      return ["drop", "clear", "pop"].includes(first);
+      // Only listing/inspecting is read-only. Bare `git stash` (save),
+      // push/pop/apply/drop/clear all mutate the working tree or stash.
+      return !["list", "show"].includes(first);
+    case "grep":
+      // -O / --open-files-in-pager runs its argument as a shell command over
+      // the matching files — arbitrary code execution, not a read.
+      return rest.some((a) => /^-O/.test(a) || /^--open-files-in-pager(=.*)?$/.test(a));
     case "clean":
       return true;
     default:
@@ -296,9 +411,11 @@ function isSafeSegment(segment: string): boolean {
   const trimmed = segment.trim();
   const bin = binaryOf(trimmed);
   if (!SAFE_BINARIES.has(bin)) return false;
-  if (bin === "git") {
+  if (bin === "git" || bin === "hg" || bin === "svn") {
     const sub = trimmed.split(/\s+/)[1]?.toLowerCase().replace(/^-+/, "") ?? "";
-    if (!SAFE_GIT_SUBCOMMANDS.has(sub)) return false;
+    const allow =
+      bin === "git" ? SAFE_GIT_SUBCOMMANDS : bin === "hg" ? SAFE_HG_SUBCOMMANDS : SAFE_SVN_SUBCOMMANDS;
+    if (!allow.has(sub)) return false;
   }
   if (hasUnsafeReadOnlyFlag(bin, trimmed.split(/\s+/).slice(1))) return false;
   // Assignment prefixes (FOO=bar cmd) and sudo/doas wrappers are not provably safe.
@@ -318,7 +435,8 @@ export function classifyCommandLocal(command: string, settings: GuardSettings): 
     return { decision: "deny", reason: "matched disallowedCommands list", audited: true };
   }
   for (const p of HARD_DENY_PATTERNS) {
-    if (p.re.test(cmd)) return { decision: "deny", reason: `hard-deny pattern: ${p.reason}`, audited: true };
+    const hit = "re" in p ? p.re.test(cmd) : p.hits(cmd);
+    if (hit) return { decision: "deny", reason: `hard-deny pattern: ${p.reason}`, audited: true };
   }
   if (matchesAny(cmd, settings.safeCommands)) {
     return { decision: "pass", reason: "matched safeCommands list", audited: false };
@@ -568,6 +686,17 @@ export function resolveEnabled(
 ): { enabled: boolean; source: "session" | "saved" } {
   if (sessionOverride !== undefined) return { enabled: sessionOverride, source: "session" };
   return { enabled: savedEnabled, source: "saved" };
+}
+
+/**
+ * What to do with a middle-band verdict when there is nobody to ask: a
+ * non-interactive run (a script, a CI job, an agent driving pi headlessly)
+ * cannot answer a confirmation prompt. `uncertain` decides, and only an
+ * explicit "allow" lets the call through; everything else fails closed.
+ * Pure so the policy stays testable.
+ */
+export function middleBandWithoutUI(policy: UncertainPolicy): "allow" | "block" {
+  return policy === "allow" ? "allow" : "block";
 }
 
 /** Derive the OpenRouter decisions endpoint from a chat-compatible base URL.
