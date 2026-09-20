@@ -1,17 +1,23 @@
 # Publishes specpi-jev-guard to npm when you cut a GitHub Release.
 #
-# Uses npm Trusted Publishing (OIDC) — no long-lived NPM_TOKEN needed.
-# One-time setup on npmjs.com (see README "Publishing" section):
-#   package Settings → Trusted Publisher → GitHub Actions → this repo + this workflow file.
+# Uses npm Trusted Publishing (OIDC), so there is no long-lived token to leak.
+# One-time setup on npmjs.com: the package page, Settings, Trusted Publisher,
+# GitHub Actions, with organization TannerMidd, repository specpi-jev-guard,
+# workflow publish.yml, and the environment field left empty.
 #
-# Fallback: if you instead save an Automation token as repo secret NPM_TOKEN,
-# uncomment the NODE_AUTH_TOKEN line — the same job works either way.
+# The npm upgrade below is not optional. OIDC landed in npm 11.5.1 and the
+# runner ships 10.x with Node 22, which fails with a 404 on PUT: no token, and
+# npm reports missing authorization as a missing package.
+#
+# Fallback: save an Automation token as the repo secret NPM_TOKEN and uncomment
+# the NODE_AUTH_TOKEN line. The same job works either way.
 
 name: Publish to npm
 
 on:
   release:
     types: [published]
+  workflow_dispatch: # to retry a release whose publish failed, without re-tagging
 
 permissions:
   contents: read
@@ -27,6 +33,8 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org/
           cache: npm
+      - run: npm install -g npm@^11.5.1
+      - run: npm --version
       - run: npm ci
       - run: npm test
       - run: npm run typecheck
