@@ -63,7 +63,7 @@ repeated from a clean checkout.
 | Run | What it measures | Result |
 | --- | --- | --- |
 | [Overview](https://tannermidd.github.io/specpi-jev-guard/) | 124 commands scored live | 386 ms average, 37 settled locally with no network call |
-| [Devious tests](https://tannermidd.github.io/specpi-jev-guard/devious.html) | 89 hostile commands, 25 ordinary ones | 3 allowed through, none of them destructive, no ordinary command refused |
+| [Devious tests](https://tannermidd.github.io/specpi-jev-guard/devious.html) | 108 hostile commands, 25 ordinary ones | 6 allowed through, no ordinary command refused |
 | [Red team](https://tannermidd.github.io/specpi-jev-guard/devious.html) | 30 attacks invented live by another model | 0 got through |
 | [Testing](https://tannermidd.github.io/specpi-jev-guard/testing.html) | the packed release, inside a real pi | 48 scenarios, 47 exercised and all as specified |
 
@@ -74,12 +74,12 @@ repeated from a clean checkout.
 under three policies including the one in its README. Nothing is executed on
 either side.
 
-| Guard | Hostile commands that would run (of 89) | Ordinary commands interrupted (of 25) |
+| Guard | Hostile commands that would run (of 108) | Ordinary commands interrupted (of 25) |
 | --- | --- | --- |
 | pi-permission-system, quick start | 0 | 25 |
-| pi-permission-system, hardened policy | 1 | 24 |
-| pi-permission-system, allow by default | 39 | 8 |
-| specpi-jev-guard | 3 | 14 |
+| pi-permission-system, hardened policy | 4 | 24 |
+| pi-permission-system, allow by default | 50 | 8 |
+| specpi-jev-guard | 6 | 13 |
 
 Matching text cannot tell a `node_modules` wipe from a root wipe, so a policy
 strict enough to stop the second interrupts the first. Scoring intent can tell
@@ -134,8 +134,10 @@ thresholds in the gap between the two groups.
    - Fast pass: read-only commands and chains (`ls`, `cat`, `git log`,
      `git diff`). A read-only binary used destructively is escalated instead:
      `find -delete`, `find -exec`, `git branch -D`, `git branch -f`,
-     `git tag -d`, `git remote add`, `git stash drop`, `sort -o`,
-     `uniq IN OUT`.
+     `git tag -d`, `git remote add`, `git stash drop`, `sort -o`, `uniq IN OUT`,
+     `fd -x`, `rg --pre`, `git diff --output`, `tree -o`, `hg --config`, and a
+     background `&`. Long-option abbreviations (`git tag --del`, `sort --out`)
+     escalate like the full spelling.
    - Your lists: `disallowedCommands` block, `safeCommands` pass silently,
      `allowedCommands` pass and leave an audit entry.
 2. **Jev scores what is left**, 0 to 1.
@@ -202,7 +204,7 @@ npm test               # rule engine, offline, no key
 npm run typecheck
 
 npm run matrix         # 124 commands, live       -> tests/jev-results.json
-npm run devious        # 89 hostile, 25 ordinary  -> tests/jev-devious.json
+npm run devious        # 108 hostile, 25 ordinary -> tests/jev-devious.json
 npm run redteam        # another model attacks it -> tests/redteam-results.json
 npm run compare        # head to head, offline    -> tests/compare-results.json
 npm run e2e            # the packed release in a sandboxed pi, about 10 minutes
