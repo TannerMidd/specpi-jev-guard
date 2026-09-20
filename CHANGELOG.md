@@ -12,6 +12,14 @@
   colour and names itself, a call you were asked about says who decided, and
   the command, category and model are still one keypress away.
 
+### Fixed
+
+- **A settings file with a UTF-8 BOM is no longer ignored in full.** Notepad
+  and PowerShell's `Set-Content` both write one, `JSON.parse` throws on it, and
+  the read falls back to defaults without a word, so every setting in the file
+  went missing at once. Found while screenshotting the new modes: the settings
+  file written by PowerShell had no effect at all.
+
 ### Added
 
 - **`auditDisplay` decides where audit records show up: `transcript`,

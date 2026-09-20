@@ -140,6 +140,17 @@ describe("auditDisplay", () => {
     }
   });
 
+  it("reads a settings file that Notepad or PowerShell wrote, BOM and all", async () => {
+    // A UTF-8 BOM makes JSON.parse throw. Without stripping it the whole file
+    // is dropped, silently, and every setting in it with it.
+    const host = fakeHost();
+    writeFileSync(SETTINGS, "﻿" + JSON.stringify({ auditDisplay: "off" }), "utf-8");
+    extension(host.api);
+    await host.handlers.get("session_start")({ type: "session_start", reason: "startup" }, host.ctx);
+    await denyOneCall(host);
+    assert.equal(render(host), undefined, "the BOM hid the setting");
+  });
+
   it("an unknown value in the settings file leaves the default standing", async () => {
     const host = await boot({ auditDisplay: "footer" });
     await denyOneCall(host);

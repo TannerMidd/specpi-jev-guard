@@ -129,7 +129,10 @@ function lastUserPrompt(ctx: ExtensionContext): string {
 function readJsonFile(path: string): Record<string, unknown> {
   try {
     if (!existsSync(path)) return {};
-    const parsed: unknown = JSON.parse(readFileSync(path, "utf-8"));
+    // Strip a UTF-8 BOM: Notepad and PowerShell's Set-Content write one, and
+    // JSON.parse throws on it, which would silently drop the whole file.
+    const text = readFileSync(path, "utf-8").replace(/^﻿/, "");
+    const parsed: unknown = JSON.parse(text);
     if (typeof parsed === "object" && parsed !== null) {
       const out: Record<string, unknown> = {};
       for (const [k, v] of Object.entries(parsed)) out[k] = v;
