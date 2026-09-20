@@ -8,12 +8,14 @@ import {
   buildSystemOneBody,
   buildSystemOneState,
   classifyCommandLocal,
+  formatAuditStatus,
   globToRegExp,
   isProtectedPath,
   matchesAny,
   middleBandWithoutUI,
   normalizeDeleteTarget,
   openRouterDecisionsUrl,
+  parseAuditDisplay,
   parseSystemOneResponse,
   parseVerdict,
   redactSecrets,
@@ -564,5 +566,55 @@ describe("session toggle", () => {
     assert.deepEqual(resolveEnabled(false, undefined), { enabled: false, source: "saved" });
     assert.deepEqual(resolveEnabled(true, false), { enabled: false, source: "session" });
     assert.deepEqual(resolveEnabled(false, true), { enabled: true, source: "session" });
+  });
+});
+
+describe("audit display setting", () => {
+  it("accepts the three modes and nothing else", () => {
+    assert.equal(parseAuditDisplay("transcript"), "transcript");
+    assert.equal(parseAuditDisplay("status"), "status");
+    assert.equal(parseAuditDisplay("off"), "off");
+    assert.equal(parseAuditDisplay("Status"), undefined);
+    assert.equal(parseAuditDisplay("footer"), undefined);
+    assert.equal(parseAuditDisplay(true), undefined);
+    assert.equal(parseAuditDisplay(undefined), undefined);
+  });
+
+  it("ships showing records in the transcript, as it always has", () => {
+    assert.equal(DEFAULT_SETTINGS.auditDisplay, "transcript");
+  });
+});
+
+describe("audit status line", () => {
+  it("names the tool, the decision, the score and the model", () => {
+    assert.equal(
+      formatAuditStatus({ tool: "bash", decision: "allowed", danger: 0.042, model: "jev-1.13" }),
+      "jev-guard bash allowed · danger 0.04 · jev-1.13",
+    );
+  });
+
+  it("leaves out a score the record does not have, rather than calling it zero", () => {
+    // A rules block is the most dangerous call the guard sees and carries no
+    // score. "danger 0.00" would read as the safest line on screen.
+    const line = formatAuditStatus({ tool: "bash", decision: "blocked" });
+    assert.equal(line, "jev-guard bash blocked");
+    assert.ok(!line.includes("danger"));
+  });
+
+  it("drops an empty model instead of printing a stray separator", () => {
+    assert.equal(
+      formatAuditStatus({ tool: "write", decision: "allowed", danger: 0, model: "" }),
+      "jev-guard write allowed · danger 0.00",
+    );
+  });
+
+  it("stays short enough for a shared footer line", () => {
+    const line = formatAuditStatus({
+      tool: "powershell",
+      decision: "asked-allowed",
+      danger: 0.5,
+      model: "~typesafe/jev-latest",
+    });
+    assert.ok(line.length <= 80, line);
   });
 });

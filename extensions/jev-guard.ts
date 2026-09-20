@@ -31,21 +31,23 @@ import {
   bandFor,
   buildSystemOneBody,
   classifyCommandLocal,
+  formatAuditStatus,
   isProtectedPath,
   middleBandWithoutUI,
   openRouterDecisionsUrl,
+  parseAuditDisplay,
   parseSystemOneResponse,
   relativePosix,
   resolveEnabled,
   truncate,
 } from "./risk-rules.ts";
-import type { Backend, ClassifyInput, GuardSettings, JevVerdict } from "./risk-rules.ts";
+import type { AuditDisplay, Backend, ClassifyInput, GuardSettings, JevVerdict } from "./risk-rules.ts";
 
 const SETTINGS_FILE = "jev-guard.json";
 const AUDIT_TYPE = "jev-guard";
 const GATED_TOOLS = new Set(["bash", "powershell", "write", "edit"]);
 /** Anything else after /jev-guard is a typo, not a request for status. */
-const KNOWN_SUBCOMMANDS = new Set(["status", "setup", "on", "off", "check", "model", "backend"]);
+const KNOWN_SUBCOMMANDS = new Set(["status", "setup", "on", "off", "check", "model", "backend", "audit"]);
 const CACHE_LIMIT = 200;
 
 interface AuditRecord {
@@ -168,6 +170,8 @@ function applyPatch(target: GuardSettings, patch: Record<string, unknown>): void
   if (patch["uncertain"] === "allow" || patch["uncertain"] === "ask" || patch["uncertain"] === "deny") {
     target.uncertain = patch["uncertain"];
   }
+  const display = parseAuditDisplay(patch["auditDisplay"]);
+  if (display) target.auditDisplay = display;
   for (const key of ["safeCommands", "allowedCommands", "disallowedCommands", "protectedPaths"] as const) {
     const value = patch[key];
     if (Array.isArray(value) && value.every((v) => typeof v === "string")) {
@@ -527,11 +531,51 @@ export default function (pi: ExtensionAPI) {
   // (safe default: the guard comes back next launch); --global also persists.
   const session = { enabled: undefined as boolean | undefined };
 
-  function audit(data: AuditRecord): void {
+  // Where audit records are shown. The entry renderer is handed no context and
+  // so cannot read settings itself, which is why the mode is cached here:
+  // refreshed on every settings load, and primed at session_start, which pi
+  // awaits before it renders a resumed transcript.
+  let auditDisplay: AuditDisplay = DEFAULT_SETTINGS.auditDisplay;
+
+  /** Load settings and keep the cached display mode in step with them. */
+  function settingsFor(ctx: ExtensionContext): GuardSettings {
+    const settings = loadSettings(ctx);
+    setAuditDisplay(ctx, settings.auditDisplay);
+    return settings;
+  }
+
+  /** Switch modes, clearing the footer on the way out of `status`: a verdict
+   *  left standing there outlives the call it described. */
+  function setAuditDisplay(ctx: ExtensionContext, next: AuditDisplay): void {
+    if (auditDisplay === "status" && next !== "status") clearAuditStatus(ctx);
+    auditDisplay = next;
+  }
+
+  function clearAuditStatus(ctx: ExtensionContext): void {
+    try {
+      ctx.ui.setStatus(AUDIT_TYPE, undefined);
+    } catch {
+      // The footer line is cosmetic; never let it break the gate.
+    }
+  }
+
+  /**
+   * Record one decision. The session file always gets it: that is the durable
+   * audit trail, and the e2e suite reads it. Where it is *shown* is the user's
+   * call, because a routine "allowed" box on every judged call buries the
+   * conversation it is supposed to protect.
+   */
+  function audit(ctx: ExtensionContext, data: AuditRecord): void {
     try {
       pi.appendEntry(AUDIT_TYPE, { ...data });
     } catch {
       // Auditing must never break the gate itself.
+    }
+    if (auditDisplay !== "status") return;
+    try {
+      ctx.ui.setStatus(AUDIT_TYPE, formatAuditStatus(data));
+    } catch {
+      // The footer line is cosmetic; never let it break the gate.
     }
   }
 
@@ -579,7 +623,7 @@ export default function (pi: ExtensionAPI) {
         const need = keyEnvName(settings.backend);
         const hasPiProvider = settings.backend === "openrouter";
         const fix = hasPiProvider ? `run /login openrouter in pi, set ${need}` : `set ${need}`;
-        audit({
+        audit(ctx, {
           tool,
           subject: shortSubject,
           decision: "blocked",
@@ -603,7 +647,7 @@ export default function (pi: ExtensionAPI) {
 
     if (!outcome.verdict) {
       // Fail closed: an unreachable or incoherent classifier must not wave calls through.
-      audit({
+      audit(ctx, {
         tool,
         subject: shortSubject,
         decision: "blocked",
@@ -628,7 +672,7 @@ export default function (pi: ExtensionAPI) {
     const where = outcome.modelUsed ? ` [${outcome.modelUsed} ${outcome.latencyMs}ms]` : "";
 
     if (band === "block") {
-      audit({
+      audit(ctx, {
         tool,
         subject: shortSubject,
         decision: "blocked",
@@ -661,7 +705,7 @@ export default function (pi: ExtensionAPI) {
       if (!ctx.hasUI) {
         // Nobody to ask: `uncertain` decides, and only an explicit allow passes.
         const headless = middleBandWithoutUI(settings.uncertain);
-        audit({
+        audit(ctx, {
           tool,
           subject: shortSubject,
           decision: headless === "allow" ? "allowed" : "blocked",
@@ -690,7 +734,7 @@ export default function (pi: ExtensionAPI) {
         ["Yes, run it", "No, block it"],
       );
       const allowed = choice === "Yes, run it";
-      audit({
+      audit(ctx, {
         tool,
         subject: shortSubject,
         decision: allowed ? "asked-allowed" : "asked-blocked",
@@ -708,7 +752,7 @@ export default function (pi: ExtensionAPI) {
       return undefined;
     }
 
-    audit({
+    audit(ctx, {
       tool,
       subject: shortSubject,
       decision: "allowed",
@@ -723,9 +767,20 @@ export default function (pi: ExtensionAPI) {
     return undefined;
   }
 
+  pi.on("session_start", (_event, ctx) => {
+    // Pi awaits session_start before it renders a resumed transcript, so
+    // historical audit entries obey the setting too.
+    try {
+      settingsFor(ctx);
+    } catch {
+      // Priming is cosmetic: a bad read leaves the shipped default standing
+      // rather than reporting an extension error at startup.
+    }
+  });
+
   pi.on("tool_call", async (event, ctx) => {
     if (!GATED_TOOLS.has(event.toolName)) return undefined;
-    const settings = loadSettings(ctx);
+    const settings = settingsFor(ctx);
     if (!resolveEnabled(settings.enabled, session.enabled).enabled) return undefined;
 
     if (event.toolName === "bash" || event.toolName === "powershell") {
@@ -733,13 +788,13 @@ export default function (pi: ExtensionAPI) {
       const local = classifyCommandLocal(command, settings);
       const short = truncate(command.trim(), 160).replace(/\n/g, " ");
       if (local.decision === "deny") {
-        audit({ tool: event.toolName, subject: short, decision: "blocked", source: "rules", detail: local.reason, at: Date.now() });
+        audit(ctx, { tool: event.toolName, subject: short, decision: "blocked", source: "rules", detail: local.reason, at: Date.now() });
         if (ctx.hasUI) ctx.ui.notify(`jev-guard blocked ${event.toolName}: ${local.reason}`, "error");
         return { block: true, reason: `jev-guard: blocked. ${local.reason}. Call: ${short}`, terminate: true };
       }
       if (local.decision === "pass") {
         if (local.audited) {
-          audit({ tool: event.toolName, subject: short, decision: "allowed", source: "allowlist", detail: local.reason, at: Date.now() });
+          audit(ctx, { tool: event.toolName, subject: short, decision: "allowed", source: "allowlist", detail: local.reason, at: Date.now() });
         }
         return undefined;
       }
@@ -769,9 +824,9 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.registerCommand("jev-guard", {
-    description: "Jev dangerous-command guard: setup | on | off | status | check <cmd> | model <id> | backend <name>",
+    description: "Jev dangerous-command guard: setup | on | off | status | check <cmd> | model <id> | backend <name> | audit <where>",
     getArgumentCompletions: (prefix: string) => {
-      const subs = ["setup", "on", "off", "status", "check ", "model ", "backend "];
+      const subs = ["setup", "on", "off", "status", "check ", "model ", "backend ", "audit "];
       const items = subs
         .filter((s) => s.startsWith(prefix))
         .map((s) => ({ value: s, label: s }));
@@ -785,8 +840,10 @@ export default function (pi: ExtensionAPI) {
 
       if (sub === "on" || sub === "off") {
         const enable = sub === "on";
-        const saved = loadSettings(ctx);
+        const saved = settingsFor(ctx);
         session.enabled = enable;
+        // A footer verdict from a guard that is no longer gating is a lie.
+        if (!enable) clearAuditStatus(ctx);
         if (rest.split(/\s+/).includes("--global")) {
           saveGlobalSettings({ enabled: enable });
           ctx.ui.notify(`jev-guard ${enable ? "enabled" : "disabled"} and saved (${globalSettingsPath()}).`, "info");
@@ -808,7 +865,7 @@ export default function (pi: ExtensionAPI) {
           ctx.ui.notify("Usage: /jev-guard model <model-id>", "error");
           return;
         }
-        const settings = loadSettings(ctx);
+        const settings = settingsFor(ctx);
         if (settings.backend === "typesafe") {
           saveGlobalSettings({ typesafeModel: rest });
         } else {
@@ -831,12 +888,31 @@ export default function (pi: ExtensionAPI) {
         );
         return;
       }
+      if (sub === "audit") {
+        const mode = parseAuditDisplay(rest);
+        if (!mode) {
+          ctx.ui.notify("Usage: /jev-guard audit <transcript|status|off>", "error");
+          return;
+        }
+        saveGlobalSettings({ auditDisplay: mode });
+        setAuditDisplay(ctx, mode);
+        const kept = "Every decision is still written to the session file.";
+        ctx.ui.notify(
+          mode === "transcript"
+            ? "jev-guard audit records show as a box in the transcript."
+            : mode === "status"
+              ? `jev-guard audit records show as one line in the footer. ${kept}`
+              : `jev-guard audit records are hidden. ${kept}`,
+          "info",
+        );
+        return;
+      }
       if (sub === "check") {
         if (rest === "") {
           ctx.ui.notify("Usage: /jev-guard check <shell command>", "info");
           return;
         }
-        const settings = loadSettings(ctx);
+        const settings = settingsFor(ctx);
         const local = classifyCommandLocal(rest, settings);
         if (local.decision !== "unknown") {
           ctx.ui.notify(`local ${local.decision}: ${local.reason}`, "info");
@@ -874,14 +950,14 @@ export default function (pi: ExtensionAPI) {
       }
       if (sub !== "" && !KNOWN_SUBCOMMANDS.has(sub)) {
         ctx.ui.notify(
-          `Unknown subcommand "${sub}". Usage: /jev-guard [status | setup | on | off | check <cmd> | model <id> | backend <openrouter|typesafe>]`,
+          `Unknown subcommand "${sub}". Usage: /jev-guard [status | setup | on | off | check <cmd> | model <id> | backend <openrouter|typesafe> | audit <transcript|status|off>]`,
           "error",
         );
         return;
       }
 
       // status (default)
-      const settings = loadSettings(ctx);
+      const settings = settingsFor(ctx);
       const need = keyEnvName(settings.backend);
       const { key: statusKey, source: statusSource } = await resolveActiveKey(ctx, settings);
       const keyState = statusKey ? `set (${statusSource === "env" ? "env" : "pi auth"})` : "MISSING";
@@ -901,6 +977,7 @@ export default function (pi: ExtensionAPI) {
           ...(savedLine ? [savedLine] : []),
           modelLine,
           `thresholds: ask ≥ ${settings.askThreshold}, block ≥ ${settings.blockThreshold}, uncertain=${settings.uncertain}`,
+          `audit display: ${settings.auditDisplay}`,
           `${need}: ${keyState}`,
           `cached verdicts this session: ${verdictCache.size}`,
           `config: ${globalSettingsPath()}`,
@@ -912,6 +989,10 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.registerEntryRenderer(AUDIT_TYPE, (entry, opts, theme) => {
+    // Settings are unreachable from here, so the cached mode decides. Returning
+    // undefined keeps the entry out of the transcript entirely; the record was
+    // written to the session file either way.
+    if (auditDisplay !== "transcript") return undefined;
     const data = entry.data as AuditRecord | undefined;
     const box = new Box(1, 1, (text: string) => theme.bg("customMessageBg", text));
     const head = data

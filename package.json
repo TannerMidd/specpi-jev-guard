@@ -43,7 +43,7 @@
     "typescript": "^5.6.0"
   },
   "scripts": {
-    "test": "node --test tests/rules.test.mjs tests/pi-auth.test.mjs",
+    "test": "node --test tests/rules.test.mjs tests/pi-auth.test.mjs tests/audit-display.test.mjs",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm test && npm run typecheck",
     "live": "node --env-file-if-exists=.env tests/live-jev.mjs",

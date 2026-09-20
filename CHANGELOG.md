@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **`auditDisplay` decides where audit records show up: `transcript`,
+  `status`, or `off`.** A judged call used to mean a box in the transcript, and
+  nothing else. That reads well when calls are rare and buries the
+  conversation when they are not: a repeated command is scored once and cached,
+  but it was still boxed on every run. `status` puts the latest verdict on one
+  footer line instead, `off` shows nothing, and the default is unchanged.
+
+  Every mode still writes every record to the session file, so the audit trail
+  does not move. Blocks stay loud in all three: they raise a notification and
+  their reason goes back to the model regardless. Set it in
+  `~/.pi/jev-guard.json` or a trusted project file, or run
+  `/jev-guard audit <transcript|status|off>` to save it. `/jev-guard status`
+  reports the current mode.
+
+  Thanks to @toorop for the report and the design (#5).
+
 ## 0.3.0 (2026-09-20)
 
 ### Changed

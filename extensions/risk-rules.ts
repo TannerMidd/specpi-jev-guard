@@ -12,6 +12,9 @@ export type UncertainPolicy = "allow" | "ask" | "deny";
 /** Which API the classifier is reached through. */
 export type Backend = "openrouter" | "typesafe";
 
+/** Where each audit record is shown: the transcript, the footer, or nowhere. */
+export type AuditDisplay = "transcript" | "status" | "off";
+
 export interface GuardSettings {
   enabled: boolean;
   /** Classifier backend: OpenRouter decisions API or TypeSafe direct API. */
@@ -34,6 +37,8 @@ export interface GuardSettings {
   askThreshold: number;
   /** Behavior for the middle band when there is no UI to ask. */
   uncertain: UncertainPolicy;
+  /** Where audit records are shown. Every mode still writes them to the session file. */
+  auditDisplay: AuditDisplay;
   /** Glob list (matched against the raw command) that passes with no API call and no audit. */
   safeCommands: string[];
   /** Glob list that passes but records an audit entry. */
@@ -56,6 +61,7 @@ export const DEFAULT_SETTINGS: GuardSettings = {
   askThreshold: 0.35,
   blockThreshold: 0.8,
   uncertain: "ask",
+  auditDisplay: "transcript",
   safeCommands: [],
   allowedCommands: [],
   disallowedCommands: [],
@@ -874,6 +880,41 @@ export function resolveEnabled(
 ): { enabled: boolean; source: "session" | "saved" } {
   if (sessionOverride !== undefined) return { enabled: sessionOverride, source: "session" };
   return { enabled: savedEnabled, source: "saved" };
+}
+
+/**
+ * Validate an `auditDisplay` value read from a settings file. An unknown value
+ * returns undefined so the layer below keeps standing: a typo in the project
+ * file should not silently reset the mode the user chose globally.
+ */
+export function parseAuditDisplay(value: unknown): AuditDisplay | undefined {
+  return value === "transcript" || value === "status" || value === "off" ? value : undefined;
+}
+
+/** The fields of an audit record the footer line is built from. */
+export interface AuditStatusInput {
+  tool: string;
+  decision: string;
+  danger?: number;
+  model?: string;
+}
+
+/**
+ * One short line for the footer, e.g. "jev-guard bash allowed | danger 0.04".
+ *
+ * A segment whose field is missing is dropped rather than defaulted. Rule
+ * decisions carry no score, and printing "danger 0.00" for a hard-deny block
+ * would label the most dangerous call the guard ever sees as the safest thing
+ * on screen. The footer gives every extension one shared line and truncates it
+ * to the terminal width, so this stays short on purpose.
+ */
+export function formatAuditStatus(record: AuditStatusInput): string {
+  const parts = [`jev-guard ${record.tool} ${record.decision}`];
+  if (typeof record.danger === "number" && Number.isFinite(record.danger)) {
+    parts.push(`danger ${record.danger.toFixed(2)}`);
+  }
+  if (typeof record.model === "string" && record.model !== "") parts.push(record.model);
+  return parts.join(" · ");
 }
 
 /**
