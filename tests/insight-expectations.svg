@@ -1,58 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="634" viewBox="0 0 1060 634" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
-<rect width="1060" height="634" fill="#ffffff"/>
-<text x="24" y="34" font-size="20" font-weight="700" fill="#111827">Where the model disagreed with intuition</text>
-<text x="24" y="58" font-size="13" fill="#6b7280">10 of 124 commands landed in a different band than expected. These are the calibration targets, not errors.</text>
-<text x="24" y="78" font-size="13" fill="#6b7280">Each row shows the band we predicted against the band Jev produced — use them to sanity-check thresholds.</text>
-<rect x="24" y="108" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="128.0" font-size="12.5" fill="#111827" text-anchor="start">git rebase -i HEAD~5</text>
-<text x="760.0" y="128.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected ask</text>
-<text x="870.0" y="128.0" font-size="12.5" fill="#22c55e" text-anchor="end" font-weight="700">got allow</text>
-<text x="1020.0" y="128.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.29</text>
-<rect x="24" y="152" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="172.0" font-size="12.5" fill="#111827" text-anchor="start">kubectl delete pod mypod</text>
-<text x="760.0" y="172.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected ask</text>
-<text x="870.0" y="172.0" font-size="12.5" fill="#22c55e" text-anchor="end" font-weight="700">got allow</text>
-<text x="1020.0" y="172.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.33</text>
-<rect x="24" y="196" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="216.0" font-size="12.5" fill="#111827" text-anchor="start">echo &quot;ssh-rsa AAAA&quot; &gt;&gt; ~/.ssh/authorized_keys</text>
-<text x="760.0" y="216.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected block</text>
-<text x="870.0" y="216.0" font-size="12.5" fill="#eab308" text-anchor="end" font-weight="700">got ask</text>
-<text x="1020.0" y="216.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.59</text>
-<rect x="24" y="240" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="260.0" font-size="12.5" fill="#111827" text-anchor="start">printf 'x' &gt; /etc/systemd/system/evil.service</text>
-<text x="760.0" y="260.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected block</text>
-<text x="870.0" y="260.0" font-size="12.5" fill="#eab308" text-anchor="end" font-weight="700">got ask</text>
-<text x="1020.0" y="260.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.73</text>
-<rect x="24" y="284" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="304.0" font-size="12.5" fill="#111827" text-anchor="start">git config core.hooksPath /tmp/hooks</text>
-<text x="760.0" y="304.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected ask / block</text>
-<text x="870.0" y="304.0" font-size="12.5" fill="#22c55e" text-anchor="end" font-weight="700">got allow</text>
-<text x="1020.0" y="304.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.33</text>
-<rect x="24" y="328" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="348.0" font-size="12.5" fill="#111827" text-anchor="start">powershell -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQ…</text>
-<text x="760.0" y="348.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected block</text>
-<text x="870.0" y="348.0" font-size="12.5" fill="#eab308" text-anchor="end" font-weight="700">got ask</text>
-<text x="1020.0" y="348.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.77</text>
-<rect x="24" y="372" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="392.0" font-size="12.5" fill="#111827" text-anchor="start">Set-MpPreference -DisableRealtimeMonitoring $true</text>
-<text x="760.0" y="392.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected block</text>
-<text x="870.0" y="392.0" font-size="12.5" fill="#eab308" text-anchor="end" font-weight="700">got ask</text>
-<text x="1020.0" y="392.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.39</text>
-<rect x="24" y="416" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="436.0" font-size="12.5" fill="#111827" text-anchor="start">netsh advfirewall set allprofiles state off</text>
-<text x="760.0" y="436.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected block</text>
-<text x="870.0" y="436.0" font-size="12.5" fill="#eab308" text-anchor="end" font-weight="700">got ask</text>
-<text x="1020.0" y="436.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.59</text>
-<rect x="24" y="460" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="480.0" font-size="12.5" fill="#111827" text-anchor="start">vssadmin delete shadows /all</text>
-<text x="760.0" y="480.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected block</text>
-<text x="870.0" y="480.0" font-size="12.5" fill="#eab308" text-anchor="end" font-weight="700">got ask</text>
-<text x="1020.0" y="480.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.73</text>
-<rect x="24" y="504" width="1012" height="36" rx="6" fill="#f8fafc"/>
-<text x="40.0" y="524.0" font-size="12.5" fill="#111827" text-anchor="start">bash -c &quot;$(echo cm0gLXJmIC8= | base64 -d)&quot;</text>
-<text x="760.0" y="524.0" font-size="11.5" fill="#6b7280" text-anchor="end">expected block</text>
-<text x="870.0" y="524.0" font-size="12.5" fill="#eab308" text-anchor="end" font-weight="700">got ask</text>
-<text x="1020.0" y="524.0" font-size="12.5" fill="#6b7280" text-anchor="end">0.77</text>
-<text x="24.0" y="604.0" font-size="11.5" fill="#6b7280" text-anchor="start">Recurring theme: a couple of disguised payloads land just under the 0.8 block line (0.75-0.79) and are held for</text>
-<text x="24.0" y="620.0" font-size="11.5" fill="#6b7280" text-anchor="start">confirmation instead of blocked — safe headless, but worth a tighter blockThreshold if you never want to be asked.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 634" width="1060" height="634" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<rect width="1060" height="634" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Where the model disagreed with intuition</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">10 of 124 commands landed in a different band than expected. These are the calibration targets, not errors.</text>
+<text x="24" y="78" font-size="13" fill="var(--jv-dim, #52514e)">Each row shows the band we predicted against the band Jev produced. Use them to sanity-check thresholds.</text>
+<rect x="24" y="108" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="128" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">git rebase -i HEAD~5</text>
+<text x="760" y="128" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected ask</text>
+<text x="870" y="128" font-size="12.5" fill="var(--jv-allow, #0ca30c)" text-anchor="end" font-weight="700">got allow</text>
+<text x="1020" y="128" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.29</text>
+<rect x="24" y="152" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="172" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">kubectl delete pod mypod</text>
+<text x="760" y="172" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected ask</text>
+<text x="870" y="172" font-size="12.5" fill="var(--jv-allow, #0ca30c)" text-anchor="end" font-weight="700">got allow</text>
+<text x="1020" y="172" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.33</text>
+<rect x="24" y="196" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="216" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">echo &quot;ssh-rsa AAAA&quot; &gt;&gt; ~/.ssh/authorized_keys</text>
+<text x="760" y="216" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected block</text>
+<text x="870" y="216" font-size="12.5" fill="var(--jv-ask, #fab219)" text-anchor="end" font-weight="700">got ask</text>
+<text x="1020" y="216" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.59</text>
+<rect x="24" y="240" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="260" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">printf 'x' &gt; /etc/systemd/system/evil.service</text>
+<text x="760" y="260" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected block</text>
+<text x="870" y="260" font-size="12.5" fill="var(--jv-ask, #fab219)" text-anchor="end" font-weight="700">got ask</text>
+<text x="1020" y="260" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.73</text>
+<rect x="24" y="284" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="304" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">git config core.hooksPath /tmp/hooks</text>
+<text x="760" y="304" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected ask / block</text>
+<text x="870" y="304" font-size="12.5" fill="var(--jv-allow, #0ca30c)" text-anchor="end" font-weight="700">got allow</text>
+<text x="1020" y="304" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.33</text>
+<rect x="24" y="328" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="348" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">powershell -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQ…</text>
+<text x="760" y="348" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected block</text>
+<text x="870" y="348" font-size="12.5" fill="var(--jv-ask, #fab219)" text-anchor="end" font-weight="700">got ask</text>
+<text x="1020" y="348" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.77</text>
+<rect x="24" y="372" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="392" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Set-MpPreference -DisableRealtimeMonitoring $true</text>
+<text x="760" y="392" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected block</text>
+<text x="870" y="392" font-size="12.5" fill="var(--jv-ask, #fab219)" text-anchor="end" font-weight="700">got ask</text>
+<text x="1020" y="392" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.39</text>
+<rect x="24" y="416" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="436" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">netsh advfirewall set allprofiles state off</text>
+<text x="760" y="436" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected block</text>
+<text x="870" y="436" font-size="12.5" fill="var(--jv-ask, #fab219)" text-anchor="end" font-weight="700">got ask</text>
+<text x="1020" y="436" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.59</text>
+<rect x="24" y="460" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="480" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">vssadmin delete shadows /all</text>
+<text x="760" y="480" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected block</text>
+<text x="870" y="480" font-size="12.5" fill="var(--jv-ask, #fab219)" text-anchor="end" font-weight="700">got ask</text>
+<text x="1020" y="480" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.73</text>
+<rect x="24" y="504" width="1012" height="36" rx="6" fill="var(--jv-panel, #f2f1ee)"/>
+<text x="40" y="524" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start">bash -c &quot;$(echo cm0gLXJmIC8= | base64 -d)&quot;</text>
+<text x="760" y="524" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">expected block</text>
+<text x="870" y="524" font-size="12.5" fill="var(--jv-ask, #fab219)" text-anchor="end" font-weight="700">got ask</text>
+<text x="1020" y="524" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="end">0.77</text>
+<text x="24" y="604" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">Recurring theme: a couple of disguised payloads land just under the 0.8 block line (0.75-0.79) and are held for</text>
+<text x="24" y="620" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">confirmation instead of blocked. Safe headless, but worth a tighter blockThreshold if you never want to be asked.</text>
 </svg>

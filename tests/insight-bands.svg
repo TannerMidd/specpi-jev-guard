@@ -1,129 +1,108 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="670" viewBox="0 0 1060 670" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
-<rect width="1060" height="670" fill="#ffffff"/>
-<text x="24" y="34" font-size="20" font-weight="700" fill="#111827">What the guard does, by command category</text>
-<text x="24" y="58" font-size="13" fill="#6b7280">124 live commands · 2026-09-18 · bar length = how many commands fell in each band</text>
-<rect x="24" y="75" width="12" height="12" rx="3" fill="#22c55e"/>
-<text x="42" y="85" font-size="12" fill="#6b7280">allow (runs)</text>
-<rect x="121.19999999999999" y="75" width="12" height="12" rx="3" fill="#eab308"/>
-<text x="139.2" y="85" font-size="12" fill="#6b7280">ask (confirms)</text>
-<rect x="231.59999999999997" y="75" width="12" height="12" rx="3" fill="#ef4444"/>
-<text x="249.59999999999997" y="85" font-size="12" fill="#6b7280">block (never runs)</text>
-<text x="198.0" y="136.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Safe read-only</text>
-<text x="198.0" y="151.0" font-size="11" fill="#6b7280" text-anchor="end">16 commands</text>
-<g><title>Safe read-only: 16 allow</title>
-<rect x="210.0" y="118.0" width="564.7" height="24" rx="4" fill="#22c55e" opacity="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 670" width="1060" height="670" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<rect width="1060" height="670" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">What the guard does, by command category</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">124 live commands · 2026-09-18 · bar length = how many commands fell in each band</text>
+<rect x="24" y="75" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
+<text x="41" y="84" font-size="12" fill="var(--jv-dim, #52514e)">allow (runs)</text>
+<rect x="144.5" y="75" width="11" height="11" rx="3" fill="var(--jv-ask, #fab219)"/>
+<text x="161.5" y="84" font-size="12" fill="var(--jv-dim, #52514e)">ask (confirms)</text>
+<rect x="279" y="75" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="296" y="84" font-size="12" fill="var(--jv-dim, #52514e)">block (never runs)</text>
+<text x="198" y="136" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Safe read-only</text>
+<text x="198" y="151" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">16 commands</text>
+<g class="mark-g"><title>Safe read-only: 16 allow</title><path class="mark" d="M210,118H770.7A4,4 0 0 1 774.7,122V138A4,4 0 0 1 770.7,142H210V118Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="492.4" y="135.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">16</text>
-<text x="786.7" y="135.0" font-size="11" fill="#6b7280" text-anchor="start">0 blocked · 0 ask · 16 allow</text>
-<text x="198.0" y="182.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Routine dev</text>
-<text x="198.0" y="197.0" font-size="11" fill="#6b7280" text-anchor="end">16 commands</text>
-<g><title>Routine dev: 15 allow</title>
-<rect x="210.0" y="164.0" width="529.4" height="24" rx="4" fill="#22c55e" opacity="1"/>
+<text x="492.4" y="135" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">16</text>
+<text x="786.7" y="135" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">0 blocked · 0 ask · 16 allow</text>
+<text x="198" y="182" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Routine dev</text>
+<text x="198" y="197" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">16 commands</text>
+<g class="mark-g"><title>Routine dev: 15 allow</title><path class="mark" d="M210,164H737.4V188H210V164Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="474.7" y="181.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
-<g><title>Routine dev: 1 ask</title>
-<rect x="739.4" y="164.0" width="35.3" height="24" rx="4" fill="#eab308" opacity="1"/>
+<text x="474.7" y="181" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Routine dev: 1 ask</title><path class="mark" d="M739.4,164H770.7A4,4 0 0 1 774.7,168V184A4,4 0 0 1 770.7,188H739.4V164Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="757.1" y="181.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
-<text x="786.7" y="181.0" font-size="11" fill="#6b7280" text-anchor="start">0 blocked · 1 ask · 15 allow</text>
-<text x="198.0" y="228.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Installs</text>
-<text x="198.0" y="243.0" font-size="11" fill="#6b7280" text-anchor="end">6 commands</text>
-<g><title>Installs: 6 ask</title>
-<rect x="210.0" y="210.0" width="211.8" height="24" rx="4" fill="#eab308" opacity="1"/>
+<text x="757.1" y="181" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
+<text x="786.7" y="181" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">0 blocked · 1 ask · 15 allow</text>
+<text x="198" y="228" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Installs</text>
+<text x="198" y="243" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">6 commands</text>
+<g class="mark-g"><title>Installs: 6 ask</title><path class="mark" d="M210,210H417.8A4,4 0 0 1 421.8,214V230A4,4 0 0 1 417.8,234H210V210Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="315.9" y="227.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">6</text>
-<text x="433.8" y="227.0" font-size="11" fill="#6b7280" text-anchor="start">0 blocked · 6 ask · 0 allow</text>
-<text x="198.0" y="274.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Risky</text>
-<text x="198.0" y="289.0" font-size="11" fill="#6b7280" text-anchor="end">16 commands</text>
-<g><title>Risky: 4 allow</title>
-<rect x="210.0" y="256.0" width="141.2" height="24" rx="4" fill="#22c55e" opacity="1"/>
+<text x="315.9" y="227" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">6</text>
+<text x="433.8" y="227" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">0 blocked · 6 ask · 0 allow</text>
+<text x="198" y="274" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Risky</text>
+<text x="198" y="289" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">16 commands</text>
+<g class="mark-g"><title>Risky: 4 allow</title><path class="mark" d="M210,256H349.2V280H210V256Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="280.6" y="273.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">4</text>
-<g><title>Risky: 12 ask</title>
-<rect x="351.2" y="256.0" width="423.5" height="24" rx="4" fill="#eab308" opacity="1"/>
+<text x="280.6" y="273" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">4</text>
+<g class="mark-g"><title>Risky: 12 ask</title><path class="mark" d="M351.2,256H770.7A4,4 0 0 1 774.7,260V276A4,4 0 0 1 770.7,280H351.2V256Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="562.9" y="273.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">12</text>
-<text x="786.7" y="273.0" font-size="11" fill="#6b7280" text-anchor="start">0 blocked · 12 ask · 4 allow</text>
-<text x="198.0" y="320.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Traps (must pass)</text>
-<text x="198.0" y="335.0" font-size="11" fill="#6b7280" text-anchor="end">8 commands</text>
-<g><title>Traps (must pass): 3 allow</title>
-<rect x="210.0" y="302.0" width="105.9" height="24" rx="4" fill="#22c55e" opacity="1"/>
+<text x="562.9" y="273" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">12</text>
+<text x="786.7" y="273" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">0 blocked · 12 ask · 4 allow</text>
+<text x="198" y="320" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Traps (must pass)</text>
+<text x="198" y="335" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">8 commands</text>
+<g class="mark-g"><title>Traps (must pass): 3 allow</title><path class="mark" d="M210,302H313.9V326H210V302Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="262.9" y="319.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">3</text>
-<g><title>Traps (must pass): 5 ask</title>
-<rect x="315.9" y="302.0" width="176.5" height="24" rx="4" fill="#eab308" opacity="1"/>
+<text x="262.9" y="319" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Traps (must pass): 5 ask</title><path class="mark" d="M315.9,302H488.4A4,4 0 0 1 492.4,306V322A4,4 0 0 1 488.4,326H315.9V302Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="404.1" y="319.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">5</text>
-<text x="504.4" y="319.0" font-size="11" fill="#6b7280" text-anchor="start">0 blocked · 5 ask · 3 allow</text>
-<text x="198.0" y="366.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Destructive</text>
-<text x="198.0" y="381.0" font-size="11" fill="#6b7280" text-anchor="end">17 commands</text>
-<g><title>Destructive: 1 ask</title>
-<rect x="210.0" y="348.0" width="35.3" height="24" rx="4" fill="#eab308" opacity="1"/>
+<text x="404.1" y="319" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">5</text>
+<text x="504.4" y="319" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">0 blocked · 5 ask · 3 allow</text>
+<text x="198" y="366" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Destructive</text>
+<text x="198" y="381" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">17 commands</text>
+<g class="mark-g"><title>Destructive: 1 ask</title><path class="mark" d="M210,348H243.3V372H210V348Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="227.6" y="365.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
-<g><title>Destructive: 16 block</title>
-<rect x="245.3" y="348.0" width="564.7" height="24" rx="4" fill="#ef4444" opacity="1"/>
+<text x="227.6" y="365" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
+<g class="mark-g"><title>Destructive: 16 block</title><path class="mark" d="M245.3,348H806A4,4 0 0 1 810,352V368A4,4 0 0 1 806,372H245.3V348Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="527.6" y="365.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">16</text>
-<text x="822.0" y="365.0" font-size="11" fill="#6b7280" text-anchor="start">16 blocked · 1 ask · 0 allow</text>
-<text x="198.0" y="412.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Supply chain</text>
-<text x="198.0" y="427.0" font-size="11" fill="#6b7280" text-anchor="end">8 commands</text>
-<g><title>Supply chain: 1 ask</title>
-<rect x="210.0" y="394.0" width="35.3" height="24" rx="4" fill="#eab308" opacity="1"/>
+<text x="527.6" y="365" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">16</text>
+<text x="822" y="365" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">16 blocked · 1 ask · 0 allow</text>
+<text x="198" y="412" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Supply chain</text>
+<text x="198" y="427" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">8 commands</text>
+<g class="mark-g"><title>Supply chain: 1 ask</title><path class="mark" d="M210,394H243.3V418H210V394Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="227.6" y="411.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
-<g><title>Supply chain: 7 block</title>
-<rect x="245.3" y="394.0" width="247.1" height="24" rx="4" fill="#ef4444" opacity="1"/>
+<text x="227.6" y="411" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
+<g class="mark-g"><title>Supply chain: 7 block</title><path class="mark" d="M245.3,394H488.4A4,4 0 0 1 492.4,398V414A4,4 0 0 1 488.4,418H245.3V394Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="368.8" y="411.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
-<text x="504.4" y="411.0" font-size="11" fill="#6b7280" text-anchor="start">7 blocked · 1 ask · 0 allow</text>
-<text x="198.0" y="458.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Exfiltration</text>
-<text x="198.0" y="473.0" font-size="11" fill="#6b7280" text-anchor="end">10 commands</text>
-<g><title>Exfiltration: 3 allow</title>
-<rect x="210.0" y="440.0" width="105.9" height="24" rx="4" fill="#22c55e" opacity="1"/>
+<text x="368.8" y="411" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
+<text x="504.4" y="411" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">7 blocked · 1 ask · 0 allow</text>
+<text x="198" y="458" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Exfiltration</text>
+<text x="198" y="473" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">10 commands</text>
+<g class="mark-g"><title>Exfiltration: 3 allow</title><path class="mark" d="M210,440H313.9V464H210V440Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="262.9" y="457.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">3</text>
-<g><title>Exfiltration: 7 block</title>
-<rect x="315.9" y="440.0" width="247.1" height="24" rx="4" fill="#ef4444" opacity="1"/>
+<text x="262.9" y="457" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Exfiltration: 7 block</title><path class="mark" d="M315.9,440H558.9A4,4 0 0 1 562.9,444V460A4,4 0 0 1 558.9,464H315.9V440Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="439.4" y="457.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
-<text x="574.9" y="457.0" font-size="11" fill="#6b7280" text-anchor="start">7 blocked · 0 ask · 3 allow</text>
-<text x="198.0" y="504.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Persistence</text>
-<text x="198.0" y="519.0" font-size="11" fill="#6b7280" text-anchor="end">5 commands</text>
-<g><title>Persistence: 1 allow</title>
-<rect x="210.0" y="486.0" width="35.3" height="24" rx="4" fill="#22c55e" opacity="1"/>
+<text x="439.4" y="457" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
+<text x="574.9" y="457" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">7 blocked · 0 ask · 3 allow</text>
+<text x="198" y="504" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Persistence</text>
+<text x="198" y="519" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">5 commands</text>
+<g class="mark-g"><title>Persistence: 1 allow</title><path class="mark" d="M210,486H243.3V510H210V486Z" fill="var(--jv-allow, #0ca30c)"/>
 </g>
-<text x="227.6" y="503.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
-<g><title>Persistence: 2 ask</title>
-<rect x="245.3" y="486.0" width="70.6" height="24" rx="4" fill="#eab308" opacity="1"/>
+<text x="227.6" y="503" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
+<g class="mark-g"><title>Persistence: 2 ask</title><path class="mark" d="M245.3,486H313.9V510H245.3V486Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="280.6" y="503.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">2</text>
-<g><title>Persistence: 2 block</title>
-<rect x="315.9" y="486.0" width="70.6" height="24" rx="4" fill="#ef4444" opacity="1"/>
+<text x="280.6" y="503" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">2</text>
+<g class="mark-g"><title>Persistence: 2 block</title><path class="mark" d="M315.9,486H382.5A4,4 0 0 1 386.5,490V506A4,4 0 0 1 382.5,510H315.9V486Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="351.2" y="503.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">2</text>
-<text x="398.5" y="503.0" font-size="11" fill="#6b7280" text-anchor="start">2 blocked · 2 ask · 1 allow</text>
-<text x="198.0" y="550.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Privesc / evasion</text>
-<text x="198.0" y="565.0" font-size="11" fill="#6b7280" text-anchor="end">8 commands</text>
-<g><title>Privesc / evasion: 6 ask</title>
-<rect x="210.0" y="532.0" width="211.8" height="24" rx="4" fill="#eab308" opacity="1"/>
+<text x="351.2" y="503" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">2</text>
+<text x="398.5" y="503" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">2 blocked · 2 ask · 1 allow</text>
+<text x="198" y="550" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Privesc / evasion</text>
+<text x="198" y="565" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">8 commands</text>
+<g class="mark-g"><title>Privesc / evasion: 6 ask</title><path class="mark" d="M210,532H419.8V556H210V532Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="315.9" y="549.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">6</text>
-<g><title>Privesc / evasion: 2 block</title>
-<rect x="421.8" y="532.0" width="70.6" height="24" rx="4" fill="#ef4444" opacity="1"/>
+<text x="315.9" y="549" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">6</text>
+<g class="mark-g"><title>Privesc / evasion: 2 block</title><path class="mark" d="M421.8,532H488.4A4,4 0 0 1 492.4,536V552A4,4 0 0 1 488.4,556H421.8V532Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="457.1" y="549.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">2</text>
-<text x="504.4" y="549.0" font-size="11" fill="#6b7280" text-anchor="start">2 blocked · 6 ask · 0 allow</text>
-<text x="198.0" y="596.0" font-size="13" fill="#111827" text-anchor="end" font-weight="600">Sneaky (disguised)</text>
-<text x="198.0" y="611.0" font-size="11" fill="#6b7280" text-anchor="end">14 commands</text>
-<g><title>Sneaky (disguised): 3 ask</title>
-<rect x="210.0" y="578.0" width="105.9" height="24" rx="4" fill="#eab308" opacity="1"/>
+<text x="457.1" y="549" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">2</text>
+<text x="504.4" y="549" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">2 blocked · 6 ask · 0 allow</text>
+<text x="198" y="596" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Sneaky (disguised)</text>
+<text x="198" y="611" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">14 commands</text>
+<g class="mark-g"><title>Sneaky (disguised): 3 ask</title><path class="mark" d="M210,578H313.9V602H210V578Z" fill="var(--jv-ask, #fab219)"/>
 </g>
-<text x="262.9" y="595.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">3</text>
-<g><title>Sneaky (disguised): 11 block</title>
-<rect x="315.9" y="578.0" width="388.2" height="24" rx="4" fill="#ef4444" opacity="1"/>
+<text x="262.9" y="595" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Sneaky (disguised): 11 block</title><path class="mark" d="M315.9,578H700.1A4,4 0 0 1 704.1,582V598A4,4 0 0 1 700.1,602H315.9V578Z" fill="var(--jv-block, #d03b3b)"/>
 </g>
-<text x="510.0" y="595.0" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">11</text>
-<text x="716.1" y="595.0" font-size="11" fill="#6b7280" text-anchor="start">11 blocked · 3 ask · 0 allow</text>
-<text x="24.0" y="654.0" font-size="11" fill="#6b7280" text-anchor="start">Traps are ordinary work that merely looks alarming — a high allow count there means few false alarms.</text>
+<text x="510" y="595" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">11</text>
+<text x="716.1" y="595" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">11 blocked · 3 ask · 0 allow</text>
+<text x="24" y="654" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">Traps are ordinary work that merely looks alarming, so a high allow count there means few false alarms.</text>
 </svg>

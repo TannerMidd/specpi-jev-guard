@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 786" width="1020" height="786" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>Flowchart of how every gated command is decided</title>
+<rect width="1020" height="786" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="40" y="46" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">How a gated command is decided</text>
+<text x="40" y="70" font-size="13" fill="var(--jv-dim, #52514e)">Four cheap local checks run first. Only what is genuinely uncertain costs a network call.</text>
+<line x1="310" y1="158" x2="310" y2="178" stroke="var(--jv-border, #c3c2b7)" stroke-width="1.5"/>
+<polygon points="310,186 305.8,178 314.2,178" fill="var(--jv-border, #c3c2b7)"/>
+<rect x="120" y="100" width="380" height="58" rx="12" fill="var(--jv-panel, #f2f1ee)" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="140" y="125" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">bash / write / edit call</text>
+<text x="140" y="144" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start" opacity="1">intercepted before it runs</text>
+<line x1="310" y1="246" x2="310" y2="266" stroke="var(--jv-border, #c3c2b7)" stroke-width="1.5"/>
+<polygon points="310,274 305.8,266 314.2,266" fill="var(--jv-border, #c3c2b7)"/>
+<text x="318" y="264" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="start" font-weight="600">no</text>
+<rect x="120" y="188" width="380" height="58" rx="12" fill="var(--jv-panel, #f2f1ee)" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="140" y="213" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">On your disallow list?</text>
+<text x="140" y="232" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start" opacity="1">patterns you set yourself</text>
+<line x1="500" y1="217" x2="610" y2="217" stroke="var(--jv-block, #d03b3b)" stroke-width="1.5"/>
+<polygon points="618,217 610,221.2 610,212.8" fill="var(--jv-block, #d03b3b)"/>
+<text x="559" y="210" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-weight="600">yes</text>
+<rect x="620" y="201" width="250" height="32" rx="16" fill="var(--jv-block, #d03b3b)"/>
+<text x="745" y="221.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">BLOCK</text>
+<line x1="310" y1="334" x2="310" y2="354" stroke="var(--jv-border, #c3c2b7)" stroke-width="1.5"/>
+<polygon points="310,362 305.8,354 314.2,354" fill="var(--jv-border, #c3c2b7)"/>
+<text x="318" y="352" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="start" font-weight="600">no</text>
+<rect x="120" y="276" width="380" height="58" rx="12" fill="var(--jv-panel, #f2f1ee)" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="140" y="301" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Hard-deny pattern?</text>
+<text x="140" y="320" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start" opacity="1">rm -rf /  ·  fork bomb  ·  curl | sh  ·  mkfs</text>
+<line x1="500" y1="305" x2="610" y2="305" stroke="var(--jv-block, #d03b3b)" stroke-width="1.5"/>
+<polygon points="618,305 610,309.2 610,300.8" fill="var(--jv-block, #d03b3b)"/>
+<text x="559" y="298" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-weight="600">yes</text>
+<rect x="620" y="289" width="250" height="32" rx="16" fill="var(--jv-block, #d03b3b)"/>
+<text x="745" y="309.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">BLOCK · 0 ms</text>
+<line x1="310" y1="422" x2="310" y2="442" stroke="var(--jv-border, #c3c2b7)" stroke-width="1.5"/>
+<polygon points="310,450 305.8,442 314.2,442" fill="var(--jv-border, #c3c2b7)"/>
+<text x="318" y="440" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="start" font-weight="600">no</text>
+<rect x="120" y="364" width="380" height="58" rx="12" fill="var(--jv-panel, #f2f1ee)" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="140" y="389" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Provably read-only?</text>
+<text x="140" y="408" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start" opacity="1">ls  ·  cat  ·  git log  ·  grep</text>
+<line x1="500" y1="393" x2="610" y2="393" stroke="var(--jv-allow, #0ca30c)" stroke-width="1.5"/>
+<polygon points="618,393 610,397.2 610,388.8" fill="var(--jv-allow, #0ca30c)"/>
+<text x="559" y="386" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-weight="600">yes</text>
+<rect x="620" y="377" width="250" height="32" rx="16" fill="var(--jv-allow, #0ca30c)"/>
+<text x="745" y="397.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">ALLOW · 0 ms</text>
+<line x1="310" y1="510" x2="310" y2="530" stroke="var(--jv-border, #c3c2b7)" stroke-width="1.5"/>
+<polygon points="310,538 305.8,530 314.2,530" fill="var(--jv-border, #c3c2b7)"/>
+<text x="318" y="528" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="start" font-weight="600">a score</text>
+<rect x="120" y="452" width="380" height="58" rx="12" fill="var(--jv-accent, #2a78d6)" stroke="var(--jv-accent, #2a78d6)" stroke-width="1"/>
+<text x="140" y="477" font-size="14" fill="#ffffff" text-anchor="start" font-weight="650">Ask Jev for a danger score</text>
+<text x="140" y="496" font-size="12" fill="#ffffff" text-anchor="start" opacity="0.85">~323 ms average  ·  no key, no answer, no parse</text>
+<line x1="500" y1="481" x2="610" y2="481" stroke="var(--jv-block, #d03b3b)" stroke-width="1.5"/>
+<polygon points="618,481 610,485.2 610,476.8" fill="var(--jv-block, #d03b3b)"/>
+<text x="559" y="474" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-weight="600">on error</text>
+<rect x="620" y="465" width="250" height="32" rx="16" fill="var(--jv-block, #d03b3b)"/>
+<text x="745" y="485.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">BLOCK · fail closed</text>
+<rect x="120" y="540" width="380" height="58" rx="12" fill="none" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="140" y="565" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">The score picks a band</text>
+<text x="140" y="584" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start" opacity="1">one number, 0 to 1, for this exact command</text>
+<line x1="310" y1="598" x2="207" y2="656.1" stroke="var(--jv-block, #d03b3b)" stroke-width="1.5"/>
+<polygon points="200,660 204.9,652.4 209,659.7" fill="var(--jv-block, #d03b3b)"/>
+<rect x="60" y="662" width="280" height="32" rx="16" fill="var(--jv-block, #d03b3b)"/>
+<text x="200" y="682.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">BLOCK</text>
+<text x="200" y="712" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="middle">score ≥ 0.80</text>
+<line x1="310" y1="598" x2="492.4" y2="657.5" stroke="var(--jv-ask, #fab219)" stroke-width="1.5"/>
+<polygon points="500,660 491.1,661.5 493.7,653.5" fill="var(--jv-ask, #fab219)"/>
+<rect x="360" y="662" width="280" height="32" rx="16" fill="var(--jv-ask, #fab219)"/>
+<text x="500" y="682.5" font-size="12.5" fill="#1a1a19" text-anchor="middle" font-weight="700">ASK</text>
+<text x="500" y="712" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="middle">0.35 – 0.80, blocks when unattended</text>
+<line x1="310" y1="598" x2="792.1" y2="659" stroke="var(--jv-allow, #0ca30c)" stroke-width="1.5"/>
+<polygon points="800,660 791.5,663.2 792.6,654.8" fill="var(--jv-allow, #0ca30c)"/>
+<rect x="660" y="662" width="280" height="32" rx="16" fill="var(--jv-allow, #0ca30c)"/>
+<text x="800" y="682.5" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">ALLOW</text>
+<text x="800" y="712" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="middle">score &lt; 0.35</text>
+<text x="40" y="762" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start">No path turns a failure into an allow: an unreachable classifier, a missing key or an unparseable answer all block.</text>
+</svg>

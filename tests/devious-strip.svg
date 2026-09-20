@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 700" width="1020" height="700" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>Two histograms: danger scores for hostile commands and for ordinary work</title>
+<rect width="1020" height="700" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="40" y="46" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Attacks score high. Ordinary work scores low.</text>
+<text x="40" y="70" font-size="13" fill="var(--jv-dim, #52514e)">Two counts of the same thing: how many commands got each danger score. Hostile commands on top, ordinary work below.</text>
+<text x="40" y="90" font-size="13" fill="var(--jv-dim, #52514e)">21 further attacks never got a score, because a local rule stopped them before Jev was called.</text>
+<rect x="40" y="115" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="57" y="124" font-size="12" fill="var(--jv-dim, #52514e)">score blocks the command</text>
+<rect x="244" y="115" width="11" height="11" rx="3" fill="var(--jv-ask, #fab219)"/>
+<text x="261" y="124" font-size="12" fill="var(--jv-dim, #52514e)">score asks you first</text>
+<rect x="420.2" y="115" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
+<text x="437.2" y="124" font-size="12" fill="var(--jv-dim, #52514e)">score lets it run</text>
+<line x1="385.0" y1="190" x2="385.0" y2="602" stroke="var(--jv-border, #c3c2b7)" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="393" y="146" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start" font-weight="620">asks you first, from 0.35</text>
+<line x1="790.0" y1="190" x2="790.0" y2="602" stroke="var(--jv-border, #c3c2b7)" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="798" y="146" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start" font-weight="620">blocked, from 0.80</text>
+<text x="70" y="160" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">68 hostile commands</text>
+<text x="70" y="179" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">written to get past a classifier</text>
+<rect x="70.0" y="200.0" width="315.0" height="190" fill="var(--jv-allow, #0ca30c)" opacity="0.05"/>
+<rect x="385.0" y="200.0" width="405.0" height="190" fill="var(--jv-ask, #fab219)" opacity="0.05"/>
+<rect x="790.0" y="200.0" width="180.0" height="190" fill="var(--jv-block, #d03b3b)" opacity="0.05"/>
+<line x1="70" y1="342.5" x2="970.0" y2="342.5" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="70" y1="295.0" x2="970.0" y2="295.0" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="70" y1="247.5" x2="970.0" y2="247.5" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="70" y1="200.0" x2="970.0" y2="200.0" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<text x="60" y="394" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">0</text>
+<text x="60" y="346.5" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">10</text>
+<text x="60" y="299" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">20</text>
+<text x="60" y="251.5" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">30</text>
+<text x="60" y="204" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">40</text>
+<line x1="70" y1="390" x2="970" y2="390" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<g class="mark-g"><title>1 command scored 0.15 to 0.20</title><path class="mark" d="M216.9,385.3H238.1A2.4,2.4 0 0 1 240.5,387.6V390H214.5V387.6A2.4,2.4 0 0 1 216.9,385.3Z" fill="var(--jv-allow, #0ca30c)"/></g>
+<g class="mark-g"><title>2 commands scored 0.25 to 0.30</title><path class="mark" d="M308.5,380.5H326.5A4,4 0 0 1 330.5,384.5V390H304.5V384.5A4,4 0 0 1 308.5,380.5Z" fill="var(--jv-allow, #0ca30c)"/></g>
+<g class="mark-g"><title>1 command scored 0.35 to 0.40</title><path class="mark" d="M396.9,385.3H418.1A2.4,2.4 0 0 1 420.5,387.6V390H394.5V387.6A2.4,2.4 0 0 1 396.9,385.3Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>1 command scored 0.40 to 0.45</title><path class="mark" d="M441.9,385.3H463.1A2.4,2.4 0 0 1 465.5,387.6V390H439.5V387.6A2.4,2.4 0 0 1 441.9,385.3Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>1 command scored 0.45 to 0.50</title><path class="mark" d="M486.9,385.3H508.1A2.4,2.4 0 0 1 510.5,387.6V390H484.5V387.6A2.4,2.4 0 0 1 486.9,385.3Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>1 command scored 0.50 to 0.55</title><path class="mark" d="M531.9,385.3H553.1A2.4,2.4 0 0 1 555.5,387.6V390H529.5V387.6A2.4,2.4 0 0 1 531.9,385.3Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>2 commands scored 0.55 to 0.60</title><path class="mark" d="M578.5,380.5H596.5A4,4 0 0 1 600.5,384.5V390H574.5V384.5A4,4 0 0 1 578.5,380.5Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>3 commands scored 0.65 to 0.70</title><path class="mark" d="M668.5,375.8H686.5A4,4 0 0 1 690.5,379.8V390H664.5V379.8A4,4 0 0 1 668.5,375.8Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>4 commands scored 0.80 to 0.85</title><path class="mark" d="M803.5,371H821.5A4,4 0 0 1 825.5,375V390H799.5V375A4,4 0 0 1 803.5,371Z" fill="var(--jv-block, #d03b3b)"/></g>
+<g class="mark-g"><title>6 commands scored 0.85 to 0.90</title><path class="mark" d="M848.5,361.5H866.5A4,4 0 0 1 870.5,365.5V390H844.5V365.5A4,4 0 0 1 848.5,361.5Z" fill="var(--jv-block, #d03b3b)"/></g>
+<g class="mark-g"><title>11 commands scored 0.90 to 0.95</title><path class="mark" d="M893.5,337.8H911.5A4,4 0 0 1 915.5,341.8V390H889.5V341.8A4,4 0 0 1 893.5,337.8Z" fill="var(--jv-block, #d03b3b)"/></g>
+<g class="mark-g"><title>35 commands scored 0.95 to 1.00</title><path class="mark" d="M938.5,223.8H956.5A4,4 0 0 1 960.5,227.8V390H934.5V227.8A4,4 0 0 1 938.5,223.8Z" fill="var(--jv-block, #d03b3b)"/></g>
+<text x="947.5" y="240.8" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">35</text>
+<text x="70" y="472" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">25 ordinary commands</text>
+<text x="70" y="491" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">real work that merely looks alarming</text>
+<rect x="70.0" y="512.0" width="315.0" height="90" fill="var(--jv-allow, #0ca30c)" opacity="0.05"/>
+<rect x="385.0" y="512.0" width="405.0" height="90" fill="var(--jv-ask, #fab219)" opacity="0.05"/>
+<rect x="790.0" y="512.0" width="180.0" height="90" fill="var(--jv-block, #d03b3b)" opacity="0.05"/>
+<line x1="70" y1="579.5" x2="970.0" y2="579.5" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="70" y1="557.0" x2="970.0" y2="557.0" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="70" y1="534.5" x2="970.0" y2="534.5" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="70" y1="512.0" x2="970.0" y2="512.0" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<text x="60" y="606" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">0</text>
+<text x="60" y="583.5" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">1</text>
+<text x="60" y="561" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">2</text>
+<text x="60" y="538.5" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">3</text>
+<text x="60" y="516" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end" font-variant-numeric="tabular-nums">4</text>
+<line x1="70" y1="602" x2="970" y2="602" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<g class="mark-g"><title>2 commands scored 0.05 to 0.10</title><path class="mark" d="M128.5,557H146.5A4,4 0 0 1 150.5,561V602H124.5V561A4,4 0 0 1 128.5,557Z" fill="var(--jv-allow, #0ca30c)"/></g>
+<g class="mark-g"><title>4 commands scored 0.10 to 0.15</title><path class="mark" d="M173.5,512H191.5A4,4 0 0 1 195.5,516V602H169.5V516A4,4 0 0 1 173.5,512Z" fill="var(--jv-allow, #0ca30c)"/></g>
+<text x="182.5" y="529" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="700">4</text>
+<g class="mark-g"><title>1 command scored 0.20 to 0.25</title><path class="mark" d="M263.5,579.5H281.5A4,4 0 0 1 285.5,583.5V602H259.5V583.5A4,4 0 0 1 263.5,579.5Z" fill="var(--jv-allow, #0ca30c)"/></g>
+<g class="mark-g"><title>1 command scored 0.25 to 0.30</title><path class="mark" d="M308.5,579.5H326.5A4,4 0 0 1 330.5,583.5V602H304.5V583.5A4,4 0 0 1 308.5,579.5Z" fill="var(--jv-allow, #0ca30c)"/></g>
+<g class="mark-g"><title>3 commands scored 0.30 to 0.35</title><path class="mark" d="M353.5,534.5H371.5A4,4 0 0 1 375.5,538.5V602H349.5V538.5A4,4 0 0 1 353.5,534.5Z" fill="var(--jv-allow, #0ca30c)"/></g>
+<g class="mark-g"><title>2 commands scored 0.35 to 0.40</title><path class="mark" d="M398.5,557H416.5A4,4 0 0 1 420.5,561V602H394.5V561A4,4 0 0 1 398.5,557Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>2 commands scored 0.45 to 0.50</title><path class="mark" d="M488.5,557H506.5A4,4 0 0 1 510.5,561V602H484.5V561A4,4 0 0 1 488.5,557Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>2 commands scored 0.50 to 0.55</title><path class="mark" d="M533.5,557H551.5A4,4 0 0 1 555.5,561V602H529.5V561A4,4 0 0 1 533.5,557Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>3 commands scored 0.55 to 0.60</title><path class="mark" d="M578.5,534.5H596.5A4,4 0 0 1 600.5,538.5V602H574.5V538.5A4,4 0 0 1 578.5,534.5Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>1 command scored 0.60 to 0.65</title><path class="mark" d="M623.5,579.5H641.5A4,4 0 0 1 645.5,583.5V602H619.5V583.5A4,4 0 0 1 623.5,579.5Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>2 commands scored 0.65 to 0.70</title><path class="mark" d="M668.5,557H686.5A4,4 0 0 1 690.5,561V602H664.5V561A4,4 0 0 1 668.5,557Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>1 command scored 0.70 to 0.75</title><path class="mark" d="M713.5,579.5H731.5A4,4 0 0 1 735.5,583.5V602H709.5V583.5A4,4 0 0 1 713.5,579.5Z" fill="var(--jv-ask, #fab219)"/></g>
+<g class="mark-g"><title>1 command scored 0.75 to 0.80</title><path class="mark" d="M758.5,579.5H776.5A4,4 0 0 1 780.5,583.5V602H754.5V583.5A4,4 0 0 1 758.5,579.5Z" fill="var(--jv-ask, #fab219)"/></g>
+<text x="70" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.0</text>
+<text x="160" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.1</text>
+<text x="250" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.2</text>
+<text x="340" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.3</text>
+<text x="430" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.4</text>
+<text x="520" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.5</text>
+<text x="610" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.6</text>
+<text x="700" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.7</text>
+<text x="790" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.8</text>
+<text x="880" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.9</text>
+<text x="970" y="624" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">1.0</text>
+<text x="520" y="650" font-size="12.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">danger score Jev gave the command</text>
+<text x="40" y="678" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start">Nothing hostile scored below 0.10, and nothing ordinary scored above 0.80. The gap between them is where you set your thresholds.</text>
+</svg>
