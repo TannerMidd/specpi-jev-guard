@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 672" width="1020" height="672" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>What the guard did with every call it judged during the run</title>
+<rect width="1020" height="672" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="40" y="46" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Every call the guard judged, and what it did</text>
+<text x="40" y="70" font-size="13" fill="var(--jv-dim, #52514e)">16 decisions recorded across the run, read from the audit entries the extension writes into the session.</text>
+<text x="40" y="90" font-size="13" fill="var(--jv-dim, #52514e)">One bar per outcome. Red refused the call, amber stopped to ask, green let it run.</text>
+<line x1="470" y1="150" x2="470" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="580" y1="150" x2="580" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="690" y1="150" x2="690" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="800" y1="150" x2="800" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="910" y1="150" x2="910" y2="592" stroke="var(--jv-grid, #e1e0d9)" stroke-width="1"/>
+<line x1="360" y1="592" x2="910" y2="592" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="342" y="171" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Refused by a local rule</text>
+<text x="342" y="188" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">hard-deny or your own list, 0 ms, no network</text>
+<g class="mark-g"><title>4 calls: refused by a local rule</title><path class="mark" d="M360,160H796A4,4 0 0 1 800,164V180A4,4 0 0 1 796,184H360V160Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="790" y="177" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">4</text>
+<text x="342" y="227" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Refused by the classifier</text>
+<text x="342" y="244" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">scored at or above the block threshold</text>
+<g class="mark-g"><title>1 call: refused by the classifier</title><path class="mark" d="M360,216H466A4,4 0 0 1 470,220V236A4,4 0 0 1 466,240H360V216Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="460" y="233" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">1</text>
+<text x="342" y="283" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Asked, and the answer was no</text>
+<text x="342" y="300" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">middle band, confirmation declined</text>
+<g class="mark-g"><title>1 call: asked, and the answer was no</title><path class="mark" d="M360,272H466A4,4 0 0 1 470,276V292A4,4 0 0 1 466,296H360V272Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="460" y="289" font-size="13" fill="#1a1a19" text-anchor="end" font-weight="700">1</text>
+<text x="342" y="339" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Asked, and the answer was yes</text>
+<text x="342" y="356" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">middle band, confirmation given, call ran</text>
+<g class="mark-g"><title>1 call: asked, and the answer was yes</title><path class="mark" d="M360,328H466A4,4 0 0 1 470,332V348A4,4 0 0 1 466,352H360V328Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="460" y="345" font-size="13" fill="#1a1a19" text-anchor="end" font-weight="700">1</text>
+<text x="342" y="395" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Allowed after judging</text>
+<text x="342" y="412" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">scored below the ask threshold</text>
+<g class="mark-g"><title>5 calls: allowed after judging</title><path class="mark" d="M360,384H906A4,4 0 0 1 910,388V404A4,4 0 0 1 906,408H360V384Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="900" y="401" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">5</text>
+<text x="342" y="451" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Allowed by your own list</text>
+<text x="342" y="468" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">allowedCommands, recorded but not judged</text>
+<g class="mark-g"><title>1 call: allowed by your own list</title><path class="mark" d="M360,440H466A4,4 0 0 1 470,444V460A4,4 0 0 1 466,464H360V440Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="460" y="457" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">1</text>
+<text x="342" y="507" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Refused: no classifier key</text>
+<text x="342" y="524" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">fails closed rather than running unvouched</text>
+<g class="mark-g"><title>1 call: refused: no classifier key</title><path class="mark" d="M360,496H466A4,4 0 0 1 470,500V516A4,4 0 0 1 466,520H360V496Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="460" y="513" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">1</text>
+<text x="342" y="563" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Refused: classifier unreachable</text>
+<text x="342" y="580" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="end">network error or timeout, fails closed</text>
+<g class="mark-g"><title>2 calls: refused: classifier unreachable</title><path class="mark" d="M360,552H576A4,4 0 0 1 580,556V572A4,4 0 0 1 576,576H360V552Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="570" y="569" font-size="13" fill="#ffffff" text-anchor="end" font-weight="700">2</text>
+<text x="360" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0</text>
+<text x="470" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">1</text>
+<text x="580" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">2</text>
+<text x="690" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">3</text>
+<text x="800" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">4</text>
+<text x="910" y="614" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">5</text>
+<text x="40" y="650" font-size="12.5" fill="var(--jv-muted, #898781)" text-anchor="start">A call the guard never saw is not counted here: read-only commands and ordinary project files never reach it.</text>
+</svg>

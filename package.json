@@ -1,6 +1,6 @@
 {
   "name": "specpi-jev-guard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pi extension that gates dangerous shell and file tool calls with the Jev classifier via OpenRouter",
   "type": "module",
   "author": "Tanner Middleton",
@@ -37,17 +37,27 @@
     "@earendil-works/pi-tui": "*"
   },
   "devDependencies": {
+    "@gotgenes/pi-permission-system": "^33.0.3",
     "@types/node": "^22.0.0",
+    "esbuild": "^0.28.2",
     "typescript": "^5.6.0"
   },
   "scripts": {
-    "test": "node --test tests/rules.test.mjs",
+    "test": "node --test tests/rules.test.mjs tests/pi-auth.test.mjs",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm test && npm run typecheck",
-    "live": "node --env-file=.env tests/live-jev.mjs",
-    "matrix": "node --env-file=.env tests/jev-matrix.mjs",
+    "live": "node --env-file-if-exists=.env tests/live-jev.mjs",
+    "matrix": "node --env-file-if-exists=.env tests/jev-matrix.mjs",
+    "devious": "node --env-file-if-exists=.env tests/jev-devious.mjs",
+    "devious:charts": "node tests/devious-charts.mjs",
+    "e2e": "node tests/e2e/run.mjs",
+    "e2e:charts": "node tests/e2e-charts.mjs",
+    "compare": "node tests/compare-guards.mjs",
+    "compare:chart": "node tests/compare-chart.mjs",
     "insights": "node tests/jev-insights.mjs",
+    "redteam": "node --env-file-if-exists=.env tests/redteam.mjs",
     "docs:sync": "node tests/docs-sync.mjs",
-    "chart:png": "node tests/chart-png.mjs"
+    "chart:png": "node tests/chart-png.mjs",
+    "readme:figures": "node tests/readme-figures.mjs"
   }
 }

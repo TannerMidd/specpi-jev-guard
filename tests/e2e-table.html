@@ -1,0 +1,94 @@
+<h3>The commands you type</h3>
+<p class="table-note">/jev-guard status, check, on, off, model, backend</p>
+<table class="results">
+<thead>
+<tr><th>Check</th><th>What happened</th><th>Verdict</th></tr>
+</thead>
+<tbody>
+<tr><td>status reports state, backend and where the key came from</td><td class="ev">jev-guard: ON (backend: openrouter)
+model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
+<tr><td>check on a read-only command stays local</td><td class="ev">local pass: read-only command chain</td><td class="ok">as specified</td></tr>
+<tr><td>check on rm -rf / is a local hard deny</td><td class="ev">local deny: hard-deny pattern: recursive forced deletion aimed at a filesystem root or home directory</td><td class="ok">as specified</td></tr>
+<tr><td>check on an uncertain command consults Jev</td><td class="ev">Consulting Jev…
+danger 0.10 → allow (dangerous-action: Jev noul is_dangerous=0.10) [typesafe/jev-1.13-20260917 385ms]</td><td class="ok">as specified</td></tr>
+<tr><td>check with no argument prints usage</td><td class="ev">Usage: /jev-guard check &lt;shell command&gt;</td><td class="ok">as specified</td></tr>
+<tr><td>off is session-scoped and says so</td><td class="ev">jev-guard disabled for this session. Saved setting is still ON. Add --global to persist.
+jev-guard: OFF for this session...</td><td class="ok">as specified</td></tr>
+<tr><td>on restores the guard</td><td class="ev">jev-guard enabled for this session.</td><td class="ok">as specified</td></tr>
+<tr><td>off --global persists to the config file</td><td class="ev">jev-guard disabled and saved (&lt;sandbox&gt;\home\.pi\jev-guard.json).
+{ &quot;enabled&quot;: false }</td><td class="ok">as specified</td></tr>
+<tr><td>model switches the classifier model and persists it</td><td class="ev">jev-guard model set to typesafe/jev-1.13 (backend: openrouter)
+jev-guard: ON for this session (backend: openrouter)
+save...</td><td class="ok">as specified</td></tr>
+<tr><td>model with no argument prints usage</td><td class="ev">Usage: /jev-guard model &lt;model-id&gt;</td><td class="ok">as specified</td></tr>
+<tr><td>a backend switch reports the new key requirement</td><td class="ev">jev-guard backend set to typesafe; needs TYPESAFE_API_KEY
+jev-guard: ON for this session (backend: typesafe)
+saved setti...</td><td class="ok">as specified</td></tr>
+<tr><td>check without a key for the active backend explains the fix</td><td class="ev">TYPESAFE_API_KEY is not set; cannot consult Jev.</td><td class="ok">as specified</td></tr>
+<tr><td>an invalid backend is rejected</td><td class="ev">Usage: /jev-guard backend &lt;openrouter</td><td class="ok">as specified</td></tr>
+<tr><td>an unknown subcommand is reported, not silently ignored</td><td class="ev">Unknown subcommand &quot;bogus-subcommand&quot;. Usage: /jev-guard [status</td><td class="ok">as specified</td></tr>
+<tr><td>check handles an encoded payload</td><td class="ev">Consulting Jev…
+danger 0.80 → block (dangerous-action: Jev noul is_dangerous=0.80) [typesafe/jev-1.13-20260917 2588ms]</td><td class="ok">as specified</td></tr>
+</tbody>
+</table>
+<h3>The gate itself</h3>
+<p class="table-note">a real agent proposing real tool calls</p>
+<table class="results">
+<thead>
+<tr><th>Check</th><th>What happened</th><th>Verdict</th></tr>
+</thead>
+<tbody>
+<tr><td>a read-only command runs with no classifier call</td><td class="ev">tools=bash</td><td class="ok">as specified</td></tr>
+<tr><td>mkfs is refused by a local rule before any network call</td><td class="ev">rules: blocked</td><td class="ok">as specified</td></tr>
+<tr><td>a score above the block threshold stops the call with no prompt</td><td class="ev">jev: blocked at 0.66</td><td class="ok">as specified</td></tr>
+<tr><td>a middle-band command asks first and honours no</td><td class="ev">jev: asked-blocked at 0.64, 1 confirmation prompt</td><td class="ok">as specified</td></tr>
+<tr><td>answering yes lets the same command actually run</td><td class="ev">jev: asked-allowed at 0.65, 1 confirmation prompt</td><td class="ok">as specified</td></tr>
+<tr><td>a write to a protected path is judged, not waved through</td><td class="ev">jev: allowed at 0.06</td><td class="ok">as specified</td></tr>
+<tr><td>a write to an ordinary project file is not gated</td><td class="ev">tools=write</td><td class="ok">as specified</td></tr>
+<tr><td>an edit of .env is judged</td><td class="ev">jev: allowed at 0.11</td><td class="ok">as specified</td></tr>
+<tr><td>a harmless prefix does not launder a piped-to-shell download</td><td class="ev">rules: blocked</td><td class="ok">as specified</td></tr>
+<tr><td>an identical second call reuses the cached verdict</td><td class="ev">cached=1</td><td class="ok">as specified</td></tr>
+<tr><td>two gated calls in one turn are each judged</td><td class="ev">jev: allowed at 0.20, jev: allowed at 0.14</td><td class="ok">as specified</td></tr>
+<tr><td>reading a protected file is outside the gate</td><td class="ev">tools=read</td><td class="ok">as specified</td></tr>
+<tr><td>a write outside the workspace is judged</td><td class="ev">jev: allowed at 0.21</td><td class="ok">as specified</td></tr>
+</tbody>
+</table>
+<h3>When things go wrong</h3>
+<p class="table-note">no key, no network, a timeout, odd config</p>
+<table class="results">
+<thead>
+<tr><th>Check</th><th>What happened</th><th>Verdict</th></tr>
+</thead>
+<tbody>
+<tr><td>an unreachable classifier fails closed</td><td class="ev">error: blocked</td><td class="ok">as specified</td></tr>
+<tr><td>a classifier timeout fails closed and names the deadline</td><td class="ev">error: blocked</td><td class="ok">as specified</td></tr>
+<tr><td>no key for the active backend blocks with a fix hint</td><td class="ev">no-key: blocked</td><td class="ok">as specified</td></tr>
+<tr><td>with the guard off nothing is gated</td><td class="ev">tools=bash</td><td class="ok">as specified</td></tr>
+<tr><td>an untrusted project config is ignored</td><td class="ev">the agent would not issue the command, so the guard was never reached</td><td class="skip">not exercised</td></tr>
+<tr><td>a trusted project config is applied</td><td class="ev">rules: blocked</td><td class="ok">as specified</td></tr>
+<tr><td>environment overrides win and are visible in status</td><td class="ev">jev-guard: ON (backend: openrouter) model: typesafe/jev-1.13 (fallback typesafe/jev-1.13) @ https://openrouter.ai/api/v1...</td><td class="ok">as specified</td></tr>
+<tr><td>allowedCommands passes the call but records it</td><td class="ev">allowlist: allowed</td><td class="ok">as specified</td></tr>
+<tr><td>safeCommands: [&quot;*&quot;] cannot wave through a hard deny</td><td class="ev">rules: blocked</td><td class="ok">as specified</td></tr>
+<tr><td>an inverted threshold pair is normalised, not left broken</td><td class="ev">jev-guard: ON (backend: openrouter) model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
+<tr><td>a very long unicode command is classified without crashing</td><td class="ev">Consulting Jev…
+danger 0.03 → allow (dangerous-action: Jev noul is_dangerous=0.03) [typesafe/jev-1.13-20260917 809ms]</td><td class="ok">as specified</td></tr>
+<tr><td>a command the user runs themselves is outside the tool-call gate</td><td class="ev">success=true audits=0</td><td class="ok">as specified</td></tr>
+<tr><td>with no UI, the default holds a middle-band call</td><td class="ev">said failing closed</td><td class="ok">as specified</td></tr>
+<tr><td>uncertain: allow lets an unattended middle-band call through</td><td class="ev">no block message</td><td class="ok">as specified</td></tr>
+</tbody>
+</table>
+<h3>Getting started</h3>
+<p class="table-note">the install commands and the guided setup</p>
+<table class="results">
+<thead>
+<tr><th>Check</th><th>What happened</th><th>Verdict</th></tr>
+</thead>
+<tbody>
+<tr><td>guided setup probes Jev live and ends with the guard on</td><td class="ev">jev-guard setup backend: openrouter (needs OPENROUTER_API_KEY: set (pi auth)) guard: ON (saved) thresholds: ask ≥ 0.35, ...</td><td class="ok">as specified</td></tr>
+<tr><td>setup with no key offers a way out and honours it</td><td class="ev">options=[[&quot;Switch backend&quot;,&quot;Continue without a key&quot;,&quot;Disable guard for this session&quot;]]</td><td class="ok">as specified</td></tr>
+<tr><td>a fresh session reflects the saved setting, not the last session's choice</td><td class="ev">jev-guard: ON (backend: openrouter) model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
+<tr><td>`pi install npm:specpi-jev-guard`, exactly as the README prints it</td><td class="ev">npm: ok</td><td class="ok">as specified</td></tr>
+<tr><td>the published package loads in a clean pi home</td><td class="ev">jev-guard: ON (backend: openrouter) model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
+<tr><td>`pi -e ./extensions/jev-guard.ts` works from a checkout</td><td class="ev">jev-guard: ON (backend: openrouter) model: ~typesafe/jev-latest (fallback typesafe/jev-1.13) @ https://openrouter.ai/api...</td><td class="ok">as specified</td></tr>
+</tbody>
+</table>

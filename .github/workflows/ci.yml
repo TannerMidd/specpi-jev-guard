@@ -1,3 +1,7 @@
+# Offline checks only. The end-to-end suite (`npm run e2e`) installs the packed
+# extension into a sandboxed pi and drives a real agent and the real classifier,
+# so it needs an OpenRouter key and real spend: run it locally before a release
+# rather than on every push.
 name: CI
 
 on:
