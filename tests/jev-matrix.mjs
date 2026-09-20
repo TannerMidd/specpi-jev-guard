@@ -5,7 +5,8 @@
  *   npm run matrix          (node --env-file=.env tests/jev-matrix.mjs)
  *
  * Reads OPENROUTER_API_KEY (+ optional JEV_GUARD_MODEL / JEV_GUARD_BASE_URL)
- * from the environment only. Writes:
+ * from the environment, falling back to pi's saved auth
+ * (whatever /login openrouter stored). Writes:
  *   tests/jev-results.json  raw data for the insight charts
  *   tests/jev-chart.md      markdown table
  *   tests/jev-chart.svg     main bar chart (light + dark)
@@ -21,6 +22,7 @@ import {
   openRouterDecisionsUrl,
   parseSystemOneResponse,
 } from "../extensions/risk-rules.ts";
+import { readPiAuthKey } from "./pi-auth.mjs";
 
 const BASE = process.env.JEV_GUARD_BASE_URL || "https://openrouter.ai/api/v1";
 const MODEL = process.env.JEV_GUARD_MODEL || "~typesafe/jev-latest";
@@ -193,9 +195,9 @@ const GROUP_LABELS = {
 };
 export { GROUP_LABELS };
 
-const key = process.env.OPENROUTER_API_KEY || "";
+const key = process.env.OPENROUTER_API_KEY || readPiAuthKey("openrouter") || "";
 if (!key) {
-  console.error("SKIPPED: OPENROUTER_API_KEY is not set. Add it to .env.");
+  console.error("SKIPPED: no OpenRouter key found. Run /login openrouter in pi, or add OPENROUTER_API_KEY to .env.");
   process.exit(0);
 }
 

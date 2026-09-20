@@ -2,19 +2,22 @@
  * live-jev.mjs — probe Jev with the repo's real payload, on either backend.
  *
  * Usage:
- *   1. cp .env.example .env   (then put your key in .env)
+ *   1. Sign in with /login openrouter in pi, or cp .env.example .env and put
+ *      your key there.
  *   2. npm run live                              # OpenRouter backend
  *      npm run live -- --backend typesafe        # TypeSafe direct backend
  *   3. Optionally append fixture commands:
- *      node --env-file=.env tests/live-jev.mjs "rm -rf /" "ls -la"
+ *      npm run live -- "rm -rf /" "ls -la"
  *
- * Keys are read from the environment only and are never printed.
+ * Keys are read from the environment first, then pi's saved auth
+ * (whatever /login openrouter stored), and are never printed.
  */
 import {
   buildSystemOneBody,
   openRouterDecisionsUrl,
   parseSystemOneResponse,
 } from "../extensions/risk-rules.ts";
+import { readPiAuthKey } from "./pi-auth.mjs";
 
 const args = process.argv.slice(2);
 let backend = "openrouter";
@@ -51,10 +54,22 @@ function fail(msg) {
   process.exit(1);
 }
 
+function describeError(err) {
+  const reason = err instanceof Error ? (err.cause?.message ?? err.message) : String(err);
+  return reason || "unknown error";
+}
+
 async function checkOpenRouter() {
-  const res = await fetch(`${OPENROUTER_BASE}/model/${OPENROUTER_MODEL}`, {
-    headers: { "User-Agent": "specpi-jev-guard" },
-  });
+  let res;
+  try {
+    res = await fetch(`${OPENROUTER_BASE}/model/${OPENROUTER_MODEL}`, {
+      headers: { "User-Agent": "specpi-jev-guard" },
+      signal: AbortSignal.timeout(30000),
+    });
+  } catch (err) {
+    console.log(`model lookup: ${OPENROUTER_MODEL} -> unreachable (${describeError(err)})`);
+    return false;
+  }
   const data = await res.json().catch(() => ({}));
   const d = data.data || {};
   console.log(`model lookup: ${OPENROUTER_MODEL} -> HTTP ${res.status}`);
@@ -64,7 +79,16 @@ async function checkOpenRouter() {
 }
 
 async function checkTypesafe(key) {
-  const res = await fetch(`${TYPESAFE_BASE}/models`, { headers: { Authorization: "Bearer " + key } });
+  let res;
+  try {
+    res = await fetch(`${TYPESAFE_BASE}/models`, {
+      headers: { Authorization: "Bearer " + key },
+      signal: AbortSignal.timeout(30000),
+    });
+  } catch (err) {
+    console.log(`model list: ${TYPESAFE_BASE}/models -> unreachable (${describeError(err)})`);
+    return false;
+  }
   const data = await res.json().catch(() => ({}));
   console.log(`model list: ${TYPESAFE_BASE}/models -> HTTP ${res.status}`);
   const models = Array.isArray(data.models) ? data.models.map((m) => m.name).join(", ") : "";
@@ -74,43 +98,57 @@ async function checkTypesafe(key) {
 
 async function classifyOpenRouter(key, command) {
   const started = Date.now();
-  const res = await fetch(openRouterDecisionsUrl(OPENROUTER_BASE), {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + key, // never logged
-      "Content-Type": "application/json",
-      "HTTP-Referer": "https://pi.dev",
-      "X-Title": "specpi-jev-guard live probe",
-    },
-    body: buildSystemOneBody(OPENROUTER_MODEL, { kind: "bash", subject: command, cwd: process.cwd(), userPrompt: "" }),
-    signal: AbortSignal.timeout(30000),
-  });
-  const latencyMs = Date.now() - started;
-  const text = await res.text();
-  const parsed = parseSystemOneResponse(res.status, text);
-  if (!parsed.ok) return { command, ok: false, latencyMs, error: parsed.error };
-  return { command, ok: true, latencyMs, servedBy: parsed.model, content: JSON.stringify(parsed.verdict), verdict: parsed.verdict };
+  try {
+    const res = await fetch(openRouterDecisionsUrl(OPENROUTER_BASE), {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + key, // never logged
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://pi.dev",
+        "X-Title": "specpi-jev-guard live probe",
+      },
+      body: buildSystemOneBody(OPENROUTER_MODEL, { kind: "bash", subject: command, cwd: process.cwd(), userPrompt: "" }),
+      signal: AbortSignal.timeout(30000),
+    });
+    const latencyMs = Date.now() - started;
+    const text = await res.text();
+    const parsed = parseSystemOneResponse(res.status, text);
+    if (!parsed.ok) return { command, ok: false, latencyMs, error: parsed.error };
+    return { command, ok: true, latencyMs, servedBy: parsed.model, content: JSON.stringify(parsed.verdict), verdict: parsed.verdict };
+  } catch (err) {
+    return { command, ok: false, latencyMs: Date.now() - started, error: describeError(err) };
+  }
 }
 
 async function classifyTypesafe(key, command) {
   const started = Date.now();
-  const res = await fetch(`${TYPESAFE_BASE}/systemone`, {
-    method: "POST",
-    headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
-    body: buildSystemOneBody(TYPESAFE_MODEL, { kind: "bash", subject: command, cwd: process.cwd(), userPrompt: "" }),
-    signal: AbortSignal.timeout(30000),
-  });
-  const latencyMs = Date.now() - started;
-  const text = await res.text();
-  const parsed = parseSystemOneResponse(res.status, text);
-  if (!parsed.ok) return { command, ok: false, latencyMs, error: parsed.error };
-  return { command, ok: true, latencyMs, servedBy: parsed.model, content: JSON.stringify(parsed.verdict), verdict: parsed.verdict };
+  try {
+    const res = await fetch(`${TYPESAFE_BASE}/systemone`, {
+      method: "POST",
+      headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
+      body: buildSystemOneBody(TYPESAFE_MODEL, { kind: "bash", subject: command, cwd: process.cwd(), userPrompt: "" }),
+      signal: AbortSignal.timeout(30000),
+    });
+    const latencyMs = Date.now() - started;
+    const text = await res.text();
+    const parsed = parseSystemOneResponse(res.status, text);
+    if (!parsed.ok) return { command, ok: false, latencyMs, error: parsed.error };
+    return { command, ok: true, latencyMs, servedBy: parsed.model, content: JSON.stringify(parsed.verdict), verdict: parsed.verdict };
+  } catch (err) {
+    return { command, ok: false, latencyMs: Date.now() - started, error: describeError(err) };
+  }
 }
 
 const keyName = backend === "typesafe" ? "TYPESAFE_API_KEY" : "OPENROUTER_API_KEY";
-const key = process.env[keyName] || "";
+const keyProvider = backend === "typesafe" ? "typesafe" : "openrouter";
+
+const key = process.env[keyName] || readPiAuthKey(keyProvider) || "";
 if (!key) {
-  console.log(`SKIPPED: ${keyName} is not set (backend: ${backend}). Add it to .env to probe this backend.`);
+  const hint =
+    backend === "typesafe"
+      ? `Add ${keyName} to .env to probe this backend.`
+      : `Run /login openrouter in pi, or add ${keyName} to .env.`;
+  console.log(`SKIPPED: no ${backend} key found. ${hint}`);
   process.exit(0);
 }
 
