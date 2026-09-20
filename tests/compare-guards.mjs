@@ -3,9 +3,10 @@
  * permission extension, @gotgenes/pi-permission-system, and against this one.
  *
  * Same 114 command strings, same question: what would each guard have done?
- * No command is executed here, exactly as in jev-devious.mjs. Our side is read
- * from the recorded run (tests/jev-devious.json) so this script needs no key
- * and no network; their side is computed live by calling their own gates.
+ * No command is executed here, exactly as in jev-devious.mjs. The jev-guard
+ * side is read from the recorded run (tests/jev-devious.json) so this script
+ * needs no key and no network; the other guard is computed live by calling its
+ * own gates.
  *
  *   npm run compare     # -> tests/compare-results.json
  *

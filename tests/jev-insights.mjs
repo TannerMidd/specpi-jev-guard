@@ -211,7 +211,7 @@ function renderExpectations() {
   let s = svgOpen(W, H);
   s += title(24, 34, "Where the model disagreed with intuition");
   s += subtitle(24, 58, `${vars.length} of ${meta.total} commands landed in a different band than expected. These are the calibration targets, not errors.`);
-  s += subtitle(24, 78, "Each row shows the band we predicted against the band Jev produced. Use them to sanity-check thresholds.");
+  s += subtitle(24, 78, "Each row shows the predicted band against the band Jev produced. Use them to sanity-check thresholds.");
 
   vars.forEach((r, i) => {
     const y = T + i * RH;

@@ -17,7 +17,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/TannerMidd/specpi-jev-guard/main/docs/assets/terminal-dark.png">
-  <img src="https://raw.githubusercontent.com/TannerMidd/specpi-jev-guard/main/docs/assets/terminal.png" width="860" alt="Three commands: rm -rf / is blocked by a local rule, rm -rf dist build scores 0.51 and asks first, npm test runs with no prompt.">
+  <img src="https://raw.githubusercontent.com/TannerMidd/specpi-jev-guard/main/docs/assets/terminal.png" width="860" alt="Three commands: rm -rf / is blocked by a local rule, rm -rf dist build scores 0.55 and asks first, npm test runs with no prompt.">
 </picture>
 
 </div>
@@ -131,13 +131,15 @@ thresholds in the gap between the two groups.
 1. **Local rules, no network call. Jev cannot overrule these.**
    - Hard deny: root and home wipes, fork bombs, `mkfs`, raw disk writes,
      `chmod -R` on `/`, `curl ... | sh`, drive wipes.
-   - Fast pass: read-only commands and chains (`ls`, `cat`, `git log`,
-     `git diff`). A read-only binary used destructively is escalated instead:
-     `find -delete`, `find -exec`, `git branch -D`, `git branch -f`,
-     `git tag -d`, `git remote add`, `git stash drop`, `sort -o`, `uniq IN OUT`,
-     `fd -x`, `rg --pre`, `git diff --output`, `tree -o`, `hg --config`, and a
-     background `&`. Long-option abbreviations (`git tag --del`, `sort --out`)
-     escalate like the full spelling.
+   - Fast pass: 24 binaries whose whole option surface is a read (`ls`, `cat`,
+     `grep`, `stat`, `du`, `ps`), plus `git`, `rg`, `fd` and `find`, whose
+     read-only flags are named one at a time. Everything else escalates,
+     including a flag nobody has heard of: an option that is not on the list is
+     a reason to ask Jev, not to wave the call through. So `git log --oneline`
+     and `rg -n TODO src` run for free while `find -delete`, `git branch -D`,
+     `git diff --output=...`, `fd -x`, `rg --pre` and a background `&` go to
+     the classifier. Long-option abbreviations (`git tag --del`) are resolved
+     for the tools that accept them, and only those.
    - Your lists: `disallowedCommands` block, `safeCommands` pass silently,
      `allowedCommands` pass and leave an audit entry.
 2. **Jev scores what is left**, 0 to 1.
