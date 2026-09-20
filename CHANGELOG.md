@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.4.0 (2026-09-20)
+
+### Changed
+
+- **A judged call no longer marks the transcript at all.** Every gated call
+  used to append a padded, coloured box, so the guard's routine traffic was the
+  loudest thing on screen and the conversation it protects scrolled away under
+  it. A gated session now reads like an ungated one: the record goes to the
+  session file and to one line in the footer, and nowhere else.
+
+  Set `"auditDisplay": "transcript"` to put a mark back under each judged call.
+  It is a dim `jev 0.02` now rather than a box, a block is drawn in the error
+  colour and names itself, a call you were asked about says who decided, and
+  expanding it still gives the command, the category, the model and the
+  latency.
+
+### Added
+
+- **A counter in pi's footer: `jev 12`, and `jev 12 · 1 blocked` once the guard
+  has stopped something, and the latest verdict after that.** It is what makes
+  a quiet transcript readable rather than uninformative: the records can move
+  out of the way without the guard going silent. The count comes from the
+  session's own records, so a resumed session keeps its total, and the line
+  goes away while the guard is off.
+
+- **`auditDisplay` decides where a record shows: `status`, `transcript`, or
+  `off`.** `status` is the default described above. `off` drops the footer line
+  too, for a session that should look untouched. Every mode still writes every
+  record to the session file, so the audit trail does not move, and blocks stay
+  loud in all three: they raise a notification and their reason goes back to
+  the model.
+
+  Set it in `~/.pi/jev-guard.json` or a trusted project file, or run
+  `/jev-guard audit <status|transcript|off>` to save it. `/jev-guard status`
+  reports the current mode.
+
+  Thanks to @toorop for the report and the design (#5).
+
+### Fixed
+
+- **A settings file with a UTF-8 BOM is no longer ignored in full.** Notepad
+  and PowerShell's `Set-Content` both write one, `JSON.parse` throws on it, and
+  the read falls back to defaults without a word, so every setting in the file
+  went missing at once. Found while screenshotting the new modes: the settings
+  file written by PowerShell had no effect at all.
+
 ## 0.3.0 (2026-09-20)
 
 ### Changed

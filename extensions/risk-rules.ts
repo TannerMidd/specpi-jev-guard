@@ -12,6 +12,17 @@ export type UncertainPolicy = "allow" | "ask" | "deny";
 /** Which API the classifier is reached through. */
 export type Backend = "openrouter" | "typesafe";
 
+/**
+ * Where each audit record is shown.
+ *
+ * The default is `status`: the footer keeps the count and the latest verdict,
+ * and the transcript is left alone. A line per judged call is a line per
+ * judged call, and in a working session that is most of the screen. `off`
+ * drops the footer line too; `transcript` puts a line back under each call for
+ * anyone who wants to watch the guard work.
+ */
+export type AuditDisplay = "transcript" | "status" | "off";
+
 export interface GuardSettings {
   enabled: boolean;
   /** Classifier backend: OpenRouter decisions API or TypeSafe direct API. */
@@ -34,6 +45,8 @@ export interface GuardSettings {
   askThreshold: number;
   /** Behavior for the middle band when there is no UI to ask. */
   uncertain: UncertainPolicy;
+  /** Where audit records are shown. Every mode still writes them to the session file. */
+  auditDisplay: AuditDisplay;
   /** Glob list (matched against the raw command) that passes with no API call and no audit. */
   safeCommands: string[];
   /** Glob list that passes but records an audit entry. */
@@ -56,6 +69,7 @@ export const DEFAULT_SETTINGS: GuardSettings = {
   askThreshold: 0.35,
   blockThreshold: 0.8,
   uncertain: "ask",
+  auditDisplay: "status",
   safeCommands: [],
   allowedCommands: [],
   disallowedCommands: [],
@@ -874,6 +888,111 @@ export function resolveEnabled(
 ): { enabled: boolean; source: "session" | "saved" } {
   if (sessionOverride !== undefined) return { enabled: sessionOverride, source: "session" };
   return { enabled: savedEnabled, source: "saved" };
+}
+
+/** A transcript line for one audit record: what it says, and the theme colour
+ *  it is drawn in. */
+export interface AuditLine {
+  text: string;
+  tone: "dim" | "warning" | "error";
+}
+
+/** Where a decision came from, in the few words the transcript line can spare. */
+function sourceNote(source: string | undefined): string {
+  switch (source) {
+    case "rules":
+      return "rules";
+    case "allowlist":
+      return "allowlist";
+    case "no-key":
+      return "no key";
+    case "error":
+      return "classifier error";
+    default:
+      return "";
+  }
+}
+
+/**
+ * The transcript line for one record.
+ *
+ * It sits directly under the call it judged, so it repeats none of it: the
+ * mark, the score, and the decision only where the decision was not a plain
+ * allow. The routine verdict is the common case, and the common case is the
+ * one that must not crowd out the conversation, so it gets one dim line and no
+ * box. A decision with no score always names itself, because "jev" alone says
+ * nothing about what happened.
+ */
+export function formatAuditLine(record: AuditStatusInput & { source?: string }): AuditLine {
+  const danger = record.danger;
+  const scored = typeof danger === "number" && Number.isFinite(danger);
+  const score = scored ? ` ${danger.toFixed(2)}` : "";
+  const note = sourceNote(record.source);
+  const tail = note === "" ? "" : ` (${note})`;
+  switch (record.decision) {
+    case "allowed":
+      return { text: scored && note === "" ? `jev${score}` : `jev${score} allowed${tail}`, tone: "dim" };
+    case "asked-allowed":
+      return { text: `jev${score} allowed by you`, tone: "warning" };
+    case "asked-blocked":
+      return { text: `jev${score} blocked by you`, tone: "warning" };
+    default:
+      return { text: `jev${score} blocked${tail}`, tone: "error" };
+  }
+}
+
+/**
+ * Validate an `auditDisplay` value read from a settings file. An unknown value
+ * returns undefined so the layer below keeps standing: a typo in the project
+ * file should not silently reset the mode the user chose globally.
+ */
+export function parseAuditDisplay(value: unknown): AuditDisplay | undefined {
+  return value === "transcript" || value === "status" || value === "off" ? value : undefined;
+}
+
+/** The fields of an audit record the footer line is built from. */
+export interface AuditStatusInput {
+  tool: string;
+  decision: string;
+  danger?: number;
+  model?: string;
+}
+
+/** What the footer says about the guard: how much it has judged this session,
+ *  and, in `status` mode, what it decided last. */
+export interface GuardStatusInput {
+  /** Calls the classifier judged this session. */
+  calls: number;
+  /** Calls the guard stopped, by any route. */
+  blocked: number;
+  /** The most recent decision. Shown in `status` mode only. */
+  latest?: AuditStatusInput;
+}
+
+/**
+ * The guard's one line in pi's footer, e.g. "jev 12 · 1 blocked · bash 0.04".
+ *
+ * The count is always there: it is how a session that shows no records still
+ * shows the guard is awake. The rest appears only when it has something to
+ * say, because the footer is one line shared with every other extension and is
+ * truncated to the terminal width.
+ *
+ * A segment whose field is missing is dropped rather than defaulted. Rule
+ * decisions carry no score, and printing "0.00" for a hard-deny block would
+ * label the most dangerous call the guard ever sees as the safest thing on
+ * screen.
+ */
+export function formatGuardStatus(state: GuardStatusInput): string {
+  const parts = [`jev ${Math.max(0, Math.trunc(state.calls))}`];
+  if (state.blocked > 0) parts.push(`${Math.trunc(state.blocked)} blocked`);
+  const latest = state.latest;
+  if (latest) {
+    const danger = latest.danger;
+    const score = typeof danger === "number" && Number.isFinite(danger) ? ` ${danger.toFixed(2)}` : "";
+    const word = latest.decision === "allowed" ? "" : ` ${latest.decision}`;
+    parts.push(`${latest.tool}${word}${score}`);
+  }
+  return parts.join(" · ");
 }
 
 /**

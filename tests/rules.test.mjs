@@ -8,12 +8,15 @@ import {
   buildSystemOneBody,
   buildSystemOneState,
   classifyCommandLocal,
+  formatAuditLine,
+  formatGuardStatus,
   globToRegExp,
   isProtectedPath,
   matchesAny,
   middleBandWithoutUI,
   normalizeDeleteTarget,
   openRouterDecisionsUrl,
+  parseAuditDisplay,
   parseSystemOneResponse,
   parseVerdict,
   redactSecrets,
@@ -564,5 +567,116 @@ describe("session toggle", () => {
     assert.deepEqual(resolveEnabled(false, undefined), { enabled: false, source: "saved" });
     assert.deepEqual(resolveEnabled(true, false), { enabled: false, source: "session" });
     assert.deepEqual(resolveEnabled(false, true), { enabled: true, source: "session" });
+  });
+});
+
+describe("audit display setting", () => {
+  it("accepts the three modes and nothing else", () => {
+    assert.equal(parseAuditDisplay("transcript"), "transcript");
+    assert.equal(parseAuditDisplay("status"), "status");
+    assert.equal(parseAuditDisplay("off"), "off");
+    assert.equal(parseAuditDisplay("Status"), undefined);
+    assert.equal(parseAuditDisplay("footer"), undefined);
+    assert.equal(parseAuditDisplay(true), undefined);
+    assert.equal(parseAuditDisplay(undefined), undefined);
+  });
+
+  it("ships with the transcript left alone", () => {
+    assert.equal(DEFAULT_SETTINGS.auditDisplay, "status");
+  });
+});
+
+describe("guard footer line", () => {
+  it("always leads with the count, so an empty transcript still shows the guard is awake", () => {
+    assert.equal(formatGuardStatus({ calls: 0, blocked: 0 }), "jev 0");
+    assert.equal(formatGuardStatus({ calls: 12, blocked: 0 }), "jev 12");
+  });
+
+  it("adds what it stopped, only when it stopped something", () => {
+    assert.equal(formatGuardStatus({ calls: 12, blocked: 1 }), "jev 12 · 1 blocked");
+    assert.ok(!formatGuardStatus({ calls: 12, blocked: 0 }).includes("blocked"));
+  });
+
+  it("adds the last verdict when status mode passes one", () => {
+    assert.equal(
+      formatGuardStatus({ calls: 3, blocked: 0, latest: { tool: "bash", decision: "allowed", danger: 0.042 } }),
+      "jev 3 · bash 0.04",
+    );
+    assert.equal(
+      formatGuardStatus({ calls: 3, blocked: 1, latest: { tool: "write", decision: "blocked", danger: 0.91 } }),
+      "jev 3 · 1 blocked · write blocked 0.91",
+    );
+  });
+
+  it("leaves out a score the record does not have, rather than calling it zero", () => {
+    // A rules block is the most dangerous call the guard sees and carries no
+    // score. "0.00" would read as the safest thing on the line.
+    const line = formatGuardStatus({ calls: 0, blocked: 1, latest: { tool: "bash", decision: "blocked" } });
+    assert.equal(line, "jev 0 · 1 blocked · bash blocked");
+  });
+
+  it("stays short enough for a shared footer line", () => {
+    const line = formatGuardStatus({
+      calls: 148,
+      blocked: 12,
+      latest: { tool: "powershell", decision: "asked-allowed", danger: 0.5 },
+    });
+    assert.ok(line.length <= 60, line);
+  });
+});
+
+describe("audit transcript line", () => {
+  it("a routine allow is the mark and the score, nothing else", () => {
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "allowed", source: "jev", danger: 0.021 }), {
+      text: "jev 0.02",
+      tone: "dim",
+    });
+  });
+
+  it("a decision with no score says what it was, since the score cannot", () => {
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "allowed", source: "allowlist" }), {
+      text: "jev allowed (allowlist)",
+      tone: "dim",
+    });
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "blocked", source: "rules" }), {
+      text: "jev blocked (rules)",
+      tone: "error",
+    });
+    assert.deepEqual(formatAuditLine({ tool: "write", decision: "blocked", source: "no-key" }), {
+      text: "jev blocked (no key)",
+      tone: "error",
+    });
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "blocked", source: "error" }), {
+      text: "jev blocked (classifier error)",
+      tone: "error",
+    });
+  });
+
+  it("a block is drawn as a block, not as a quiet aside", () => {
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "blocked", source: "jev", danger: 0.91 }), {
+      text: "jev 0.91 blocked",
+      tone: "error",
+    });
+  });
+
+  it("names the person when the person decided", () => {
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "asked-allowed", source: "jev", danger: 0.44 }), {
+      text: "jev 0.44 allowed by you",
+      tone: "warning",
+    });
+    assert.deepEqual(formatAuditLine({ tool: "bash", decision: "asked-blocked", source: "jev", danger: 0.44 }), {
+      text: "jev 0.44 blocked by you",
+      tone: "warning",
+    });
+  });
+
+  it("stays on one short line whatever happened", () => {
+    for (const decision of ["allowed", "blocked", "asked-allowed", "asked-blocked"]) {
+      for (const source of ["jev", "rules", "allowlist", "no-key", "error"]) {
+        const line = formatAuditLine({ tool: "powershell", decision, source, danger: 0.5 });
+        assert.ok(line.text.length <= 40, line.text);
+        assert.ok(!line.text.includes(String.fromCharCode(10)), line.text);
+      }
+    }
   });
 });

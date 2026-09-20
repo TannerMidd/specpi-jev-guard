@@ -101,6 +101,7 @@ Registering this extension there is the obvious next step and is not built yet.
 /jev-guard check <cmd>          score one command without running it
 /jev-guard model <id>           switch classifier model
 /jev-guard backend <name>       openrouter | typesafe
+/jev-guard audit <where>        transcript | status | off
 ```
 
 ## Configuration
@@ -113,6 +114,7 @@ trusted. Environment variables win over both.
   "askThreshold": 0.35,
   "blockThreshold": 0.8,
   "uncertain": "ask",
+  "auditDisplay": "status",
   "safeCommands": ["uv run pytest*"],
   "allowedCommands": ["rm -rf build*"],
   "disallowedCommands": ["npm publish*"]
@@ -122,6 +124,32 @@ trusted. Environment variables win over both.
 Set thresholds from evidence rather than instinct: run `/jev-guard check`
 against commands you must stop and commands you must not, then put the
 thresholds in the gap between the two groups.
+
+### Where audit records show up
+
+A judged call leaves a record. By default it goes to the session file and to
+the footer, and nowhere else: a gated session reads like an ungated one. The
+footer carries `jev 12`, then `jev 12 · 1 blocked` once the guard has stopped
+something, and the last verdict after that: `jev 12 · bash 0.04`.
+
+| `auditDisplay` | what you see |
+| --- | --- |
+| `status` (default) | the footer line, and the transcript left alone |
+| `transcript` | a dim `jev 0.02` under each judged call as well |
+| `off` | nothing, not even the footer line |
+
+The count comes from the session's own records, so it survives a resume, and
+it goes away while the guard is off.
+
+Blocks are loud whatever this is set to: they raise a notification and the
+reason goes back to the model. `transcript` mode draws a block in the error
+colour and names it (`jev 0.91 blocked`), says who decided when you were asked
+(`jev 0.44 allowed by you`), and expands (ctrl+o) to the command, the category
+and the model.
+
+Every mode writes every record to the session file, so the audit trail is the
+same in all three. Switch with `/jev-guard audit transcript`, which saves the
+choice.
 
 <details>
 <summary>Full reference: decision order, backends, every setting</summary>
@@ -148,7 +176,9 @@ thresholds in the gap between the two groups.
      script or a CI job or a headless agent, `uncertain` decides. The default
      `ask`, and `deny`, both block. Only `"allow"` lets the middle band through
      unattended.
-   - Below: runs. Every judged call is written to the session transcript.
+   - Below: runs. Every judged call is recorded; `auditDisplay` decides
+     whether that record shows in the footer alone (the default), in the
+     transcript as well, or nowhere.
 3. **Writes and edits:** ordinary project files pass locally. Paths outside the
    workspace, and paths matching `protectedPaths` (`.env*`, keys, `.ssh/`), go
    to Jev.
@@ -171,7 +201,8 @@ first, then the environment.
 
 `enabled`, `backend`, `model`, `fallbackModel`, `baseUrl`, `typesafeModel`,
 `typesafeBaseUrl`, `timeoutMs`, `askThreshold`, `blockThreshold`, `uncertain`,
-`safeCommands`, `allowedCommands`, `disallowedCommands`, `protectedPaths`.
+`auditDisplay`, `safeCommands`, `allowedCommands`, `disallowedCommands`,
+`protectedPaths`.
 
 Connection settings can also come from the environment:
 `OPENROUTER_API_KEY`, `TYPESAFE_API_KEY`, `JEV_GUARD_BACKEND`,
