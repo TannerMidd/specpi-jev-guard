@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="1000" height="480" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>Warm classification latency: Jev API, Laya CPU and Laya GPU</title>
+<rect width="1000" height="480" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Warm classification latency</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">Devious suite · two questions per request · local-rule decisions excluded · lower is faster</text>
+<rect x="24" y="78" width="11" height="11" rx="3" fill="var(--jv-accent, #2a78d6)"/>
+<text x="41" y="87" font-size="12" fill="var(--jv-dim, #52514e)">Jev API</text>
+<rect x="109.7" y="78" width="11" height="11" rx="3" fill="var(--jv-dim, #52514e)"/>
+<text x="126.7" y="87" font-size="12" fill="var(--jv-dim, #52514e)">Laya CPU</text>
+<rect x="202.4" y="78" width="11" height="11" rx="3" fill="#9566c5"/>
+<text x="219.4" y="87" font-size="12" fill="var(--jv-dim, #52514e)">Laya GPU</text>
+<text x="24" y="141" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">mean</text>
+<path class="mark" d="M105,117H202.2A4,4 0 0 1 206.2,121V133A4,4 0 0 1 202.2,137H105V117Z" fill="var(--jv-accent, #2a78d6)"/>
+<text x="216.2" y="132" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">243 ms</text>
+<path class="mark" d="M105,144H669.6A4,4 0 0 1 673.6,148V160A4,4 0 0 1 669.6,164H105V144Z" fill="var(--jv-dim, #52514e)"/>
+<text x="683.6" y="159" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">1366 ms</text>
+<path class="mark" d="M105,171H123.5A4,4 0 0 1 127.5,175V187A4,4 0 0 1 123.5,191H105V171Z" fill="#9566c5"/>
+<text x="137.5" y="186" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">54 ms</text>
+<text x="24" y="245" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">p50</text>
+<path class="mark" d="M105,221H199.2A4,4 0 0 1 203.2,225V237A4,4 0 0 1 199.2,241H105V221Z" fill="var(--jv-accent, #2a78d6)"/>
+<text x="213.2" y="236" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">236 ms</text>
+<path class="mark" d="M105,248H664.2A4,4 0 0 1 668.2,252V264A4,4 0 0 1 664.2,268H105V248Z" fill="var(--jv-dim, #52514e)"/>
+<text x="678.2" y="263" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">1353 ms</text>
+<path class="mark" d="M105,275H122.6A4,4 0 0 1 126.6,279V291A4,4 0 0 1 122.6,295H105V275Z" fill="#9566c5"/>
+<text x="136.6" y="290" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">52 ms</text>
+<text x="24" y="349" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">p95</text>
+<path class="mark" d="M105,325H228.8A4,4 0 0 1 232.8,329V341A4,4 0 0 1 228.8,345H105V325Z" fill="var(--jv-accent, #2a78d6)"/>
+<text x="242.8" y="340" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">307 ms</text>
+<path class="mark" d="M105,352H727.1A4,4 0 0 1 731.1,356V368A4,4 0 0 1 727.1,372H105V352Z" fill="var(--jv-dim, #52514e)"/>
+<text x="741.1" y="367" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">1504 ms</text>
+<path class="mark" d="M105,379H128.1A4,4 0 0 1 132.1,383V395A4,4 0 0 1 128.1,399H105V379Z" fill="#9566c5"/>
+<text x="142.1" y="394" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">65 ms</text>
+<text x="24" y="442" font-size="13" fill="var(--jv-dim, #52514e)">115 / 115 / 115 successful requests · RTX 5070 Ti · network time included for Jev</text>
+<text x="24" y="465" font-size="13" fill="var(--jv-dim, #52514e)">CPU FP32; GPU bfloat16 autocast (SDK defaults). Model loading is excluded.</text>
+</svg>

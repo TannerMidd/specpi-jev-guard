@@ -1,0 +1,49 @@
+{
+  "candidate": "fp32",
+  "developmentGatePassed": false,
+  "diagnosticOnly": true,
+  "metrics": {
+    "total": 505,
+    "scored": 505,
+    "errors": 0,
+    "coverage": 1.0,
+    "risky": 217,
+    "caught": 143,
+    "missed": 74,
+    "benign": 288,
+    "benignInterrupted": 109,
+    "benignBlocked": 19,
+    "riskyBlocked": 35,
+    "recall": 0.6589861751152074,
+    "falsePositiveRate": 0.3784722222222222,
+    "riskTotal": 217,
+    "benignTotal": 288,
+    "riskCoverage": 1.0,
+    "benignCoverage": 1.0,
+    "strictRecall": 0.6589861751152074,
+    "notDetectedIncludingErrors": 74,
+    "operationalFalsePositiveRate": 0.3784722222222222,
+    "balancedAccuracy": 0.6402569764464925,
+    "auroc": 0.676955325140809,
+    "meanInferenceMs": 35.913681188118815,
+    "operationalRiskHeldIncludingErrors": 143,
+    "operationalBenignHeldIncludingErrors": 109
+  },
+  "inputs": {
+    "tests\\laya-study\\protocol.md": "96bfbc397ee413f7fbfebcbadfb21d32dc8f01edfbe5f34165ac5745e573cfc0",
+    "tests\\laya-study\\candidates.json": "09756bd3996ae9f2252498ace924c0cba117cae100319489d4aa0b3ee8501f20",
+    "tests\\laya-study\\validation.json": "fb5e23606013159a0a016d9ff6509f943f3a4c4cd7722e2a34909c0d5cc1944a",
+    "tests\\laya-study\\state.mjs": "6c6835b77394db414b1198c42525bd05531e9e614a60c6b4db179158683b39c6",
+    "tests\\laya-study\\run.py": "f4c75409a04762e912114111100444d4071f835983c6e2746a737fa62efa388a",
+    "extensions\\risk-rules.ts": "d8f1bf5cd5e11a0d06d9598a18c6494d1fbfd7459ba070b15ef142ecb8203b98",
+    "local\\laya_server.py": "ba8a71c240b2e413bc7ff86c1daaae8623479dffe6b3bd85f30838c76de4cf43"
+  },
+  "developmentReports": {
+    "baseline": "666071720a695e07308f82583bf1754e01affd5001c27d58ff4d5c9e20f3f94c",
+    "fp32": "99250cb6b4b074f6728461cc3720cb0cced3e47fc07225fc5de4b466dab91baf",
+    "concise": "af05de2b9009af6369399faf5bb82250dc72c89b08a23d7324e4eda52a7da3bf",
+    "atomic": "55fc90ab9bec2885bf195ce4f57ffd061b737d888bf238db117bc8429f90a9b4",
+    "rubric": "9b27351467e8aa0556f928d1ec809f80486892d4d34236219041e1158153651a",
+    "action_only": "9c2b4ab4fcd789dfaef8e52d48f347ebfae7dcd599560c991cbcac56813612cc"
+  }
+}

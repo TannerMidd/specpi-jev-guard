@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 356" width="1060" height="356" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>What the guard did with 856 attempts</title>
+<rect width="1060" height="356" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">What the guard did with 856 attempts</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">Jev 1.13 via OpenRouter · 2026-09-22 · ask at 0.35, block at 0.8 · local rules included · bar length is a count</text>
+<text x="174" y="121" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Hostile attempts</text>
+<text x="174" y="139" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">471 attack-labelled</text>
+<g class="mark-g"><title>Hostile attempts: 379 blocked</title><path class="mark" d="M190,104H855.9V140H190V104Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="522.9" y="126.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">379</text>
+<g class="mark-g"><title>Hostile attempts: 82 asked first</title><path class="mark" d="M857.9,104H1000.4V140H857.9V104Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="929.1" y="126.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">82</text>
+<g class="mark-g"><title>Hostile attempts: 10 ran</title><path class="mark" d="M1002.4,104H1016A4,4 0 0 1 1020,108V136A4,4 0 0 1 1016,140H1002.4V104Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<rect x="190" y="157" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="207" y="166" font-size="12" fill="var(--jv-dim, #52514e)">379 blocked</text>
+<rect x="303.6" y="157" width="11" height="11" rx="3" fill="var(--jv-ask, #fab219)"/>
+<text x="320.6" y="166" font-size="12" fill="var(--jv-dim, #52514e)">82 asked first</text>
+<rect x="438" y="157" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
+<text x="455" y="166" font-size="12" fill="var(--jv-dim, #52514e)">10 ran</text>
+<text x="174" y="225" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Ordinary work</text>
+<text x="174" y="243" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">385 controls</text>
+<g class="mark-g"><title>Ordinary work: 308 ran</title><path class="mark" d="M190,208H730.8V244H190V208Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="460.4" y="230.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">308</text>
+<g class="mark-g"><title>Ordinary work: 64 asked first</title><path class="mark" d="M732.8,208H843.5V244H732.8V208Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="788.2" y="230.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">64</text>
+<g class="mark-g"><title>Ordinary work: 13 blocked</title><path class="mark" d="M845.5,208H864.5A4,4 0 0 1 868.5,212V240A4,4 0 0 1 864.5,244H845.5V208Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<rect x="190" y="261" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
+<text x="207" y="270" font-size="12" fill="var(--jv-dim, #52514e)">308 ran</text>
+<rect x="275.7" y="261" width="11" height="11" rx="3" fill="var(--jv-ask, #fab219)"/>
+<text x="292.7" y="270" font-size="12" fill="var(--jv-dim, #52514e)">64 asked first</text>
+<rect x="410.2" y="261" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="427.2" y="270" font-size="12" fill="var(--jv-dim, #52514e)">13 blocked</text>
+<text x="24" y="340" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">An ask blocks when nobody is there to answer, so an unattended agent is stopped by 461 of 471 attacks. 1 of the 10 that ran is a harmless probe, expected to run.</text>
+</svg>

@@ -1,0 +1,51 @@
+{
+  "createdAt": "2026-09-22T16:45:26Z",
+  "dataset": "kontext-security/ShellRisk-Bench",
+  "revision": "437467862139b4e9cdd5322024ef3434a67c7ec8",
+  "data": {
+    "train": {
+      "sha256": "88b2bf56ffba81afe396cf2f1f27b3884dcdf76d588275c44cf9e9a6677fe4af",
+      "rows": 16772
+    },
+    "test": {
+      "sha256": "e9df3b50a716ad077eeab6fcc27be57834bc2ff3f28ebeaf48dfd6640e9064c8",
+      "rows": 4194
+    }
+  },
+  "developmentRows": 505,
+  "developmentSha256": "c6fd2d3678832d6456bbf33f6ad05ac6cee4ff8348a2c69eb5ad8d10051a1ff1",
+  "excludedSha256": "049b7a2b9a5c6238d8aa29c92794476a86feabc2376f77584eaf0a6569b2f5a6",
+  "inputs": {
+    "tests\\laya-study\\protocol.md": "96bfbc397ee413f7fbfebcbadfb21d32dc8f01edfbe5f34165ac5745e573cfc0",
+    "tests\\laya-study\\candidates.json": "09756bd3996ae9f2252498ace924c0cba117cae100319489d4aa0b3ee8501f20",
+    "tests\\laya-study\\validation.json": "fb5e23606013159a0a016d9ff6509f943f3a4c4cd7722e2a34909c0d5cc1944a",
+    "tests\\laya-study\\state.mjs": "6c6835b77394db414b1198c42525bd05531e9e614a60c6b4db179158683b39c6",
+    "tests\\laya-study\\run.py": "46dfbd07bbf3407ce3026c1eb6a4b6c48950f2c2c9b6e56e1eed02e4fc8f4819",
+    "extensions\\risk-rules.ts": "d8f1bf5cd5e11a0d06d9598a18c6494d1fbfd7459ba070b15ef142ecb8203b98",
+    "local\\laya_server.py": "ba8a71c240b2e413bc7ff86c1daaae8623479dffe6b3bd85f30838c76de4cf43"
+  },
+  "preserved": {
+    "tests\\evals\\jev\\devious.json": "c9a0f36997bea558d868bed3dd6b5a26ec52de3c15887ed3966867ffd4cc9645",
+    "tests\\evals\\jev\\e2e.json": "97a16426213b89f4e691f86f92aa2197c2b87d9a694038e2bcaca237ba1d17a7",
+    "tests\\evals\\jev\\matrix.json": "abdd8a13f898e6cdb5e99e70fa495578f5c834d84bc09534cbbabb9cdd57ebb6",
+    "tests\\evals\\jev\\matrix.md": "349aefc9d870bd240bb9fd9cc3e7f0dba06c52f018a862f80ecc6d512368eae1",
+    "tests\\evals\\jev\\redteam.json": "15ec00f432ccefb3653bb6082ef948deb4be979a8272ef21c45630a98a8bcbfb",
+    "tests\\evals\\laya\\devious.json": "8a41d8baa32a11669f7d1a3f6dea49e5d81dc57456343317892c5134a9c3385a",
+    "tests\\evals\\laya\\e2e.json": "22420dac2986caa74717ad6682a3c5bdf1e63d47def82dad9a7edc21123e548b",
+    "tests\\evals\\laya\\matrix.json": "65a8602dde5856ca8462d74dfed2393b0aeb2a24ce890504ce830a9dc669cc45",
+    "tests\\evals\\laya\\matrix.md": "6801b0af39cbe08fa2b510c57704da8aece7dae5d5759a7795936c35eafdad08",
+    "tests\\evals\\laya\\redteam.json": "40238c6d0aaf808f0f22e9f1fc2dfeddd92080f908fa261e4b448918c42653dc",
+    "tests\\evals\\laya\\resources.json": "f6638fef5152ae11540aa446cf3a873eeaf67b0a79741761590a99205026e6be",
+    "tests\\evals\\laya-gpu\\devious.json": "71616f785a9726f774182985f782337c969dfe88dcbddaec9d8ab99c8634531d",
+    "tests\\evals\\laya-gpu\\e2e.json": "70be9240ac72435cd41c542a2346619974b675917ed5f8cc26f49d109a8acb57",
+    "tests\\evals\\laya-gpu\\matrix.json": "3e55d1ca20596b62d21d081e25ba29421e9cb457985148e998427a2e44f27a38",
+    "tests\\evals\\laya-gpu\\matrix.md": "3d9e9b9df3d4f058389d81ce1164046528593f54f1253e7225e1307795a59c70",
+    "tests\\evals\\laya-gpu\\redteam.json": "49ce085ca1ea6a6d1c19536e2699f3f657ac71ee17e274d86e947a6836e94c41",
+    "tests\\evals\\laya-gpu\\resources.json": "10cbd58c761037f84f5ab55c0b7691018c0e895192920b7032862c7b5ac712ad",
+    "tests\\jev-devious.json": "c27584be3b94301e1ef61332e7dcac0c2295f1e7221a34614eab735cbfe585a7",
+    "tests\\jev-results.json": "0dee00f00b848ad91d54db48ab60984615f259b91c9050226dedd833dd6e8ae3",
+    "tests\\pi-e2e-results.json": "55a881bb11623c3e8a462e8b7ee128586816aa90db90bae9d559167e706f4a1c",
+    "tests\\redteam-results.json": "85b1106be2f70055bd95002dbeef170cd1c179e638eec2dfc6570c89f377da66"
+  },
+  "upstreamLayaSourceRevision": "573e5b62696ba441230cd6be71d593331b5d23af"
+}

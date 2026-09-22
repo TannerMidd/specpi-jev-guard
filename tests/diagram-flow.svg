@@ -46,7 +46,7 @@
 <text x="318" y="528" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="start" font-weight="600">a score</text>
 <rect x="120" y="452" width="380" height="58" rx="12" fill="var(--jv-accent, #2a78d6)" stroke="var(--jv-accent, #2a78d6)" stroke-width="1"/>
 <text x="140" y="477" font-size="14" fill="#ffffff" text-anchor="start" font-weight="650">Ask Jev for a danger score</text>
-<text x="140" y="496" font-size="12" fill="#ffffff" text-anchor="start" opacity="0.85">~357 ms average  ·  no key, no answer, no parse</text>
+<text x="140" y="496" font-size="12" fill="#ffffff" text-anchor="start" opacity="0.85">~258 ms average  ·  no key, no answer, no parse</text>
 <line x1="500" y1="481" x2="610" y2="481" stroke="var(--jv-block, #d03b3b)" stroke-width="1.5"/>
 <polygon points="618,481 610,485.2 610,476.8" fill="var(--jv-block, #d03b3b)"/>
 <text x="559" y="474" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-weight="600">on error</text>

@@ -17,7 +17,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/TannerMidd/specpi-jev-guard/main/docs/assets/terminal-dark.png">
-  <img src="https://raw.githubusercontent.com/TannerMidd/specpi-jev-guard/main/docs/assets/terminal.png" width="860" alt="Three commands: rm -rf / is blocked by a local rule, rm -rf dist build scores 0.55 and asks first, npm test runs with no prompt.">
+  <img src="https://raw.githubusercontent.com/TannerMidd/specpi-jev-guard/main/docs/assets/terminal.png" width="860" alt="Three commands: rm -rf / is blocked by a local rule, rm -rf dist build scores 0.51 and asks first, npm test runs with no prompt.">
 </picture>
 
 </div>
@@ -62,24 +62,23 @@ repeated from a clean checkout.
 
 | Run | What it measures | Result |
 | --- | --- | --- |
-| [Overview](https://tannermidd.github.io/specpi-jev-guard/) | 124 commands scored live | 386 ms average, 37 settled locally with no network call |
-| [Devious tests](https://tannermidd.github.io/specpi-jev-guard/devious.html) | 108 hostile commands, 25 ordinary ones | 6 allowed through, no ordinary command refused |
+| [Devious tests](https://tannermidd.github.io/specpi-jev-guard/devious.html) | 856 attempts: 471 hostile across 31 families, 385 ordinary | 9 hostile let through, 13 ordinary refused, 258 ms average answer |
 | [Red team](https://tannermidd.github.io/specpi-jev-guard/devious.html) | 30 attacks invented live by another model | 0 got through |
 | [Testing](https://tannermidd.github.io/specpi-jev-guard/testing.html) | the packed release, inside a real pi | 48 scenarios, 47 exercised and all as specified |
 
 ### Against the most installed permission system
 
-`npm run compare` replays the whole devious suite through the gates of
+`npm run compare` replays the devious suite's 784 bash commands through the gates of
 [@gotgenes/pi-permission-system](https://pi.dev/packages/@gotgenes/pi-permission-system),
 under three policies including the one in its README. Nothing is executed on
 either side.
 
-| Guard | Hostile commands that would run (of 108) | Ordinary commands interrupted (of 25) |
+| Guard | Hostile commands that would run (of 435) | Ordinary commands interrupted (of 349) |
 | --- | --- | --- |
-| pi-permission-system, quick start | 0 | 25 |
-| pi-permission-system, hardened policy | 4 | 24 |
-| pi-permission-system, allow by default | 50 | 8 |
-| specpi-jev-guard | 6 | 13 |
+| pi-permission-system, quick start | 0 | 349 |
+| pi-permission-system, hardened policy | 4 | 346 |
+| pi-permission-system, allow by default | 154 | 182 |
+| specpi-jev-guard | 10 | 62 |
 
 Matching text cannot tell a `node_modules` wipe from a root wipe, so a policy
 strict enough to stop the second interrupts the first. Scoring intent can tell
@@ -237,12 +236,12 @@ npm test               # rule engine, offline, no key
 npm run typecheck
 
 npm run matrix         # 124 commands, live       -> tests/jev-results.json
-npm run devious        # 108 hostile, 25 ordinary -> tests/jev-devious.json
+npm run devious        # 856 attempts, live       -> tests/jev-devious.json
 npm run redteam        # another model attacks it -> tests/redteam-results.json
 npm run compare        # head to head, offline    -> tests/compare-results.json
 npm run e2e            # the packed release in a sandboxed pi, about 10 minutes
 
-npm run insights && npm run devious:charts && npm run e2e:charts
+npm run overview && npm run devious:charts && npm run e2e:charts
 npm run docs:sync      # inline the charts and tables into docs/
 ```
 

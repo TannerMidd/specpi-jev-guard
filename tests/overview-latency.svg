@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 442" width="1060" height="442" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>How long Jev takes to answer</title>
+<rect width="1060" height="442" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">How long Jev takes to answer</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">831 classifier calls · average 258 ms · half within 248 ms · p95 337 ms · slowest 1.5 s</text>
+<text x="24" y="78" font-size="13" fill="var(--jv-dim, #52514e)">This is the whole added cost of a gated call. Local rules and cached verdicts add 0 ms.</text>
+<g class="mark-g"><title>45 calls took under 200 ms</title><path class="mark" d="M130,323.5H201.2V372H130V323.5Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="165.6" y="315.5" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">45</text>
+<text x="165.6" y="392" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">under 200</text>
+<g class="mark-g"><title>178 calls took 200-224 ms</title><path class="mark" d="M241.3,180.3H312.5V372H241.3V180.3Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="276.9" y="172.3" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">178</text>
+<text x="276.9" y="392" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">200-224</text>
+<g class="mark-g"><title>208 calls took 225-249 ms</title><path class="mark" d="M352.5,148H423.7V372H352.5V148Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="388.1" y="140" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">208</text>
+<text x="388.1" y="392" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">225-249</text>
+<g class="mark-g"><title>163 calls took 250-274 ms</title><path class="mark" d="M463.8,196.5H535V372H463.8V196.5Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="499.4" y="188.5" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">163</text>
+<text x="499.4" y="392" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">250-274</text>
+<g class="mark-g"><title>117 calls took 275-299 ms</title><path class="mark" d="M575,246H646.2V372H575V246Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="610.6" y="238" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">117</text>
+<text x="610.6" y="392" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">275-299</text>
+<g class="mark-g"><title>92 calls took 300-349 ms</title><path class="mark" d="M686.3,272.9H757.5V372H686.3V272.9Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="721.9" y="264.9" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">92</text>
+<text x="721.9" y="392" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">300-349</text>
+<g class="mark-g"><title>23 calls took 350-499 ms</title><path class="mark" d="M797.5,347.2H868.7V372H797.5V347.2Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="833.1" y="339.2" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">23</text>
+<text x="833.1" y="392" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">350-499</text>
+<g class="mark-g"><title>5 calls took 500 and up ms</title><path class="mark" d="M908.8,366.6H980V372H908.8V366.6Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="944.4" y="358.6" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">5</text>
+<text x="944.4" y="392" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="middle">500 and up</text>
+<line x1="110" y1="372" x2="1000" y2="372" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="98" y="372" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="end">calls</text>
+<text x="555" y="416" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="middle">classifier latency, ms</text>
+</svg>

@@ -38,17 +38,18 @@
       <a href="index.html">Overview</a>
       <a href="devious.html">Devious Tests</a>
       <a href="testing.html" aria-current="page">Testing</a>
-      <a href="https://github.com/TannerMidd/specpi-jev-guard">GitHub</a>
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="16" height="16">
-          <circle class="sun-core" cx="12" cy="12" r="5" fill="currentColor"/>
-          <path class="moon-core" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/>
-          <g class="sun-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>
-          </g>
-        </svg>
-      </button>
+      <a href="comparison.html">Jev vs Laya</a>
+      <a class="nav-ext" href="https://github.com/TannerMidd/specpi-jev-guard">GitHub</a>
     </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="16" height="16">
+        <circle class="sun-core" cx="12" cy="12" r="5" fill="currentColor"/>
+        <path class="moon-core" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/>
+        <g class="sun-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>
+        </g>
+      </svg>
+    </button>
   </div>
 </header>
 
@@ -58,9 +59,8 @@
     <h1>The extension, tested inside a real pi</h1>
     <p class="lede">Unit tests check the rules. They cannot tell you whether the extension still gates anything once it is packed, published, installed, and handed a live agent. So the suite on this page does exactly that, end to end, with nothing mocked.</p>
     <div class="install">
-      <code>npm run e2e</code>
-      <button type="button" data-copy="npm run e2e">Copy</button>
-      <span class="sep">then <code>npm run e2e:charts</code></span>
+      <div class="install-cmd"><code>npm run e2e</code><button type="button" data-copy="npm run e2e">Copy</button></div>
+      <p class="install-next">then <code>npm run e2e:charts</code></p>
     </div>
     <p class="hero-meta">Every figure and every row below comes from one recorded run. The raw file is in the repository.</p>
   </div>

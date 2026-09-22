@@ -1,0 +1,3 @@
+# Frozen evidence hashes must survive checkout on every platform.
+*.json -text
+study/protocol.md -text

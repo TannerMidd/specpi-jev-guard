@@ -43,7 +43,7 @@
     "typescript": "^5.6.0"
   },
   "scripts": {
-    "test": "node --test tests/rules.test.mjs tests/pi-auth.test.mjs tests/audit-display.test.mjs",
+    "test": "node --test tests/rules.test.mjs tests/pi-auth.test.mjs tests/audit-display.test.mjs tests/devious-cases.test.mjs",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm test && npm run typecheck",
     "live": "node --env-file-if-exists=.env tests/live-jev.mjs",
@@ -55,6 +55,7 @@
     "compare": "node tests/compare-guards.mjs",
     "compare:chart": "node tests/compare-chart.mjs",
     "insights": "node tests/jev-insights.mjs",
+    "overview": "node tests/overview-charts.mjs",
     "redteam": "node --env-file-if-exists=.env tests/redteam.mjs",
     "docs:sync": "node tests/docs-sync.mjs",
     "chart:png": "node tests/chart-png.mjs",

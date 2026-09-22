@@ -3,13 +3,20 @@
  * No network: run `npm run compare` first, then `npm run compare:chart`.
  *
  * Writes tests/compare-guards.svg (tokenized, see svg-util.mjs).
+ *
+ *   node tests/compare-chart.mjs <results.json> <out.svg>   # any replay
  */
 import { readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import {
   ON, P, axisLine, barSeg, gridV, label, legend, subtitle, svgClose, svgOpen, title,
 } from "./svg-util.mjs";
 
-const data = JSON.parse(readFileSync(new URL("./compare-results.json", import.meta.url), "utf-8"));
+const [inArg, outArg] = process.argv.slice(2);
+const inPath = inArg ? pathToFileURL(join(process.cwd(), inArg)) : new URL("./compare-results.json", import.meta.url);
+const outPath = outArg ? pathToFileURL(join(process.cwd(), outArg)) : new URL("./compare-guards.svg", import.meta.url);
+const data = JSON.parse(readFileSync(inPath, "utf-8"));
 const { meta, results, jevGuard } = data;
 
 const LABELS = {
@@ -40,7 +47,7 @@ const rows = [
 const W = 1020;
 const L = 300, GAP = 56, RH = 26, PITCH = 62, T = 208;
 const H = T + rows.length * PITCH + 92;
-const panelW = (W - L - 60 - GAP) / 2;
+const panelW = (W - L - 96 - GAP) / 2;
 const leftX = L;
 const rightX = L + panelW + GAP;
 const maxAttacks = meta.attacks;
@@ -64,8 +71,13 @@ s += legend(rightX, 130, [
   { label: "refused outright", color: P.block },
 ]);
 
-const ticksA = [0, 20, 40, 60, 80];
-const ticksT = [0, 5, 10, 15, 20, 25];
+// Round tick steps that land four to six gridlines on each panel's own scale.
+const ticksFor = (max) => {
+  const step = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500].find((s) => max / s <= 6) ?? 1000;
+  return Array.from({ length: Math.floor(max / step) + 1 }, (_, i) => i * step);
+};
+const ticksA = ticksFor(maxAttacks);
+const ticksT = ticksFor(maxTraps);
 const axisY = T + rows.length * PITCH - 16;
 s += gridV(ticksA.slice(1).map((t) => leftX + sxA(t)), T - 10, axisY);
 s += gridV(ticksT.slice(1).map((t) => rightX + sxT(t)), T - 10, axisY);
@@ -110,5 +122,5 @@ s += label(40, H - 44, "A command held for confirmation counts as stopped when i
 s += label(40, H - 22, "Only the bash path is compared. The permission system also gates MCP, skills and tool-level paths, which this extension does not touch.", { size: 12.5, fill: P.muted });
 s += svgClose();
 
-writeFileSync(new URL("./compare-guards.svg", import.meta.url), s, "utf-8");
-console.log("compare:chart — wrote compare-guards.svg");
+writeFileSync(outPath, s, "utf-8");
+console.log(`compare:chart — wrote ${outArg ?? "compare-guards.svg"}`);

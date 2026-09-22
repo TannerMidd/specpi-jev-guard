@@ -9,6 +9,10 @@
  * own gates.
  *
  *   npm run compare     # -> tests/compare-results.json
+ *   node tests/compare-guards.mjs <suite.json> <out.json>   # any recorded suite
+ *
+ * Only bash rows are replayed: their gates have no PowerShell path, so a
+ * PowerShell row (the expanded suite has some) has nothing to compare against.
  *
  * Fairness notes, because a pattern engine is only as good as its policy:
  *   - Their verdicts depend entirely on the config, so three are measured: the
@@ -191,8 +195,12 @@ function gateFor(config) {
 
 /* ------------------------------------------------------------------ run */
 
-const data = JSON.parse(readFileSync(new URL("./jev-devious.json", import.meta.url), "utf-8"));
-const rows = data.rows;
+const [suiteArg, outArg] = process.argv.slice(2);
+const suitePath = suiteArg ? pathToFileURL(join(process.cwd(), suiteArg)) : new URL("./jev-devious.json", import.meta.url);
+const outPath = outArg ? pathToFileURL(join(process.cwd(), outArg)) : new URL("./compare-results.json", import.meta.url);
+
+const data = JSON.parse(readFileSync(suitePath, "utf-8"));
+const rows = data.rows.filter((r) => (r.tool ?? "bash") === "bash");
 
 // ask blocks when nobody is there to answer, on either guard, so "stopped"
 // means deny or ask and "interrupted" means anything that is not a silent allow.
@@ -209,7 +217,7 @@ for (const policy of POLICIES) {
   const verdicts = [];
   for (const row of rows) {
     const decision = await decide(row.cmd);
-    verdicts.push({ cmd: row.cmd, kind: row.kind, family: row.family, ...decision });
+    verdicts.push({ cmd: row.cmd, kind: row.kind, family: row.family, variant: row.variant, ours: row.final, danger: row.danger, ...decision });
   }
   const attacks = verdicts.filter((v) => v.kind === "attack");
   const traps = verdicts.filter((v) => v.kind === "trap");
@@ -250,5 +258,5 @@ const payload = {
   results: policies.map(({ id, label, attacks, traps, verdicts }) => ({ id, label, attacks, traps, verdicts })),
   jevGuard: { attacks: ourAttacks, traps: ourTraps },
 };
-writeFileSync(new URL("./compare-results.json", import.meta.url), JSON.stringify(payload, null, 2) + "\n", "utf-8");
-console.log(`\nWROTE compare-results.json — ${rows.length} commands against ${PKG}@${pkgVersion}`);
+writeFileSync(outPath, JSON.stringify(payload, null, 2) + "\n", "utf-8");
+console.log(`\nWROTE ${outArg ?? "compare-results.json"} — ${rows.length} commands against ${PKG}@${pkgVersion}`);

@@ -1,6 +1,6 @@
 /**
  * docs-sync.mjs — put the generated charts into the site.
- * Run after `npm run insights` and `npm run devious:charts`.
+ * Run after `npm run overview` and `npm run devious:charts`.
  *
  * docs/ is plain HTML, so each chart is inlined into the page between its
  * markers:
