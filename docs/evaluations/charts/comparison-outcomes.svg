@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="1000" height="650" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>Jev API, Laya CPU and Laya GPU: final gate decisions on identical cases</title>
+<rect width="1000" height="650" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Same cases. Same rules. Three measured runs.</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">2026-09-22 · ask ≥ 0.35, block ≥ 0.8 · no threshold tuning</text>
+<rect x="24" y="78" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="41" y="87" font-size="12" fill="var(--jv-dim, #52514e)">Blocked</text>
+<rect x="109.7" y="78" width="11" height="11" rx="3" fill="var(--jv-ask, #fab219)"/>
+<text x="126.7" y="87" font-size="12" fill="var(--jv-dim, #52514e)">Asked first</text>
+<rect x="223.3" y="78" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
+<text x="240.3" y="87" font-size="12" fill="var(--jv-dim, #52514e)">Allowed</text>
+<rect x="309" y="78" width="11" height="11" rx="3" fill="var(--jv-error, #898781)"/>
+<text x="326" y="87" font-size="12" fill="var(--jv-dim, #52514e)">Error (fails closed)</text>
+<text x="24" y="125" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Devious attack cases · 111 cases</text>
+<text x="24" y="161" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Jev API</text>
+<g class="mark-g"><title>Jev API: 85 block</title><path class="mark" d="M230,144H643.5V168H230V144Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="436.8" y="161" font-size="12" fill="#fff" text-anchor="middle">85</text>
+<g class="mark-g"><title>Jev API: 19 ask</title><path class="mark" d="M643.5,144H735.9V168H643.5V144Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="689.7" y="161" font-size="12" fill="#1a1a19" text-anchor="middle">19</text>
+<g class="mark-g"><title>Jev API: 7 allow</title><path class="mark" d="M735.9,144H770V168H735.9V144Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="753" y="161" font-size="12" fill="#1a1a19" text-anchor="middle">7</text>
+<text x="786" y="161" font-size="11" fill="var(--jv-text, #0b0b0b)" text-anchor="start">85 / 19 / 7 / 0</text>
+<text x="24" y="196" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Laya CPU</text>
+<g class="mark-g"><title>Laya CPU: 31 block</title><path class="mark" d="M230,179H380.8V203H230V179Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="305.4" y="196" font-size="12" fill="#fff" text-anchor="middle">31</text>
+<g class="mark-g"><title>Laya CPU: 35 ask</title><path class="mark" d="M380.8,179H551.1V203H380.8V179Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="465.9" y="196" font-size="12" fill="#1a1a19" text-anchor="middle">35</text>
+<g class="mark-g"><title>Laya CPU: 45 allow</title><path class="mark" d="M551.1,179H770V203H551.1V179Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="660.5" y="196" font-size="12" fill="#1a1a19" text-anchor="middle">45</text>
+<text x="786" y="196" font-size="11" fill="var(--jv-text, #0b0b0b)" text-anchor="start">31 / 35 / 45 / 0</text>
+<text x="24" y="231" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Laya GPU</text>
+<g class="mark-g"><title>Laya GPU: 31 block</title><path class="mark" d="M230,214H380.8V238H230V214Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="305.4" y="231" font-size="12" fill="#fff" text-anchor="middle">31</text>
+<g class="mark-g"><title>Laya GPU: 36 ask</title><path class="mark" d="M380.8,214H555.9V238H380.8V214Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="468.4" y="231" font-size="12" fill="#1a1a19" text-anchor="middle">36</text>
+<g class="mark-g"><title>Laya GPU: 44 allow</title><path class="mark" d="M555.9,214H770V238H555.9V214Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="663" y="231" font-size="12" fill="#1a1a19" text-anchor="middle">44</text>
+<text x="786" y="231" font-size="11" fill="var(--jv-text, #0b0b0b)" text-anchor="start">31 / 36 / 44 / 0</text>
+<text x="24" y="295" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Ordinary controls · 25 cases</text>
+<text x="24" y="331" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Jev API</text>
+<g class="mark-g"><title>Jev API: 15 ask</title><path class="mark" d="M230,314H554V338H230V314Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="392" y="331" font-size="12" fill="#1a1a19" text-anchor="middle">15</text>
+<g class="mark-g"><title>Jev API: 10 allow</title><path class="mark" d="M554,314H770V338H554V314Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="662" y="331" font-size="12" fill="#1a1a19" text-anchor="middle">10</text>
+<text x="786" y="331" font-size="11" fill="var(--jv-text, #0b0b0b)" text-anchor="start">0 / 15 / 10 / 0</text>
+<text x="24" y="366" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Laya CPU</text>
+<g class="mark-g"><title>Laya CPU: 1 block</title><path class="mark" d="M230,349H251.6V373H230V349Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<g class="mark-g"><title>Laya CPU: 4 ask</title><path class="mark" d="M251.6,349H338V373H251.6V349Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="294.8" y="366" font-size="12" fill="#1a1a19" text-anchor="middle">4</text>
+<g class="mark-g"><title>Laya CPU: 20 allow</title><path class="mark" d="M338,349H770V373H338V349Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="554" y="366" font-size="12" fill="#1a1a19" text-anchor="middle">20</text>
+<text x="786" y="366" font-size="11" fill="var(--jv-text, #0b0b0b)" text-anchor="start">1 / 4 / 20 / 0</text>
+<text x="24" y="401" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Laya GPU</text>
+<g class="mark-g"><title>Laya GPU: 1 block</title><path class="mark" d="M230,384H251.6V408H230V384Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<g class="mark-g"><title>Laya GPU: 4 ask</title><path class="mark" d="M251.6,384H338V408H251.6V384Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="294.8" y="401" font-size="12" fill="#1a1a19" text-anchor="middle">4</text>
+<g class="mark-g"><title>Laya GPU: 20 allow</title><path class="mark" d="M338,384H770V408H338V384Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="554" y="401" font-size="12" fill="#1a1a19" text-anchor="middle">20</text>
+<text x="786" y="401" font-size="11" fill="var(--jv-text, #0b0b0b)" text-anchor="start">1 / 4 / 20 / 0</text>
+<text x="24" y="465" font-size="14" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Recorded red-team attacks (replayed, not newly generated) · 30 cases</text>
+<text x="24" y="501" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Jev API</text>
+<g class="mark-g"><title>Jev API: 28 block</title><path class="mark" d="M230,484H734V508H230V484Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="482" y="501" font-size="12" fill="#fff" text-anchor="middle">28</text>
+<g class="mark-g"><title>Jev API: 2 ask</title><path class="mark" d="M734,484H770V508H734V484Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="752" y="501" font-size="12" fill="#1a1a19" text-anchor="middle">2</text>
+<text x="786" y="501" font-size="11" fill="var(--jv-text, #0b0b0b)" text-anchor="start">28 / 2 / 0 / 0</text>
+<text x="24" y="536" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Laya CPU</text>
+<g class="mark-g"><title>Laya CPU: 10 block</title><path class="mark" d="M230,519H410V543H230V519Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="320" y="536" font-size="12" fill="#fff" text-anchor="middle">10</text>
+<g class="mark-g"><title>Laya CPU: 14 ask</title><path class="mark" d="M410,519H662V543H410V519Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="536" y="536" font-size="12" fill="#1a1a19" text-anchor="middle">14</text>
+<g class="mark-g"><title>Laya CPU: 6 allow</title><path class="mark" d="M662,519H770V543H662V519Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="716" y="536" font-size="12" fill="#1a1a19" text-anchor="middle">6</text>
+<text x="786" y="536" font-size="11" fill="var(--jv-text, #0b0b0b)" text-anchor="start">10 / 14 / 6 / 0</text>
+<text x="24" y="571" font-size="12" fill="var(--jv-text, #0b0b0b)" text-anchor="start">Laya GPU</text>
+<g class="mark-g"><title>Laya GPU: 10 block</title><path class="mark" d="M230,554H410V578H230V554Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="320" y="571" font-size="12" fill="#fff" text-anchor="middle">10</text>
+<g class="mark-g"><title>Laya GPU: 14 ask</title><path class="mark" d="M410,554H662V578H410V554Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="536" y="571" font-size="12" fill="#1a1a19" text-anchor="middle">14</text>
+<g class="mark-g"><title>Laya GPU: 6 allow</title><path class="mark" d="M662,554H770V578H662V554Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="716" y="571" font-size="12" fill="#1a1a19" text-anchor="middle">6</text>
+<text x="786" y="571" font-size="11" fill="var(--jv-text, #0b0b0b)" text-anchor="start">10 / 14 / 6 / 0</text>
+<text x="24" y="617" font-size="13" fill="var(--jv-dim, #52514e)">Includes local rules. One attack-labelled case permits allow; raw allows are not identical to bypasses.</text>
+<text x="24" y="638" font-size="13" fill="var(--jv-dim, #52514e)">Experimental Laya English · RTX 5070 Ti · CPU FP32; GPU bfloat16 autocast (SDK defaults)</text>
+</svg>

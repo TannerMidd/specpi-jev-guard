@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evaluation evidence · specpi-jev-guard</title>
+<meta name="description" content="Recorded Jev/Laya comparison, the 856-attempt devious suite and a negative tuning study. Laya implementation shelved; raw evidence preserved.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f9f9f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Evaluation evidence · specpi-jev-guard">
+<meta property="og:description" content="Recorded Jev/Laya comparison, the 856-attempt devious suite and a negative tuning study. Laya implementation shelved; raw evidence preserved.">
+<link rel="icon" href="../assets/favicon.svg">
+<link rel="stylesheet" href="../assets/site.css">
+<script>
+  // Pin the saved theme before first paint so the page never flashes.
+  try {
+    var t = localStorage.getItem("jev-theme");
+    if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M16 2.6 26.4 6.3Q27 6.5 27 7.1V16.2C27 22.5 22.5 27.3 16.5 29.2Q16 29.4 15.5 29.2C9.5 27.3 5 22.5 5 16.2V7.1Q5 6.5 5.6 6.3Z" fill="currentColor"/>
+        <path d="M12 11.9 16 15.7 12 19.5" fill="none" stroke="var(--surface-1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18.3 19.5h3.1" fill="none" stroke="var(--surface-1)" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">specpi-jev-guard</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="../index.html">Overview</a>
+      <a href="../devious.html">Devious Tests</a>
+      <a href="../testing.html">Testing</a>
+      <a href="../comparison.html" aria-current="true">Jev vs Laya</a>
+      <a class="nav-ext" href="https://github.com/TannerMidd/specpi-jev-guard">GitHub</a>
+    </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="16" height="16">
+        <circle class="sun-core" cx="12" cy="12" r="5" fill="currentColor"/>
+        <path class="moon-core" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/>
+        <g class="sun-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>
+        </g>
+      </svg>
+    </button>
+  </div>
+</header>
+<div class="hero"><div class="hero-inner">
+  <p class="eyebrow">Recorded research · implementation shelved</p>
+  <h1>The evidence behind the comparison</h1>
+  <p class="lede">Matched CPU/GPU/API runs, the 856-attempt devious suite, and a bounded tuning study. The failures are kept alongside the successes.</p>
+  <p class="hero-meta">Recorded 2026-09-22. These pages do not add a Laya backend or change the released package.</p>
+</div></div>
+<div class="shell">
+  <aside class="toc" aria-label="On this page"><div class="toc-inner"><p class="toc-title">On this page</p><nav id="toc"></nav></div></aside>
+  <main id="main" class="prose">
+    <div class="callout"><p><strong>The Laya implementation is shelved.</strong> The comparison did not justify shipping it as a safety-equivalent alternative to Jev. This archive preserves observations, not an installation option. It also does not establish that Laya could never improve.</p></div>
+    <ul class="links">
+      <li><a href="../comparison.html">Comparison and tuning charts</a></li>
+      <li><a href="../comparison.html#expanded-results">Devious-suite charts</a></li>
+      <li><a href="README.md" download>Archive guide (Markdown)</a></li>
+    </ul>
+
+    <h2 id="matched">Matched API, CPU and GPU runs</h2>
+    <p>Same cases, local rules, questions and ask/block thresholds (0.35/0.8). Laya used the pinned English checkpoint. CPU FP32 and GPU BF16 differ numerically, not just in speed. Timings exclude model loading; Jev includes network time. The red-team inputs were replayed, not newly generated for each backend.</p>
+    <table class="files">
+      <thead><tr><th>Run</th><th>Matrix</th><th>Devious suite</th><th>Red team</th><th>End to end</th><th>Resources</th></tr></thead>
+      <tbody>
+        <tr><td>Jev API</td><td><a href="results/jev/matrix.json">124 cases</a></td><td><a href="results/jev/devious.json">136 cases</a></td><td><a href="results/jev/redteam.json">30 attacks</a></td><td><a href="results/jev/e2e.json">48 scenarios</a></td><td class="none">remote API</td></tr>
+        <tr><td>Laya CPU</td><td><a href="results/laya/matrix.json">124 cases</a></td><td><a href="results/laya/devious.json">136 cases</a></td><td><a href="results/laya/redteam.json">30 attacks</a></td><td><a href="results/laya/e2e.json">48 scenarios</a></td><td><a href="results/laya/resources.json">runtime, RAM</a></td></tr>
+        <tr><td>Laya GPU</td><td><a href="results/laya-gpu/matrix.json">124 cases</a></td><td><a href="results/laya-gpu/devious.json">136 cases</a></td><td><a href="results/laya-gpu/redteam.json">30 attacks</a></td><td><a href="results/laya-gpu/e2e.json">48 scenarios</a></td><td><a href="results/laya-gpu/resources.json">runtime, RAM, VRAM</a></td></tr>
+      </tbody>
+    </table>
+    <ul class="links">
+      <li><a href="results/README.md" download>Full report and limitations (Markdown)</a></li>
+      <li><a href="results/device-differences.json">CPU and GPU decision differences (JSON)</a></li>
+    </ul>
+    <p>E2E counts are integration assertions, not safety accuracy. Agent deviations can fail an assertion without exercising the intended path. Unexercised cases are not passes. GPU memory is the process's PyTorch allocator, not total device use.</p>
+
+    <h2 id="expanded">Devious suite: 856 attempts</h2>
+    <p>The original 136 cases plus 120 new attack/benign pairs across 20 families, each tested plainly, nested or encoded, and with misleading assurances. These are correlated views, not 720 independent new techniques.</p>
+    <p>Jev gave 9 unexpected allows among 471 attack-labelled attempts; Laya GPU gave 114, plus one input rejection. Controls interrupted: 77/385 and 190/385 respectively; hard blocks: 13 and 54. Jev missed only one new plain attack, so more cases did not establish a harder benchmark.</p>
+    <p><strong>No CPU run of this suite.</strong> It was recorded by the research runner; <code>npm run devious</code> now runs the same 856 cases against Jev, and a test checks they match this record. Records retain the exact command, tool, user context, expectation and result. No adversarial command was executed.</p>
+    <table class="files">
+      <thead><tr><th>Record</th><th>Files</th></tr></thead>
+      <tbody>
+        <tr><td>Report</td><td><a href="results/devious-v2/README.md" download>Subset and family report (Markdown)</a></td></tr>
+        <tr><td>Observations</td><td><a href="results/devious-v2/jev/devious.json">Jev API, 856 rows</a> · <a href="results/devious-v2/laya-gpu/devious.json">Laya GPU, 856 rows</a></td></tr>
+        <tr><td>Rejection</td><td><a href="results/devious-v2/input-rejection.json">Token-budget rejection evidence</a></td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="tuning">Tuning: no preset adopted</h2>
+    <p>Six predeclared general configurations used unchanged weights and thresholds. All were evaluated on a deterministic 505-case sample of ShellRisk-Bench's TRAIN split. None passed the development gate. FP32 was frozen for diagnosis only, then evaluated once against baseline on 4,193 TEST rows after exact-overlap filtering.</p>
+    <p>Both detected 119/193 risky test inputs; baseline interrupted 1,467/4,000 benign inputs and FP32 1,482/4,000, including one rejected benign input each. No other candidate was tried on the test split. The devious suite was not used to select or adopt a candidate.</p>
+    <table class="files">
+      <thead><tr><th>Stage</th><th>Files</th></tr></thead>
+      <tbody>
+        <tr><td>Protocol</td><td><a href="results/laya-study/README.md" download>Study report (Markdown)</a> · <a href="study/protocol.md" download>Frozen protocol</a> · <a href="study/candidates.json">Six configurations</a> · <a href="study/validation.json">48 authored contrast inputs</a></td></tr>
+        <tr><td>Development</td><td><a href="results/laya-study/dev-baseline.json">Original BF16</a> · <a href="results/laya-study/dev-fp32.json">FP32 control</a> · <a href="results/laya-study/dev-concise.json">Concise questions</a> · <a href="results/laya-study/dev-atomic.json">Six risk questions</a> · <a href="results/laya-study/dev-rubric.json">Two-option rubric</a> · <a href="results/laya-study/dev-action_only.json">Action-only state</a></td></tr>
+        <tr><td>One-shot test</td><td><a href="results/laya-study/selection.json">Selection</a> · <a href="results/laya-study/validation.json">Validation and adoption gate</a> · <a href="results/laya-study/external-baseline.json">External BF16 predictions</a> · <a href="results/laya-study/external-fp32.json">External FP32 predictions</a> · <a href="results/laya-study/contrast-baseline.json">Authored BF16 contrasts</a> · <a href="results/laya-study/contrast-fp32.json">Authored FP32 contrasts</a></td></tr>
+        <tr><td>Provenance</td><td><a href="results/laya-study/manifest.json">Study manifest</a> · <a href="results/laya-study/pre-inference-failure.md" download>Pre-inference loader correction</a> · <a href="results/laya-study/pre-inference-manifest.json">Original manifest</a></td></tr>
+      </tbody>
+    </table>
+    <p>ShellRisk labels are source-derived, not individually reviewed authorization decisions. TRAIN and TEST share sources; near-duplicates or training contamination may remain. The authored contrasts are not independent validation. Rejected risky inputs do not count as detections; rejected benign inputs do count as operational interruptions. No weights were trained and no thresholds fitted.</p>
+
+    <h2 id="scope">Archive scope and integrity</h2>
+    <p><a href="checksums.json">SHA-256 checksums</a> cover the unchanged raw observations and frozen study inputs. Original manifests retain experiment paths for provenance; they do not imply that the Python service or research runners are included here. This is an auditable record, not a stand-alone inference reproduction kit.</p>
+    <p>The Laya runtime and its collection code remain in the shelved implementation work; the devious suite's cases and a Jev runner are in the repository. Model weights, Python environments and mixed-license external command data are not distributed with these pages. The archive can be verified with <code>node docs/evaluations/verify.mjs</code>, without model or API access.</p>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="foot-inner">
+    <p><strong>specpi-jev-guard</strong>: dangerous shell calls, gated by a classifier.</p>
+    <p class="foot-links">
+      <a href="https://github.com/TannerMidd/specpi-jev-guard">Source</a>
+      <a href="https://www.npmjs.com/package/specpi-jev-guard">npm</a>
+      <a href="checksums.json">Checksums</a>
+    </p>
+    <p class="foot-note">Every file listed here is a recorded observation. The checksums cover the raw results and the frozen study inputs.</p>
+  </div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 444" width="1060" height="444" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>Which layer decided, and what it cost</title>
+<rect width="1060" height="444" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Which layer decided, and what it cost</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">856 attempts: 25 settled locally in 0 ms, 831 scored by the classifier.</text>
+<text x="24" y="78" font-size="13" fill="var(--jv-dim, #52514e)">A hard-deny cannot be overruled by the model, whatever score Jev would have given.</text>
+<rect x="24" y="110" width="1012" height="86" rx="10" fill="var(--jv-panel, #f2f1ee)" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<rect x="24" y="110" width="6" height="86" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="52" y="142" font-size="15" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="700">Local rules: hard-deny</text>
+<text x="52" y="164" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">blocked before any network call</text>
+<text x="1008" y="148" font-size="30" fill="var(--jv-block, #d03b3b)" text-anchor="end" font-weight="700" font-variant-numeric="tabular-nums">21</text>
+<text x="1008" y="170" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="end">0 ms</text>
+<g class="mark-g"><title>Local rules: hard-deny: 2% of attempts</title><path class="mark" d="M52,176H66.6A4,4 0 0 1 70.6,180V180A4,4 0 0 1 66.6,184H52V176Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="78.6" y="184" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">2%</text>
+<rect x="24" y="210" width="1012" height="86" rx="10" fill="var(--jv-panel, #f2f1ee)" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<rect x="24" y="210" width="6" height="86" rx="3" fill="var(--jv-allow, #0ca30c)"/>
+<text x="52" y="242" font-size="15" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="700">Local rules: read-only fast pass</text>
+<text x="52" y="264" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">runs with no added latency</text>
+<text x="1008" y="248" font-size="30" fill="var(--jv-allow, #0ca30c)" text-anchor="end" font-weight="700" font-variant-numeric="tabular-nums">4</text>
+<text x="1008" y="270" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="end">0 ms</text>
+<g class="mark-g"><title>Local rules: read-only fast pass: 0% of attempts</title><path class="mark" d="M52,276H53.8A1.8,1.8 0 0 1 55.6,277.8V282.2A1.8,1.8 0 0 1 53.8,284H52V276Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="63.6" y="284" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">0%</text>
+<rect x="24" y="310" width="1012" height="86" rx="10" fill="var(--jv-panel, #f2f1ee)" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<rect x="24" y="310" width="6" height="86" rx="3" fill="var(--jv-accent, #2a78d6)"/>
+<text x="52" y="342" font-size="15" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="700">Sent to Jev</text>
+<text x="52" y="364" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">average 258 ms, p95 337 ms</text>
+<text x="1008" y="348" font-size="30" fill="var(--jv-accent, #2a78d6)" text-anchor="end" font-weight="700" font-variant-numeric="tabular-nums">831</text>
+<text x="1008" y="370" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="end">258 ms avg</text>
+<g class="mark-g"><title>Sent to Jev: 97% of attempts</title><path class="mark" d="M52,376H785.8A4,4 0 0 1 789.8,380V380A4,4 0 0 1 785.8,384H52V376Z" fill="var(--jv-accent, #2a78d6)"/>
+</g>
+<text x="797.8" y="384" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="start">97%</text>
+<text x="24" y="430" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">Most of this suite is written to get past pattern rules, so the classifier carries it. Any failure there blocks.</text>
+</svg>

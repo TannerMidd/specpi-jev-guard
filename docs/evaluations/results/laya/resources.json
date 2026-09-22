@@ -1,0 +1,21 @@
+{
+  "runtime": {
+    "model": "convaiinnovations/laya",
+    "revision": "1c5edc17a7acd8701df6fc341c0d179f1c62c982",
+    "identity": "convaiinnovations/laya@1c5edc17a7acd8701df6fc341c0d179f1c62c982",
+    "device": "cpu",
+    "threads": 4,
+    "maxTokens": 512,
+    "loadMs": 32132,
+    "python": "3.12.3",
+    "torch": "2.14.0+cpu",
+    "transformers": "5.17.0",
+    "laya": "0.3.5",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "cpu": "AMD Ryzen 9 3900X 12-Core Processor",
+  "systemRamBytes": 34280935424,
+  "rssBytes": 2099617792,
+  "peakRssBytes": 2933551104,
+  "note": "Working set after the paired text-only evaluations; peak includes loading and inference. Not a hardware minimum."
+}

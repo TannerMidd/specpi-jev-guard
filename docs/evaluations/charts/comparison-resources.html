@@ -1,0 +1,8 @@
+<table class="comparison">
+<thead><tr><th>Laya service</th><th>Process RAM</th><th>Peak RAM</th><th>Model load</th></tr></thead>
+<tbody>
+<tr><th scope="row">CPU, FP32</th><td>1.96 GiB</td><td>2.73 GiB</td><td>32.1 s</td></tr>
+<tr><th scope="row">GPU, BF16</th><td>1.79 GiB</td><td>3.14 GiB</td><td>37.0 s</td></tr>
+</tbody>
+</table>
+<p class="table-note">Model load excludes imports and download. Peaks include loading and inference, not hardware minimums. On the GPU, PyTorch's allocator held 1.60 GiB at the snapshot (peak 2.30 GiB) and reserved 2.50 GiB. Reserved includes allocated, so do not add them, and neither is total VRAM use: CUDA context, driver overhead, non-PyTorch allocations and other apps are excluded. Measured on an AMD Ryzen 9 3900X and an NVIDIA GeForce RTX 5070 Ti, Windows 11, 4 host CPU threads.</p>

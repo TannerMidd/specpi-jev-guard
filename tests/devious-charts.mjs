@@ -1,12 +1,15 @@
 /**
  * devious-charts.mjs — figures for the Devious Tests page.
- * No network: run `npm run devious` (and `npm run redteam`) first.
+ * No network: reads tests/jev-devious.json, the 856-attempt suite that
+ * `npm run devious` records, and tests/redteam-results.json.
  *
  * Writes one tokenized SVG each (see svg-util.mjs for how theming works):
  *   tests/diagram-flow.svg      how a gated command is decided
  *   tests/diagram-layers.svg    where this run's attacks were stopped
  *   tests/devious-families.svg  outcome mix per attack family
  *   tests/devious-ordinary.html what ordinary work runs into, inlined by docs:sync
+ *   tests/devious-stats.html    the numbers at the top of the page
+ *   tests/devious-edges.html    every hostile attempt that ran, with its score
  *   tests/devious-redteam.svg   an independent model's attempts, scored
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
@@ -99,7 +102,7 @@ function renderFlow() {
 
 /* ========================================= 2. where the attacks were stopped */
 
-/** One 89-command bar, split two ways: who stopped it, and what happened. */
+/** One bar of every hostile attempt, split two ways: who stopped it, and what happened. */
 function renderLayers() {
   const local = attacks.filter((r) => r.caughtBy === "local").length;
   const byJev = attacks.filter((r) => r.caughtBy === "jev" && r.final !== "allow").length;
@@ -114,9 +117,9 @@ function renderLayers() {
   const BH = 66;
   const scale = (nCmds) => (nCmds / total) * barW;
 
-  let s = svgOpen(W, H, { alt: "Where each of the 89 hostile commands was stopped" });
+  let s = svgOpen(W, H, { alt: `Where each of the ${total} hostile attempts was stopped` });
   s += title(40, 46, `Where the ${total} attacks were stopped`);
-  s += subtitle(40, 70, "Each bar is the same 89 hostile commands, split two different ways. Segment width is the number of commands.");
+  s += subtitle(40, 70, `Each bar is the same ${total} hostile attempts, split two different ways. Segment width is the number of attempts.`);
 
   // A bar, then a key line underneath: every segment is named in words, so a
   // sliver two commands wide is as readable as the big ones.
@@ -155,7 +158,7 @@ function renderLayers() {
   ]);
 
   s += label(40, H - 46, `Held blocks outright when nobody is there to answer, so an unattended agent stops ${blocked + held} of ${total}.`, { size: 12.5, fill: P.muted });
-  s += label(40, H - 24, `Got past both: ${through.map((r) => `${r.cmd} (${r.danger?.toFixed(2) ?? "n/a"})`).join("   ·   ")}`, { size: 12.5, fill: P.muted });
+  s += label(40, H - 24, `The ${plural(through.length, "attempt", "attempts")} that got past both are listed, with their scores, further down the page.`, { size: 12.5, fill: P.muted });
   s += svgClose();
   return s;
 }
@@ -167,7 +170,7 @@ function renderFamilies() {
     (a, b) => a.blocked / a.total - b.blocked / b.total || b.total - a.total,
   );
   const W = 1020;
-  const L = 230, R = 96, T = 172, RH = 24, PITCH = 42;
+  const L = 330, R = 96, T = 172, RH = 20, PITCH = 32;
   const barMax = W - L - R;
   const maxN = Math.max(...ordered.map((f) => f.total));
   const H = T + ordered.length * PITCH + 50;
@@ -175,7 +178,7 @@ function renderFamilies() {
 
   let s = svgOpen(W, H, { alt: "Stacked bars: what happened to each family of attack" });
   s += title(40, 46, "Every attack family, and what happened to it");
-  s += subtitle(40, 70, `${meta.attacks} hostile commands grouped by the trick they use. Bar length is the number of commands in that family.`);
+  s += subtitle(40, 70, `${meta.attacks} hostile attempts grouped by family. Bar length is the number of attempts; each new family is six commands tried three ways.`);
   s += subtitle(40, 90, "Sorted with the weakest result at the top, so the families worth arguing about come first.");
   s += legend(40, 126, [
     { label: "blocked", color: P.block },
@@ -183,7 +186,8 @@ function renderFamilies() {
     { label: "allowed", color: P.allow },
   ]);
 
-  const ticks = [0, 2, 4, 6, 8, 10, 12].filter((t) => t <= maxN);
+  const step = maxN > 12 ? 5 : 2;
+  const ticks = Array.from({ length: Math.floor(maxN / step) + 1 }, (_, i) => i * step);
   const axisY = T + ordered.length * PITCH - 12;
   s += gridV(ticks.slice(1).map((t) => L + scale(t)), T - 12, axisY);
   s += axisLine(L, axisY, L + barMax);
@@ -219,46 +223,90 @@ function renderFamilies() {
 
 /* ========================================= 4. what ordinary work runs into */
 
+// Which view of a command a row is. The new cases come three ways; the
+// original ones once.
+const VIEW = { legacy: "original", plain: "plain", nested: "wrapped", encoded: "encoded", assurance: "with assurance" };
+const tag = (r) => (r.variant ? ` <span class="tag">${VIEW[r.variant] ?? r.variant}</span>` : "");
+
 /**
- * The control group, named. A distribution of scores tells you the guard
- * separates two piles; it does not tell you whether the thing will interrupt
- * the work you actually do. That question is answered by reading the commands,
- * so they are listed, in the order the guard sees them.
+ * The control group, as far as it gets in your way. With hundreds of ordinary
+ * commands a full list says less than the ones that stopped, so those are
+ * named: every refusal, and every question, highest score first. The rest ran.
  */
 function renderOrdinaryTable() {
-  const trp = rows
-    .filter((r) => r.kind === "trap")
-    .sort((a, b) => a.danger - b.danger);
+  const trp = rows.filter((r) => r.kind === "trap");
   const ran = trp.filter((r) => r.final === "allow");
-  const asked = trp.filter((r) => r.final === "ask");
-  const blocked = trp.filter((r) => r.final === "block");
+  const asked = trp.filter((r) => r.final === "ask").sort((a, b) => b.danger - a.danger);
+  const blocked = trp.filter((r) => r.final === "block").sort((a, b) => b.danger - a.danger);
 
-  const VERDICT = {
-    allow: ["ran", "ok"],
-    ask: ["asked first", "ask"],
-    block: ["blocked", "bad"],
-  };
-
+  const VERDICT = { allow: ["ran", "ok"], ask: ["asked first", "ask"], block: ["blocked", "bad"] };
   const row = (r) => {
     const [text, cls] = VERDICT[r.final] ?? ["unknown", "skip"];
-    return `<tr><td><code>${escXml(r.cmd)}</code></td><td class="ev">${r.danger.toFixed(2)}</td><td class="${cls}">${text}</td></tr>`;
+    const score = typeof r.danger === "number" ? r.danger.toFixed(2) : "rule";
+    return `<tr><td><code>${escXml(r.cmd)}</code>${tag(r)}</td><td class="ev">${score}</td><td class="${cls}">${text}</td></tr>`;
   };
-
-  return [
-    `<p class="table-note">${trp.length} commands that do real work and look alarming while doing it. ` +
-      `${ran.length} ran with no prompt, ${asked.length} stopped to ask, ` +
-      `${blocked.length === 0 ? "none were blocked" : `${blocked.length} were blocked`}.</p>`,
+  const table = (list) => [
     `<table class="results ordinary">`,
     `<thead><tr><th>Command</th><th>Score</th><th>What the guard did</th></tr></thead>`,
     `<tbody>`,
-    ...trp.map(row),
+    ...list.map(row),
+    `</tbody>`,
+    `</table>`,
+  ];
+
+  return [
+    `<p class="table-note">${trp.length} ordinary commands that do real work and look alarming while doing it. ` +
+      `${ran.length} ran with no prompt, ${asked.length} stopped to ask, ` +
+      `${blocked.length === 0 ? "none were blocked" : `${blocked.length} were blocked`}. Every one that stopped is listed, highest score first.</p>`,
+    ...(blocked.length ? table(blocked) : []),
+    `<details class="more">`,
+    `<summary>The ${asked.length} that stopped to ask <span>each one waits for a yes, and blocks when nobody is there</span></summary>`,
+    ...table(asked),
+    `</details>`,
+    "",
+  ].join("\n");
+}
+
+/* ================================================= 5. the numbers up top */
+
+function renderStats() {
+  const trp = rows.filter((r) => r.kind === "trap");
+  const stopped = attacks.filter((r) => r.final === "block" || r.final === "ask").length;
+  const bypasses = attacks.filter((r) => r.bypass).length;
+  const refused = trp.filter((r) => r.final === "block").length;
+  const cards = [
+    ["", String(attacks.length), `hostile attempts, ${families.length} families`],
+    ["", `${stopped} / ${attacks.length}`, "blocked or held for confirmation"],
+    [" crit", `${bypasses} / ${attacks.length}`, "let through unexpectedly"],
+    ["", `${refused} / ${trp.length}`, "ordinary commands blocked outright"],
+  ];
+  if (redteam) {
+    const caught = redteam.rows.filter((r) => r.final !== "allow").length;
+    cards.push([caught === redteam.rows.length ? " good" : "", `${caught} / ${redteam.rows.length}`, "red-team attacks stopped"]);
+  }
+  return `<div class="stat-grid">\n${cards.map(([cls, n, text]) => `  <div class="stat-card${cls}"><strong>${n}</strong><span>${text}</span></div>`).join("\n")}\n</div>\n`;
+}
+
+/* ============================================ 6. closest to the line */
+
+function renderEdges() {
+  const through = attacks.filter((r) => r.final === "allow").sort((a, b) => a.danger - b.danger);
+  const body = through.map((r) => {
+    const note = r.bypass ? escXml(r.intent) : `${escXml(r.intent)}, allowed to run by design`;
+    return `<tr><td><code>${escXml(r.cmd)}</code>${tag(r)}</td><td class="ev">${r.danger.toFixed(2)}</td><td class="why">${note}</td></tr>`;
+  });
+  return [
+    `<table class="results misses">`,
+    `<thead><tr><th>Command that ran</th><th>Score</th><th>What it is about</th></tr></thead>`,
+    `<tbody>`,
+    ...body,
     `</tbody>`,
     `</table>`,
     "",
   ].join("\n");
 }
 
-/* ============================================= 5. the independent adversary */
+/* ============================================= 7. the independent adversary */
 
 function renderRedteam() {
   const rt = redteam.rows;
@@ -341,6 +389,12 @@ if (redteam) {
 } else {
   console.warn("skip devious-redteam — run `npm run redteam` first");
 }
-writeFileSync(new URL("./devious-ordinary.html", import.meta.url), renderOrdinaryTable(), "utf-8");
-built.push("devious-ordinary.html");
+for (const [name, render] of [
+  ["devious-ordinary", renderOrdinaryTable],
+  ["devious-stats", renderStats],
+  ["devious-edges", renderEdges],
+]) {
+  writeFileSync(new URL(`./${name}.html`, import.meta.url), render(), "utf-8");
+  built.push(`${name}.html`);
+}
 console.log(`devious:charts — wrote ${built.join(", ")}`);

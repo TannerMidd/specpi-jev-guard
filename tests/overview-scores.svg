@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 532" width="1060" height="532" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>Where the danger scores fell</title>
+<rect width="1060" height="532" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Where the scores fell</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">831 attempts scored by Jev, counted in steps of 0.05. The 25 settled by local rules carry no score.</text>
+<rect x="24" y="77" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
+<text x="41" y="86" font-size="12" fill="var(--jv-dim, #52514e)">under 0.35: runs</text>
+<rect x="172.4" y="77" width="11" height="11" rx="3" fill="var(--jv-ask, #fab219)"/>
+<text x="189.4" y="86" font-size="12" fill="var(--jv-dim, #52514e)">0.35 to 0.8: asks first</text>
+<rect x="369.4" y="77" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="386.4" y="86" font-size="12" fill="var(--jv-dim, #52514e)">0.8 and up: blocked</text>
+<text x="24" y="136" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Hostile attempts</text>
+<text x="24" y="154" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">450 scored</text>
+<g class="mark-g"><title>Hostile attempts: 1 scored 0.10 to 0.15</title><path class="mark" d="M191,258H231V260H191V258Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="211" y="252" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">1</text>
+<g class="mark-g"><title>Hostile attempts: 2 scored 0.20 to 0.25</title><path class="mark" d="M283,258H323V260H283V258Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="303" y="252" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">2</text>
+<g class="mark-g"><title>Hostile attempts: 1 scored 0.25 to 0.30</title><path class="mark" d="M329,258H369V260H329V258Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="349" y="252" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">1</text>
+<g class="mark-g"><title>Hostile attempts: 6 scored 0.30 to 0.35</title><path class="mark" d="M375,257.3H415V260H375V257.3Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="395" y="251.3" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">6</text>
+<g class="mark-g"><title>Hostile attempts: 3 scored 0.35 to 0.40</title><path class="mark" d="M421,258H461V260H421V258Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="441" y="252" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">3</text>
+<g class="mark-g"><title>Hostile attempts: 2 scored 0.40 to 0.45</title><path class="mark" d="M467,258H507V260H467V258Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="487" y="252" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">2</text>
+<g class="mark-g"><title>Hostile attempts: 2 scored 0.45 to 0.50</title><path class="mark" d="M513,258H553V260H513V258Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="533" y="252" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">2</text>
+<g class="mark-g"><title>Hostile attempts: 5 scored 0.50 to 0.55</title><path class="mark" d="M559,257.7H599V260H559V257.7Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="579" y="251.7" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">5</text>
+<g class="mark-g"><title>Hostile attempts: 13 scored 0.55 to 0.60</title><path class="mark" d="M605,254.1H645V260H605V254.1Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="625" y="248.1" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">13</text>
+<g class="mark-g"><title>Hostile attempts: 17 scored 0.60 to 0.65</title><path class="mark" d="M651,252.2H691V260H651V252.2Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="671" y="246.2" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">17</text>
+<g class="mark-g"><title>Hostile attempts: 13 scored 0.65 to 0.70</title><path class="mark" d="M697,254.1H737V260H697V254.1Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="717" y="248.1" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">13</text>
+<g class="mark-g"><title>Hostile attempts: 13 scored 0.70 to 0.75</title><path class="mark" d="M743,254.1H783V260H743V254.1Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="763" y="248.1" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">13</text>
+<g class="mark-g"><title>Hostile attempts: 14 scored 0.75 to 0.80</title><path class="mark" d="M789,253.6H829V260H789V253.6Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="809" y="247.6" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">14</text>
+<g class="mark-g"><title>Hostile attempts: 18 scored 0.80 to 0.85</title><path class="mark" d="M835,251.8H875V260H835V251.8Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="855" y="245.8" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">18</text>
+<g class="mark-g"><title>Hostile attempts: 35 scored 0.85 to 0.90</title><path class="mark" d="M881,244H921V260H881V244Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="901" y="238" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">35</text>
+<g class="mark-g"><title>Hostile attempts: 82 scored 0.90 to 0.95</title><path class="mark" d="M927,222.5H967V260H927V222.5Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="947" y="216.5" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">82</text>
+<g class="mark-g"><title>Hostile attempts: 223 scored 0.95 to 1.00</title><path class="mark" d="M973,158H1013V260H973V158Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="993" y="152" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">223</text>
+<line x1="96" y1="260" x2="1016" y2="260" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="96" y="276" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.0</text>
+<text x="326" y="276" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.25</text>
+<text x="556" y="276" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.5</text>
+<text x="786" y="276" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.75</text>
+<text x="1016" y="276" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">1.0</text>
+<text x="24" y="321" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Ordinary work</text>
+<text x="24" y="339" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">381 scored</text>
+<g class="mark-g"><title>Ordinary work: 63 scored 0.00 to 0.05</title><path class="mark" d="M99,416.2H139V445H99V416.2Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="119" y="410.2" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">63</text>
+<g class="mark-g"><title>Ordinary work: 93 scored 0.05 to 0.10</title><path class="mark" d="M145,402.5H185V445H145V402.5Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="165" y="396.5" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">93</text>
+<g class="mark-g"><title>Ordinary work: 57 scored 0.10 to 0.15</title><path class="mark" d="M191,418.9H231V445H191V418.9Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="211" y="412.9" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">57</text>
+<g class="mark-g"><title>Ordinary work: 29 scored 0.15 to 0.20</title><path class="mark" d="M237,431.7H277V445H237V431.7Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="257" y="425.7" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">29</text>
+<g class="mark-g"><title>Ordinary work: 30 scored 0.20 to 0.25</title><path class="mark" d="M283,431.3H323V445H283V431.3Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="303" y="425.3" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">30</text>
+<g class="mark-g"><title>Ordinary work: 22 scored 0.25 to 0.30</title><path class="mark" d="M329,434.9H369V445H329V434.9Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="349" y="428.9" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">22</text>
+<g class="mark-g"><title>Ordinary work: 10 scored 0.30 to 0.35</title><path class="mark" d="M375,440.4H415V445H375V440.4Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="395" y="434.4" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">10</text>
+<g class="mark-g"><title>Ordinary work: 8 scored 0.35 to 0.40</title><path class="mark" d="M421,441.3H461V445H421V441.3Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="441" y="435.3" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">8</text>
+<g class="mark-g"><title>Ordinary work: 7 scored 0.40 to 0.45</title><path class="mark" d="M467,441.8H507V445H467V441.8Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="487" y="435.8" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">7</text>
+<g class="mark-g"><title>Ordinary work: 7 scored 0.45 to 0.50</title><path class="mark" d="M513,441.8H553V445H513V441.8Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="533" y="435.8" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">7</text>
+<g class="mark-g"><title>Ordinary work: 9 scored 0.50 to 0.55</title><path class="mark" d="M559,440.9H599V445H559V440.9Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="579" y="434.9" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">9</text>
+<g class="mark-g"><title>Ordinary work: 6 scored 0.55 to 0.60</title><path class="mark" d="M605,442.3H645V445H605V442.3Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="625" y="436.3" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">6</text>
+<g class="mark-g"><title>Ordinary work: 4 scored 0.60 to 0.65</title><path class="mark" d="M651,443H691V445H651V443Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="671" y="437" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">4</text>
+<g class="mark-g"><title>Ordinary work: 3 scored 0.65 to 0.70</title><path class="mark" d="M697,443H737V445H697V443Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="717" y="437" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">3</text>
+<g class="mark-g"><title>Ordinary work: 1 scored 0.70 to 0.75</title><path class="mark" d="M743,443H783V445H743V443Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="763" y="437" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">1</text>
+<g class="mark-g"><title>Ordinary work: 19 scored 0.75 to 0.80</title><path class="mark" d="M789,436.3H829V445H789V436.3Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="809" y="430.3" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">19</text>
+<g class="mark-g"><title>Ordinary work: 3 scored 0.80 to 0.85</title><path class="mark" d="M835,443H875V445H835V443Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="855" y="437" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">3</text>
+<g class="mark-g"><title>Ordinary work: 5 scored 0.85 to 0.90</title><path class="mark" d="M881,442.7H921V445H881V442.7Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="901" y="436.7" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">5</text>
+<g class="mark-g"><title>Ordinary work: 2 scored 0.90 to 0.95</title><path class="mark" d="M927,443H967V445H927V443Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="947" y="437" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">2</text>
+<g class="mark-g"><title>Ordinary work: 3 scored 0.95 to 1.00</title><path class="mark" d="M973,443H1013V445H973V443Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="993" y="437" font-size="11" fill="var(--jv-dim, #52514e)" text-anchor="middle" font-weight="600" font-variant-numeric="tabular-nums">3</text>
+<line x1="96" y1="445" x2="1016" y2="445" stroke="var(--jv-border, #c3c2b7)" stroke-width="1"/>
+<text x="96" y="461" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.0</text>
+<text x="326" y="461" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.25</text>
+<text x="556" y="461" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.5</text>
+<text x="786" y="461" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">0.75</text>
+<text x="1016" y="461" font-size="11" fill="var(--jv-muted, #898781)" text-anchor="middle" font-variant-numeric="tabular-nums">1.0</text>
+<line x1="418.0" y1="114" x2="418.0" y2="488" stroke="var(--jv-border, #c3c2b7)" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="424" y="112" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-weight="600">ask 0.35</text>
+<line x1="832.0" y1="114" x2="832.0" y2="488" stroke="var(--jv-border, #c3c2b7)" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="838" y="112" font-size="11.5" fill="var(--jv-muted, #898781)" text-anchor="start" font-weight="600">block 0.8</text>
+<text x="24" y="518" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">0 = routine, 1 = destructive or exfiltrating. Hover a bar for its range.</text>
+</svg>

@@ -1,0 +1,245 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 830" width="1060" height="830" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>Every new command family, hostile and ordinary</title>
+<rect width="1060" height="830" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Every paired family, hostile and ordinary side by side</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">20 families, each 18 hostile and 18 ordinary attempts: six commands a side, each tried three ways. Weakest first.</text>
+<rect x="24" y="77" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="41" y="86" font-size="12" fill="var(--jv-dim, #52514e)">blocked</text>
+<rect x="109.7" y="77" width="11" height="11" rx="3" fill="var(--jv-ask, #fab219)"/>
+<text x="126.7" y="86" font-size="12" fill="var(--jv-dim, #52514e)">asked first</text>
+<rect x="223.3" y="77" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
+<text x="240.3" y="86" font-size="12" fill="var(--jv-dim, #52514e)">ran</text>
+<text x="340" y="130" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Hostile attempts</text>
+<text x="706" y="130" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Ordinary work</text>
+<text x="324" y="164.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Kubernetes scope and permissions</text>
+<g class="mark-g"><title>Kubernetes scope and permissions, hostile: 12 blocked</title><path class="mark" d="M340,150H558V170H340V150Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="449" y="164.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">12</text>
+<g class="mark-g"><title>Kubernetes scope and permissions, hostile: 3 asked first</title><path class="mark" d="M560,150H613V170H560V150Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="586.5" y="164.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Kubernetes scope and permissions, hostile: 3 ran</title><path class="mark" d="M615,150H666A4,4 0 0 1 670,154V166A4,4 0 0 1 666,170H615V150Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="642.5" y="164.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Kubernetes scope and permissions, ordinary: 17 ran</title><path class="mark" d="M706,150H1015.7V170H706V150Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="860.8" y="164.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">17</text>
+<g class="mark-g"><title>Kubernetes scope and permissions, ordinary: 1 asked first</title><path class="mark" d="M1017.7,150H1032A4,4 0 0 1 1036,154V166A4,4 0 0 1 1032,170H1017.7V150Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="1026.8" y="164.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
+<text x="324" y="196.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Filesystem scope and destructive flags</text>
+<g class="mark-g"><title>Filesystem scope and destructive flags, hostile: 12 blocked</title><path class="mark" d="M340,182H558V202H340V182Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="449" y="196.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">12</text>
+<g class="mark-g"><title>Filesystem scope and destructive flags, hostile: 5 asked first</title><path class="mark" d="M560,182H649.7V202H560V182Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="604.8" y="196.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">5</text>
+<g class="mark-g"><title>Filesystem scope and destructive flags, hostile: 1 ran</title><path class="mark" d="M651.7,182H666A4,4 0 0 1 670,186V198A4,4 0 0 1 666,202H651.7V182Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="660.8" y="196.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">1</text>
+<g class="mark-g"><title>Filesystem scope and destructive flags, ordinary: 16 ran</title><path class="mark" d="M706,182H997.3V202H706V182Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="851.7" y="196.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">16</text>
+<g class="mark-g"><title>Filesystem scope and destructive flags, ordinary: 2 asked first</title><path class="mark" d="M999.3,182H1032A4,4 0 0 1 1036,186V198A4,4 0 0 1 1032,202H999.3V182Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="1017.7" y="196.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">2</text>
+<text x="324" y="228.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Quoted payloads and dry-run contrast</text>
+<g class="mark-g"><title>Quoted payloads and dry-run contrast, hostile: 15 blocked</title><path class="mark" d="M340,214H613V234H340V214Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="476.5" y="228.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Quoted payloads and dry-run contrast, hostile: 3 asked first</title><path class="mark" d="M615,214H666A4,4 0 0 1 670,218V230A4,4 0 0 1 666,234H615V214Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="642.5" y="228.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Quoted payloads and dry-run contrast, ordinary: 6 ran</title><path class="mark" d="M706,214H814V234H706V214Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="760" y="228.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">6</text>
+<g class="mark-g"><title>Quoted payloads and dry-run contrast, ordinary: 3 asked first</title><path class="mark" d="M816,214H869V234H816V214Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="842.5" y="228.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Quoted payloads and dry-run contrast, ordinary: 9 blocked</title><path class="mark" d="M871,214H1032A4,4 0 0 1 1036,218V230A4,4 0 0 1 1032,234H871V214Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="953.5" y="228.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">9</text>
+<text x="324" y="260.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Windows loss, exfiltration and persistence</text>
+<g class="mark-g"><title>Windows loss, exfiltration and persistence, hostile: 11 blocked</title><path class="mark" d="M340,246H539.7V266H340V246Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="439.8" y="260.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">11</text>
+<g class="mark-g"><title>Windows loss, exfiltration and persistence, hostile: 7 asked first</title><path class="mark" d="M541.7,246H666A4,4 0 0 1 670,250V262A4,4 0 0 1 666,266H541.7V246Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="605.8" y="260.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">7</text>
+<g class="mark-g"><title>Windows loss, exfiltration and persistence, ordinary: 9 ran</title><path class="mark" d="M706,246H869V266H706V246Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="787.5" y="260.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">9</text>
+<g class="mark-g"><title>Windows loss, exfiltration and persistence, ordinary: 7 asked first</title><path class="mark" d="M871,246H997.3V266H871V246Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="934.2" y="260.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">7</text>
+<g class="mark-g"><title>Windows loss, exfiltration and persistence, ordinary: 2 blocked</title><path class="mark" d="M999.3,246H1032A4,4 0 0 1 1036,250V262A4,4 0 0 1 1032,266H999.3V246Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="1017.7" y="260.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">2</text>
+<text x="324" y="292.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Storage, backups and recovery</text>
+<g class="mark-g"><title>Storage, backups and recovery, hostile: 18 blocked</title><path class="mark" d="M340,278H666A4,4 0 0 1 670,282V294A4,4 0 0 1 666,298H340V278Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="505" y="292.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<g class="mark-g"><title>Storage, backups and recovery, ordinary: 12 ran</title><path class="mark" d="M706,278H924V298H706V278Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="815" y="292.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">12</text>
+<g class="mark-g"><title>Storage, backups and recovery, ordinary: 4 asked first</title><path class="mark" d="M926,278H997.3V298H926V278Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="961.7" y="292.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">4</text>
+<g class="mark-g"><title>Storage, backups and recovery, ordinary: 2 blocked</title><path class="mark" d="M999.3,278H1032A4,4 0 0 1 1036,282V294A4,4 0 0 1 1032,298H999.3V278Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="1017.7" y="292.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">2</text>
+<text x="324" y="324.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Windows security and access controls</text>
+<g class="mark-g"><title>Windows security and access controls, hostile: 6 blocked</title><path class="mark" d="M340,310H448V330H340V310Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="394" y="324.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">6</text>
+<g class="mark-g"><title>Windows security and access controls, hostile: 12 asked first</title><path class="mark" d="M450,310H666A4,4 0 0 1 670,314V326A4,4 0 0 1 666,330H450V310Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="560" y="324.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">12</text>
+<g class="mark-g"><title>Windows security and access controls, ordinary: 12 ran</title><path class="mark" d="M706,310H924V330H706V310Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="815" y="324.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">12</text>
+<g class="mark-g"><title>Windows security and access controls, ordinary: 6 asked first</title><path class="mark" d="M926,310H1032A4,4 0 0 1 1036,314V326A4,4 0 0 1 1032,330H926V310Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="981" y="324.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">6</text>
+<text x="324" y="356.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Linux security and persistence</text>
+<g class="mark-g"><title>Linux security and persistence, hostile: 7 blocked</title><path class="mark" d="M340,342H466.3V362H340V342Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="403.2" y="356.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">7</text>
+<g class="mark-g"><title>Linux security and persistence, hostile: 11 asked first</title><path class="mark" d="M468.3,342H666A4,4 0 0 1 670,346V358A4,4 0 0 1 666,362H468.3V342Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="569.2" y="356.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">11</text>
+<g class="mark-g"><title>Linux security and persistence, ordinary: 18 ran</title><path class="mark" d="M706,342H1032A4,4 0 0 1 1036,346V358A4,4 0 0 1 1032,362H706V342Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="871" y="356.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<text x="324" y="388.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Cloud IAM, storage and audit controls</text>
+<g class="mark-g"><title>Cloud IAM, storage and audit controls, hostile: 10 blocked</title><path class="mark" d="M340,374H521.3V394H340V374Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="430.7" y="388.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">10</text>
+<g class="mark-g"><title>Cloud IAM, storage and audit controls, hostile: 8 asked first</title><path class="mark" d="M523.3,374H666A4,4 0 0 1 670,378V390A4,4 0 0 1 666,394H523.3V374Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="596.7" y="388.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">8</text>
+<g class="mark-g"><title>Cloud IAM, storage and audit controls, ordinary: 17 ran</title><path class="mark" d="M706,374H1015.7V394H706V374Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="860.8" y="388.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">17</text>
+<g class="mark-g"><title>Cloud IAM, storage and audit controls, ordinary: 1 asked first</title><path class="mark" d="M1017.7,374H1032A4,4 0 0 1 1036,378V390A4,4 0 0 1 1032,394H1017.7V374Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="1026.8" y="388.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
+<text x="324" y="420.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Credentials and public artifacts</text>
+<g class="mark-g"><title>Credentials and public artifacts, hostile: 15 blocked</title><path class="mark" d="M340,406H613V426H340V406Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="476.5" y="420.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Credentials and public artifacts, hostile: 3 asked first</title><path class="mark" d="M615,406H666A4,4 0 0 1 670,410V422A4,4 0 0 1 666,426H615V406Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="642.5" y="420.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Credentials and public artifacts, ordinary: 15 ran</title><path class="mark" d="M706,406H979V426H706V406Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="842.5" y="420.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Credentials and public artifacts, ordinary: 3 asked first</title><path class="mark" d="M981,406H1032A4,4 0 0 1 1036,410V422A4,4 0 0 1 1032,426H981V406Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="1008.5" y="420.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<text x="324" y="452.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Delayed execution and multi-step preparation</text>
+<g class="mark-g"><title>Delayed execution and multi-step preparation, hostile: 15 blocked</title><path class="mark" d="M340,438H613V458H340V438Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="476.5" y="452.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Delayed execution and multi-step preparation, hostile: 3 asked first</title><path class="mark" d="M615,438H666A4,4 0 0 1 670,442V454A4,4 0 0 1 666,458H615V438Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="642.5" y="452.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Delayed execution and multi-step preparation, ordinary: 15 ran</title><path class="mark" d="M706,438H979V458H706V438Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="842.5" y="452.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Delayed execution and multi-step preparation, ordinary: 3 asked first</title><path class="mark" d="M981,438H1032A4,4 0 0 1 1036,442V454A4,4 0 0 1 1032,458H981V438Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="1008.5" y="452.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<text x="324" y="484.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Dependency and transport trust changes</text>
+<g class="mark-g"><title>Dependency and transport trust changes, hostile: 15 blocked</title><path class="mark" d="M340,470H613V490H340V470Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="476.5" y="484.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Dependency and transport trust changes, hostile: 3 asked first</title><path class="mark" d="M615,470H666A4,4 0 0 1 670,474V486A4,4 0 0 1 666,490H615V470Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="642.5" y="484.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Dependency and transport trust changes, ordinary: 18 ran</title><path class="mark" d="M706,470H1032A4,4 0 0 1 1036,474V486A4,4 0 0 1 1032,490H706V470Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="871" y="484.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<text x="324" y="516.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Git transport, hooks and configuration</text>
+<g class="mark-g"><title>Git transport, hooks and configuration, hostile: 15 blocked</title><path class="mark" d="M340,502H613V522H340V502Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="476.5" y="516.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Git transport, hooks and configuration, hostile: 3 asked first</title><path class="mark" d="M615,502H666A4,4 0 0 1 670,506V518A4,4 0 0 1 666,522H615V502Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="642.5" y="516.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<g class="mark-g"><title>Git transport, hooks and configuration, ordinary: 18 ran</title><path class="mark" d="M706,502H1032A4,4 0 0 1 1036,506V518A4,4 0 0 1 1032,522H706V502Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="871" y="516.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<text x="324" y="548.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Interpreter APIs rather than shell deletion</text>
+<g class="mark-g"><title>Interpreter APIs rather than shell deletion, hostile: 17 blocked</title><path class="mark" d="M340,534H649.7V554H340V534Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="494.8" y="548.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">17</text>
+<g class="mark-g"><title>Interpreter APIs rather than shell deletion, hostile: 1 asked first</title><path class="mark" d="M651.7,534H666A4,4 0 0 1 670,538V550A4,4 0 0 1 666,554H651.7V534Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="660.8" y="548.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
+<g class="mark-g"><title>Interpreter APIs rather than shell deletion, ordinary: 18 ran</title><path class="mark" d="M706,534H1032A4,4 0 0 1 1036,538V550A4,4 0 0 1 1032,554H706V534Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="871" y="548.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<text x="324" y="580.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Deserialization and executable configuration</text>
+<g class="mark-g"><title>Deserialization and executable configuration, hostile: 18 blocked</title><path class="mark" d="M340,566H666A4,4 0 0 1 670,570V582A4,4 0 0 1 666,586H340V566Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="505" y="580.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<g class="mark-g"><title>Deserialization and executable configuration, ordinary: 6 ran</title><path class="mark" d="M706,566H814V586H706V566Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="760" y="580.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">6</text>
+<g class="mark-g"><title>Deserialization and executable configuration, ordinary: 12 asked first</title><path class="mark" d="M816,566H1032A4,4 0 0 1 1036,570V582A4,4 0 0 1 1032,586H816V566Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="926" y="580.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">12</text>
+<text x="324" y="612.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Database loss and privilege changes</text>
+<g class="mark-g"><title>Database loss and privilege changes, hostile: 18 blocked</title><path class="mark" d="M340,598H666A4,4 0 0 1 670,602V614A4,4 0 0 1 666,618H340V598Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="505" y="612.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<g class="mark-g"><title>Database loss and privilege changes, ordinary: 15 ran</title><path class="mark" d="M706,598H979V618H706V598Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="842.5" y="612.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Database loss and privilege changes, ordinary: 3 asked first</title><path class="mark" d="M981,598H1032A4,4 0 0 1 1036,602V614A4,4 0 0 1 1032,618H981V598Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="1008.5" y="612.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<text x="324" y="644.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Less obvious outbound channels</text>
+<g class="mark-g"><title>Less obvious outbound channels, hostile: 18 blocked</title><path class="mark" d="M340,630H666A4,4 0 0 1 670,634V646A4,4 0 0 1 666,650H340V630Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="505" y="644.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<g class="mark-g"><title>Less obvious outbound channels, ordinary: 15 ran</title><path class="mark" d="M706,630H979V650H706V630Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="842.5" y="644.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>Less obvious outbound channels, ordinary: 3 asked first</title><path class="mark" d="M981,630H1032A4,4 0 0 1 1036,634V646A4,4 0 0 1 1032,650H981V630Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="1008.5" y="644.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">3</text>
+<text x="324" y="676.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Container host boundaries</text>
+<g class="mark-g"><title>Container host boundaries, hostile: 18 blocked</title><path class="mark" d="M340,662H666A4,4 0 0 1 670,666V678A4,4 0 0 1 666,682H340V662Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="505" y="676.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<g class="mark-g"><title>Container host boundaries, ordinary: 17 ran</title><path class="mark" d="M706,662H1015.7V682H706V662Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="860.8" y="676.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">17</text>
+<g class="mark-g"><title>Container host boundaries, ordinary: 1 asked first</title><path class="mark" d="M1017.7,662H1032A4,4 0 0 1 1036,666V678A4,4 0 0 1 1032,682H1017.7V662Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="1026.8" y="676.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">1</text>
+<text x="324" y="708.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Build-system hooks and hidden subprocesses</text>
+<g class="mark-g"><title>Build-system hooks and hidden subprocesses, hostile: 18 blocked</title><path class="mark" d="M340,694H666A4,4 0 0 1 670,698V710A4,4 0 0 1 666,714H340V694Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="505" y="708.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<g class="mark-g"><title>Build-system hooks and hidden subprocesses, ordinary: 18 ran</title><path class="mark" d="M706,694H1032A4,4 0 0 1 1036,698V710A4,4 0 0 1 1032,714H706V694Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="871" y="708.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<text x="324" y="740.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Callbacks in nominally ordinary tools</text>
+<g class="mark-g"><title>Callbacks in nominally ordinary tools, hostile: 18 blocked</title><path class="mark" d="M340,726H666A4,4 0 0 1 670,730V742A4,4 0 0 1 666,746H340V726Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="505" y="740.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<g class="mark-g"><title>Callbacks in nominally ordinary tools, ordinary: 18 ran</title><path class="mark" d="M706,726H1032A4,4 0 0 1 1036,730V742A4,4 0 0 1 1032,746H706V726Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="871" y="740.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<text x="324" y="772.5" font-size="12.5" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="600">Shell expansion and indirection</text>
+<g class="mark-g"><title>Shell expansion and indirection, hostile: 18 blocked</title><path class="mark" d="M340,758H666A4,4 0 0 1 670,762V774A4,4 0 0 1 666,778H340V758Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="505" y="772.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<g class="mark-g"><title>Shell expansion and indirection, ordinary: 18 ran</title><path class="mark" d="M706,758H1032A4,4 0 0 1 1036,762V774A4,4 0 0 1 1032,778H706V758Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="871" y="772.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">18</text>
+<text x="24" y="816" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">The original 136 cases are broken down by technique on the Devious Tests page.</text>
+</svg>

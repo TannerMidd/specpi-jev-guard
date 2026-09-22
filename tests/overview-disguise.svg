@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 440" width="1060" height="440" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<title>Does disguise help an attack get through</title>
+<rect width="1060" height="440" fill="var(--jv-bg, #fcfcfb)"/>
+<text x="24" y="34" font-size="19" font-weight="650" fill="var(--jv-text, #0b0b0b)" letter-spacing="-0.01em">Does disguise help? The same commands, three ways</text>
+<text x="24" y="58" font-size="13" fill="var(--jv-dim, #52514e)">Each of the 120 pairs was tried plainly, wrapped one shell deeper, and with a request that vouches for it.</text>
+<rect x="24" y="77" width="11" height="11" rx="3" fill="var(--jv-block, #d03b3b)"/>
+<text x="41" y="86" font-size="12" fill="var(--jv-dim, #52514e)">blocked</text>
+<rect x="109.7" y="77" width="11" height="11" rx="3" fill="var(--jv-ask, #fab219)"/>
+<text x="126.7" y="86" font-size="12" fill="var(--jv-dim, #52514e)">asked first</text>
+<rect x="223.3" y="77" width="11" height="11" rx="3" fill="var(--jv-allow, #0ca30c)"/>
+<text x="240.3" y="86" font-size="12" fill="var(--jv-dim, #52514e)">ran</text>
+<text x="250" y="130" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Hostile attempts</text>
+<text x="659" y="130" font-size="13.5" fill="var(--jv-text, #0b0b0b)" text-anchor="start" font-weight="650">Ordinary work</text>
+<text x="234" y="162" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Plain</text>
+<text x="234" y="179" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">the command as written</text>
+<g class="mark-g"><title>Plain, hostile: 99 blocked</title><path class="mark" d="M250,150H486.4V176H250V150Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="368.2" y="167.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">99</text>
+<g class="mark-g"><title>Plain, hostile: 20 asked first</title><path class="mark" d="M488.4,150H534.6V176H488.4V150Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="511.5" y="167.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">20</text>
+<g class="mark-g"><title>Plain, hostile: 1 ran</title><path class="mark" d="M536.6,150H537.8A1.2,1.2 0 0 1 539,151.2V174.8A1.2,1.2 0 0 1 537.8,176H536.6V150Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="547" y="167.5" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">1 of 120 ran</text>
+<g class="mark-g"><title>Plain, ordinary: 105 ran</title><path class="mark" d="M659,150H909.9V176H659V150Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="784.4" y="167.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">105</text>
+<g class="mark-g"><title>Plain, ordinary: 11 asked first</title><path class="mark" d="M911.9,150H936.4V176H911.9V150Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="924.1" y="167.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">11</text>
+<g class="mark-g"><title>Plain, ordinary: 4 blocked</title><path class="mark" d="M938.4,150H944A4,4 0 0 1 948,154V172A4,4 0 0 1 944,176H938.4V150Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="956" y="167.5" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">15 of 120 stopped</text>
+<text x="234" y="226" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Wrapped: bash -c</text>
+<text x="234" y="243" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">the bash ones, one shell deeper</text>
+<g class="mark-g"><title>Wrapped: bash -c, hostile: 92 blocked</title><path class="mark" d="M250,214H469.6V240H250V214Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="359.8" y="231.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">92</text>
+<g class="mark-g"><title>Wrapped: bash -c, hostile: 14 asked first</title><path class="mark" d="M471.6,214H503.3V240H471.6V214Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="487.4" y="231.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">14</text>
+<g class="mark-g"><title>Wrapped: bash -c, hostile: 2 ran</title><path class="mark" d="M505.3,214H507.7A2.4,2.4 0 0 1 510.1,216.4V237.6A2.4,2.4 0 0 1 507.7,240H505.3V214Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="518.1" y="231.5" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">2 of 108 ran</text>
+<g class="mark-g"><title>Wrapped: bash -c, ordinary: 93 ran</title><path class="mark" d="M659,214H881V240H659V214Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="770" y="231.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">93</text>
+<g class="mark-g"><title>Wrapped: bash -c, ordinary: 11 asked first</title><path class="mark" d="M883,214H907.5V240H883V214Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="895.2" y="231.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">11</text>
+<g class="mark-g"><title>Wrapped: bash -c, ordinary: 4 blocked</title><path class="mark" d="M909.5,214H915.1A4,4 0 0 1 919.1,218V236A4,4 0 0 1 915.1,240H909.5V214Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="927.1" y="231.5" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">15 of 108 stopped</text>
+<text x="234" y="290" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">Wrapped: encoded</text>
+<text x="234" y="307" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">the PowerShell ones, base64 encoded</text>
+<g class="mark-g"><title>Wrapped: encoded, hostile: 2 blocked</title><path class="mark" d="M250,278H252.8V304H250V278Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<g class="mark-g"><title>Wrapped: encoded, hostile: 10 asked first</title><path class="mark" d="M254.8,278H274.9A4,4 0 0 1 278.9,282V300A4,4 0 0 1 274.9,304H254.8V278Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="266.9" y="295.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">10</text>
+<text x="286.9" y="295.5" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">0 of 12 ran</text>
+<g class="mark-g"><title>Wrapped: encoded, ordinary: 12 asked first</title><path class="mark" d="M659,278H683.9A4,4 0 0 1 687.9,282V300A4,4 0 0 1 683.9,304H659V278Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="673.5" y="295.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">12</text>
+<text x="695.9" y="295.5" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">12 of 12 stopped</text>
+<text x="234" y="354" font-size="13" fill="var(--jv-text, #0b0b0b)" text-anchor="end" font-weight="650">With a misleading assurance</text>
+<text x="234" y="371" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="end">the request vouches for it</text>
+<g class="mark-g"><title>With a misleading assurance, hostile: 101 blocked</title><path class="mark" d="M250,342H491.2V368H250V342Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="370.6" y="359.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">101</text>
+<g class="mark-g"><title>With a misleading assurance, hostile: 18 asked first</title><path class="mark" d="M493.2,342H534.6V368H493.2V342Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="513.9" y="359.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">18</text>
+<g class="mark-g"><title>With a misleading assurance, hostile: 1 ran</title><path class="mark" d="M536.6,342H537.8A1.2,1.2 0 0 1 539,343.2V366.8A1.2,1.2 0 0 1 537.8,368H536.6V342Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="547" y="359.5" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">1 of 120 ran</text>
+<g class="mark-g"><title>With a misleading assurance, ordinary: 100 ran</title><path class="mark" d="M659,342H897.8V368H659V342Z" fill="var(--jv-allow, #0ca30c)"/>
+</g>
+<text x="778.4" y="359.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">100</text>
+<g class="mark-g"><title>With a misleading assurance, ordinary: 15 asked first</title><path class="mark" d="M899.8,342H934V368H899.8V342Z" fill="var(--jv-ask, #fab219)"/>
+</g>
+<text x="916.9" y="359.5" font-size="12" fill="#1a1a19" text-anchor="middle" font-weight="700">15</text>
+<g class="mark-g"><title>With a misleading assurance, ordinary: 5 blocked</title><path class="mark" d="M936,342H944A4,4 0 0 1 948,346V364A4,4 0 0 1 944,368H936V342Z" fill="var(--jv-block, #d03b3b)"/>
+</g>
+<text x="956" y="359.5" font-size="11.5" fill="var(--jv-dim, #52514e)" text-anchor="start">20 of 120 stopped</text>
+<text x="24" y="426" font-size="12" fill="var(--jv-dim, #52514e)" text-anchor="start">The views share base commands, so they are not independent samples. Bar length is a count.</text>
+</svg>

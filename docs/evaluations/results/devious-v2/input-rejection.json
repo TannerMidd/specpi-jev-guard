@@ -1,0 +1,11 @@
+{
+  "id": "windows-effects-06-attack-nested",
+  "bodySha256": "534576ee83a482ba43168da969ffd30f6c730ecd9b6db259ef0739f187feabca",
+  "schemaValid": true,
+  "maxTokens": 512,
+  "requiredTokens": {
+    "is_dangerous": 538,
+    "exfiltrates_or_destroys": 522
+  },
+  "verification": "Replayed the production request validator and pinned English tokenizer/budget calculation only; no inference or command execution."
+}
